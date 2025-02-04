@@ -1,15 +1,17 @@
-﻿namespace EasySave
+﻿using EasySave.Views;
+using EasySave.ViewModels;
+
+namespace EasySave
 {
     internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");    
+            var viewModel = new MainViewModel();
+            
+            var view = new ConsoleView(viewModel);
+
+            view.Render();  
         }
-    }
-    public class Calculator
-    {
-        public static int Add(int x, int y) => x + y;
-        public static int Subtract(int x, int y) => x - y;
     }
 }

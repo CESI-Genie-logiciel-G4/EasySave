@@ -3,6 +3,15 @@
 public class LoggerTest
 {
     [Fact]
+    public void SingletonTest()
+    {
+        var logger1 = Logger.GetInstance();
+        var logger2 = Logger.GetInstance();
+        
+        Assert.Same(logger1, logger2);
+    }
+    
+    [Fact]
     public void LogTest()
     {
         const string expectedMessage = "Hello, Logger!";
