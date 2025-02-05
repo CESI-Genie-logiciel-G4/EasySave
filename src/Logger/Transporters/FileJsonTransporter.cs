@@ -16,7 +16,7 @@ public class FileJsonTransporter(string logRepositoryPath) : Transporter
             File.CreateText(logFilePath);
         }
         
-        string json = ReFormatPath(logEntry.ToJson());
+        string json = ReformatPaths(logEntry.ToJson());
         
         StreamWriter sw = File.AppendText(logFilePath);
         using (sw)
@@ -31,7 +31,7 @@ public class FileJsonTransporter(string logRepositoryPath) : Transporter
         return Path.Combine(logRepositoryPath, $"log_{date}.json");
     }
 
-    private string ReFormatPath(string json)
+    private string ReformatPaths(string json)
     {
         return json.Replace("\\\\", "\\")+",\n";
     }
