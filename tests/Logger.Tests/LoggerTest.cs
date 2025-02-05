@@ -1,4 +1,7 @@
-﻿namespace Logger.Tests;
+﻿using Logger.LogEntries;
+using Logger.Transporters;
+
+namespace Logger.Tests;
 
 public class LoggerTest
 {
@@ -12,18 +15,28 @@ public class LoggerTest
     }
     
     [Fact]
-    public void LogTest()
+    public void CopyLogTest()
     {
-        const string expectedMessage = "Hello, Logger!";
+        const string expectedOperation = "Copy";
+        const string expectedBackupName = "save1";
+        const string expectedSourcePath = @"\\UNC\source\Path";
+        const string expectedDestinationPath = @"UNC\destination\Path";
+        const long expectedFileSize = 12;
+        const double expectedTransferTime = 3.356;
         
-        var stringWriter = new StringWriter();
-        Console.SetOut(stringWriter);
+        var logDirectory = "/home/florent/Documents/Work at CESI/Génie logiciel/Projet/";
+        var consoleTransporter = new FileJsonTransporter(logDirectory);
         
-        Logger.Log(expectedMessage);
+        var logger = Logger.GetInstance();
+        logger.SetupTransporters([consoleTransporter]);
         
-        var consoleOutput = stringWriter.ToString().Trim();
-        Assert.Equal(expectedMessage, consoleOutput);
+        CopyFileLogEntry copyLog = new CopyFileLogEntry(expectedBackupName, 
+                                                        expectedSourcePath, 
+                                                        expectedDestinationPath, 
+                                                        expectedFileSize, 
+                                                        expectedTransferTime);
+
         
-        stringWriter.Close();
+        logger.Log(copyLog);
     }
 }

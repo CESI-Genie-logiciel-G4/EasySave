@@ -1,9 +1,17 @@
-﻿namespace Logger;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using Logger.LogEntries;
+using Logger.Transporters;
 
-public class Logger
+namespace Logger;
+
+public class Logger : ILogger
 {
     private static Logger? _instance;
-    private Logger() { }
+    private Logger() {}
+
+    private List<Transporter>? _transporters;
+    
     
     public static Logger GetInstance()
     {
@@ -13,9 +21,22 @@ public class Logger
         }
         return _instance;
     }
-    
-    public static void Log(string message)
+
+    public void SetupTransporters(List<Transporter>? transporters)
     {
-        Console.WriteLine(message);
+        _transporters = transporters;
+    }
+    
+    
+    public void Log(ILogEntry logEntry)
+    {
+        if (_transporters == null)
+        {
+            throw new NullReferenceException("No transporter have been provided.");
+        }
+        foreach (var transporter in _transporters)
+        {
+            transporter.Write(logEntry);
+        }
     }
 }
