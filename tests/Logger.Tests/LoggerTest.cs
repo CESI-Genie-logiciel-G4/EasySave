@@ -24,7 +24,7 @@ public class LoggerTest
         const long expectedFileSize = 12;
         const double expectedTransferTime = 3.356;
         
-        var logDirectory = "/home/florent/Documents/Work at CESI/Génie logiciel/Projet/";
+        var logDirectory = Path.GetTempPath();
         var consoleTransporter = new FileJsonTransporter(logDirectory);
         
         var logger = Logger.GetInstance();
