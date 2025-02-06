@@ -19,7 +19,7 @@ public class LoggerTest
     public void CopyLogByJsonTest()
     {
         //Initialize
-        var logDirectory = ".";
+        const string logDirectory = ".";
         var date = DateTime.Now.ToString("yyyy-MM-dd");
         var logFile = Path.Combine(logDirectory, $"log_{date}.json");
         if (File.Exists(logFile))
@@ -79,6 +79,6 @@ public class LoggerTest
         
         Assert.Contains(expectedOperation, writer.ToString());
         Assert.Contains(expectedMessage, writer.ToString());
-        Assert.DoesNotContain(givenMetadata["Backup Name"].ToString(), writer.ToString());
+        Assert.DoesNotContain(givenMetadata["Backup Name"].ToString()!, writer.ToString());
     }
 }

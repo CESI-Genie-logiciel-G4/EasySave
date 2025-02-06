@@ -15,11 +15,7 @@ public class Logger : ILogger
     
     public static Logger GetInstance()
     {
-        if (_instance == null)
-        {
-            _instance = new Logger();
-        }
-        return _instance;
+        return _instance ??= new Logger();
     }
 
     public void SetupTransporters(List<Transporter>? transporters)
