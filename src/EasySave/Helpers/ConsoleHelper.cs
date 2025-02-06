@@ -34,7 +34,7 @@ public static class ConsoleHelper
     public static void Pause()
     {
         Console.Write("\n\t"+ T("PressAnyKey") + "\n");
-        Console.Read();
+        Console.ReadKey();
     }
     
     public static void Clear()
@@ -116,6 +116,21 @@ public static class ConsoleHelper
         } while (!isValid);
 
         return value;
+    }
+    
+    public static string AskForPath(string prompt)
+    {
+        while (true)
+        {
+            var currentDirectory = Directory.GetCurrentDirectory();
+            Console.Write($"\t({currentDirectory})\n{prompt} : ");
+            
+            var path = ReadTrimmedConsole();
+
+            if (Directory.Exists(path)) return path;
+            
+            DisplayError("InvalidDirectory");
+        }
     }
     
     /// <summary>

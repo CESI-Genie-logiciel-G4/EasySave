@@ -17,6 +17,14 @@ public class MainViewModel
         new("French", "fr")
     ];
     
+    public Dictionary<string, BackupType> BackupTypes { get; } = new()
+    {
+        ["Full"] = new FullBackup(),
+        ["Differential"] = new DifferentialBackup()
+    };
+
+    public const int BackupJobLimit = 5;
+
     public event Action<BackupJob>? BackupJobAdded;
     public event Action<BackupJob>? BackupJobExecuted;
     
@@ -24,6 +32,11 @@ public class MainViewModel
     
     public void AddBackupJob(string name, string source, string destination, BackupType type)
     {
+        if (BackupJobs.Count >= BackupJobLimit)
+        {
+            throw new InvalidOperationException("Backup job limit reached");
+        }
+        
         var newJob = new BackupJob(name, source, destination, type);
         BackupJobs.Add(newJob);
         
@@ -32,15 +45,8 @@ public class MainViewModel
     
     public void ExecuteJob(int index)
     {
-        // var job = BackupJobs[index];
-
-        var source = @"D:\Brieuc\CESI\A3 FISA INFO\Génie Logiciel\ProjetTest\Source";
-        var destination = @"D:\Brieuc\CESI\A3 FISA INFO\Génie Logiciel\ProjetTest\Directory";
-
-        var job = new BackupJob("JobTest", source, destination, new DifferentialBackup());
-        
+        var job = BackupJobs[index];
         job.Run();
-        
         BackupJobExecuted?.Invoke(job);
     }
     

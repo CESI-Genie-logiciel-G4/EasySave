@@ -81,4 +81,19 @@
   <data name="ExitToCancel" xml:space="preserve">
     <value>'{0}' to cancel</value>
   </data>
+  <data name="JobLimitReached" xml:space="preserve">
+    <value>Job limit reached</value>
+  </data>
+  <data name="SelectBackupType" xml:space="preserve">
+    <value>Select backup type</value>
+  </data>
+  <data name="EnterSourceDirectory" xml:space="preserve">
+    <value>Enter the source directory</value>
+  </data>
+  <data name="EnterDestinationDirectory" xml:space="preserve">
+    <value>Enter the destination directory</value>
+  </data>
+  <data name="InvalidDirectory" xml:space="preserve">
+    <value>Invalid directory</value>
+  </data>
 </root>

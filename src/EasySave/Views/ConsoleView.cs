@@ -108,11 +108,24 @@ public class ConsoleView
 
     private void AddJob()
     {
+        
+        if (_viewModel.BackupJobs.Count >= MainViewModel.BackupJobLimit)
+        {
+            Console.WriteLine(T("JobLimitReached"));
+            return;
+        }
+        
         var name = ConsoleHelper.AskForString(T("EnterJobName"), 3, 50);
-        var source = ConsoleHelper.AskForString(T("EnterSourceDirectory"), 3, 255);
-        var destination = ConsoleHelper.AskForString(T("EnterDestinationDirectory"), 3, 255);
-        var typeChoice = ConsoleHelper.AskForInt($"{T("EnterBackupType")} (1: Full, 2: Differential)", 1, 2);
-        BackupType type = typeChoice == 1 ? new FullBackup() : new DifferentialBackup();
+        var source = ConsoleHelper.AskForPath(T("EnterSourceDirectory"));
+        var destination = ConsoleHelper.AskForPath(T("EnterDestinationDirectory"));
+        
+        for (var i = 0; i < _viewModel.BackupTypes.Count; i++)
+        {
+            var backupType = _viewModel.BackupTypes.ElementAt(i);
+            Console.WriteLine($"\t{i + 1}. {backupType.Key}");
+        }
+        var typeChoice = ConsoleHelper.AskForInt(T("SelectBackupType"), 1, _viewModel.BackupTypes.Count);
+        var type = _viewModel.BackupTypes.ElementAt(typeChoice - 1).Value;
         
         _viewModel.AddBackupJob(name, source, destination, type);
     }
