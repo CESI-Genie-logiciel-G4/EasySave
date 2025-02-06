@@ -23,6 +23,7 @@ public class FileJsonTransporter(string logRepositoryPath) : Transporter
         {
             sw.Write(json);
         }
+        sw.Close();
     }
     
     private string GetLogFilePath()

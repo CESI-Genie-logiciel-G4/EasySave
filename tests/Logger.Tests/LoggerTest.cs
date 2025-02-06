@@ -19,7 +19,7 @@ public class LoggerTest
     public void CopyLogByJsonTest()
     {
         //Initialize
-        var logDirectory = Path.GetTempPath();
+        var logDirectory = ".";
         var date = DateTime.Now.ToString("yyyy-MM-dd");
         var logFile = Path.Combine(logDirectory, $"log_{date}.json");
         if (File.Exists(logFile))
@@ -49,13 +49,13 @@ public class LoggerTest
         
         //Asserts
         Assert.True(File.Exists(logFile));
-        var createdfile = File.ReadAllText(logFile);
+        var createdFile = File.ReadAllText(logFile);
         File.Delete(logFile);
-        Assert.Contains(expectedOperation, createdfile);
-        Assert.Contains(expectedBackupName, createdfile);
-        Assert.Contains(expectedSourcePath, createdfile);
-        Assert.Contains(expectedDestinationPath, createdfile);
-        Assert.Contains(expectedFileSize.ToString(), createdfile);
+        Assert.Contains(expectedOperation, createdFile);
+        Assert.Contains(expectedBackupName, createdFile);
+        Assert.Contains(expectedSourcePath, createdFile);
+        Assert.Contains(expectedDestinationPath, createdFile);
+        Assert.Contains(expectedFileSize.ToString(), createdFile);
     }
 
     [Fact]
