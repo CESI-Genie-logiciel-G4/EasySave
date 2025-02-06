@@ -109,7 +109,12 @@ public class ConsoleView
     private void AddJob()
     {
         var name = ConsoleHelper.AskForString(T("EnterJobName"), 3, 50);
-        _viewModel.AddBackupJob(name);
+        var source = ConsoleHelper.AskForString(T("EnterSourceDirectory"), 3, 255);
+        var destination = ConsoleHelper.AskForString(T("EnterDestinationDirectory"), 3, 255);
+        var typeChoice = ConsoleHelper.AskForInt($"{T("EnterBackupType")} (1: Full, 2: Differential)", 1, 2);
+        BackupType type = typeChoice == 1 ? new FullBackup() : new DifferentialBackup();
+        
+        _viewModel.AddBackupJob(name, source, destination, type);
     }
 
     private void RemoveJob()

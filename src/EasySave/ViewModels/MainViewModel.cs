@@ -7,9 +7,9 @@ namespace EasySave.ViewModels;
 public class MainViewModel
 {
     public List<BackupJob> BackupJobs { get; } = [
-        new("Documents"),
-        new("Images"),
-        new("Videos")
+        new("Documents", @"D:\Brieuc\CESI\A3 FISA INFO\Génie Logiciel\ProjetTest\Source", @"D:\Brieuc\CESI\A3 FISA INFO\Génie Logiciel\ProjetTest\Directory", new FullBackup()),
+        new("Images", @"C:\Users\John\Images", @"D:\Backups\Images", new FullBackup()),
+        new("Videos", @"C:\Users\John\Videos", @"D:\Backups\Videos", new DifferentialBackup())
     ];
     
     public List<LanguageItem> Languages { get; } = [
@@ -22,9 +22,9 @@ public class MainViewModel
     
     public event Action<int>? BackupJobRemoved; 
     
-    public void AddBackupJob(string name)
+    public void AddBackupJob(string name, string source, string destination, BackupType type)
     {
-        var newJob = new BackupJob(name);
+        var newJob = new BackupJob(name, source, destination, type);
         BackupJobs.Add(newJob);
         
         BackupJobAdded?.Invoke(newJob);
@@ -32,8 +32,15 @@ public class MainViewModel
     
     public void ExecuteJob(int index)
     {
-        var job = BackupJobs[index];
-        Thread.Sleep(300);
+        // var job = BackupJobs[index];
+
+        var source = @"D:\Brieuc\CESI\A3 FISA INFO\Génie Logiciel\ProjetTest\Source";
+        var destination = @"D:\Brieuc\CESI\A3 FISA INFO\Génie Logiciel\ProjetTest\Directory";
+
+        var job = new BackupJob("JobTest", source, destination, new DifferentialBackup());
+        
+        job.Run();
+        
         BackupJobExecuted?.Invoke(job);
     }
     
