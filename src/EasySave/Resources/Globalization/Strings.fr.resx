@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="MenuExecuteJobs" xml:space="preserve">
+    <value>Exécuter un ou plusieurs travaux</value>
+  </data>
+    <data name="MenuAddJob" xml:space="preserve">
+    <value>Ajouter un nouveau travail</value>
+  </data>
+    <data name="MenuRemoveJob" xml:space="preserve">
+    <value>Supprimer un travail</value>
+  </data>
+    <data name="MenuExit" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
+    <data name="MenuTitle" xml:space="preserve">
+    <value>Menu :</value>
+  </data>
+    <data name="NoJobsAvailable" xml:space="preserve">
+    <value>Aucun travail disponible</value>
+  </data>
+    <data name="JobsAvailable" xml:space="preserve">
+    <value>Travaux disponibles :</value>
+  </data>
+    <data name="SelectOption" xml:space="preserve">
+    <value>Sélectionnez une option</value>
+  </data>
+    <data name="SelectJobsToExecute" xml:space="preserve">
+    <value>Sélectionnez les travaux à exécuter</value>
+  </data>
+    <data name="SelectJobToRemove" xml:space="preserve">
+    <value>Sélectionnez le travail à supprimer</value>
+  </data>
+    <data name="EnterJobName" xml:space="preserve">
+    <value>Entrez le nom du travail</value>
+  </data>
+    <data name="JobExecuted" xml:space="preserve">
+    <value>Travail {0} exécuté</value>
+  </data>
+    <data name="JobAdded" xml:space="preserve">
+    <value>Travail {0} ajouté</value>
+  </data>
+    <data name="JobRemoved" xml:space="preserve">
+    <value>Travail N°{0} supprimé</value>
+  </data>
+    <data name="Exiting" xml:space="preserve">
+    <value>Fermeture en cours...</value>
+  </data>
+  <data name="PressAnyKey" xml:space="preserve">
+    <value>- Appuyez sur une touche pour continuer -</value>
+  </data>
+    <data name="InvalidInput" xml:space="preserve">
+    <value>Entrée invalide, veuillez réessayer.</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Sélectionnez une langue</value>
+  </data>
+  <data name="French" xml:space="preserve">
+    <value>Français</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>Anglais</value>
+  </data>
+  <data name="MenuChangeLanguage" xml:space="preserve">
+    <value>Changer la langue</value>
+  </data>
+  <data name="StringLengthRange" xml:space="preserve">
+    <value>({0}-{1} caractères) :</value>
+  </data>
+  <data name="InvalidStringLength" xml:space="preserve">
+    <value>Veuillez entrer une chaîne de caractères valide.</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Veuillez entrer un nombre valide.</value>
+  </data>
+  <data name="InvalidFormat" xml:space="preserve">
+    <value>Format invalide. Essayez: 5, 2-5, 1;3;7, *.</value>
+  </data>
+</root>

@@ -1,5 +1,6 @@
 ﻿using EasySave.Views;
 using EasySave.ViewModels;
+using EasySave.Services;
 
 namespace EasySave
 {
@@ -8,10 +9,11 @@ namespace EasySave
         private static void Main(string[] args)
         {
             var viewModel = new MainViewModel();
-            
             var view = new ConsoleView(viewModel);
-
-            view.Render();  
+            
+            LocalizationService.SetLanguage("en");
+            
+            view.Render();
         }
     }
 }

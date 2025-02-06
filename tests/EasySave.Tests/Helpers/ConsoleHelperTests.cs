@@ -14,13 +14,13 @@ public class ConsoleHelperTests
         
         ConsoleHelper.Pause();
         
-        Assert.Equal("\nPress any key to continue...", stringWriter.ToString());
+        Assert.Contains("Press any key to continue", stringWriter.ToString());
     }
     
     [Fact]
     public void ShouldConvertAskingNumberToInteger()
     {
-        var input = "42";
+        const string input = "42";
         var stringReader = new StringReader(input);
         Console.SetIn(stringReader);
         

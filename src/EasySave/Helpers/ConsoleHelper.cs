@@ -1,10 +1,11 @@
+using EasySave.Services;
+
 namespace EasySave.Helpers;
 
 public static class ConsoleHelper
 {
     private const int MinDefaultValue = 0;
     private const int MaxDefaultValue = 100;
-    
     public const string Motd = 
         """
              ______                     _____                    
@@ -19,10 +20,12 @@ public static class ConsoleHelper
     
     public const string Separator = 
         "\n   +-  --------------------------------------------  -*\n";
-
+    
+    private static string T(string key) => LocalizationService.GetString(key);
+    
     public static void Pause()
     {
-        Console.Write("\nPress any key to continue...");
+        Console.Write("\n\t"+ T("PressAnyKey") + "\n");
         Console.Read();
     }
     
@@ -45,11 +48,8 @@ public static class ConsoleHelper
 
             if (!isValid)
             {
-                Console.WriteLine("\t❌ Please enter a valid number.");
-                continue;
+                Console.WriteLine( "\t❌\t" + T("InvalidNumber") + "\n");
             }
-            
-            isValid = true;
         } while (!isValid);
 
         return value;
@@ -62,13 +62,16 @@ public static class ConsoleHelper
 
         do
         {
-            Console.Write($"{prompt} ({min}-{max} characters) : ");
+            
+            var range = string.Format(T("StringLengthRange"), min, max);
+            Console.Write($"{prompt} {range}");
+            
             value = Console.ReadLine() ?? string.Empty;
 
             isValid = value.Length >= min && value.Length <= max;
             if (!isValid)
             {
-                Console.WriteLine($"\t❌ Please enter a string between {min} and {max} characters.");
+                Console.WriteLine("\t❌\t" + T("InvalidStringLength") + "\n");
             }
         } while (!isValid);
 
@@ -89,14 +92,14 @@ public static class ConsoleHelper
 
             if (string.IsNullOrEmpty(input))
             {
-                Console.WriteLine("\t❌ Invalid input. Please try again.");
+                Console.WriteLine("\t❌\t" + T("InvalidInput") + "\n");
                 continue;
             }
 
             var numbers = ParseIntRange(input, min, max);
             if (numbers != null) return numbers;
-
-            Console.WriteLine("\t❌ Invalid format. Try: `5`, `2-5`, `1;3;7`, `*`.");
+            
+            Console.WriteLine("\t❌\t" + T("InvalidFormat") + "\n");
         }
     }
 
@@ -113,12 +116,10 @@ public static class ConsoleHelper
         {
             return ParseRange(input, min, max);
         }
-
         if (input.Contains(';'))
         {
             return ParseList(input, min, max);
         }
-
         return ParseSingle(input, min, max);
     }
 
@@ -131,7 +132,6 @@ public static class ConsoleHelper
         {
             return [number];
         }
-
         return null;
     }
 
@@ -141,22 +141,12 @@ public static class ConsoleHelper
     private static List<int>? ParseRange(string input, int min, int max)
     {
         var parts = input.Split('-');
+        if (parts.Length != 2) return null;
 
-        if (parts.Length != 2)
-        {
-            return null;
-        }
-
-        if (
-            !int.TryParse(parts[0], out var start) ||
-            !int.TryParse(parts[1], out var end)
-        )
+        if (!int.TryParse(parts[0], out var start) || !int.TryParse(parts[1], out var end))
             return null;
 
-        if (start < min || start > max ||
-            end < min || end > max ||
-            start > end
-           )
+        if (start < min || start > max || end < min || end > max || start > end)
         {
             return null;
         }

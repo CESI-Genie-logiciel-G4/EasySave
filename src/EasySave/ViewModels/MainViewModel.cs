@@ -1,4 +1,6 @@
 ﻿using EasySave.Models;
+using EasySave.Services;
+using EasySave.Utils;
 
 namespace EasySave.ViewModels;
 
@@ -8,6 +10,11 @@ public class MainViewModel
         new("Documents"),
         new("Images"),
         new("Videos")
+    ];
+    
+    public List<LanguageItem> Languages { get; } = [
+        new("English", "en"),
+        new("French", "fr")
     ];
     
     public event Action<BackupJob>? BackupJobAdded;
@@ -26,7 +33,7 @@ public class MainViewModel
     public void ExecuteJob(int index)
     {
         var job = BackupJobs[index];
-        Thread.Sleep(1000);
+        Thread.Sleep(300);
         BackupJobExecuted?.Invoke(job);
     }
     
@@ -34,5 +41,10 @@ public class MainViewModel
     {
         BackupJobs.RemoveAt(index);
         BackupJobRemoved?.Invoke(index);
+    }
+    
+    public void ChangeLanguage(LanguageItem language)
+    {
+        LocalizationService.SetLanguage(language.Identifier);
     }
 }
