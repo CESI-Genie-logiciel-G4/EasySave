@@ -11,9 +11,9 @@ public class ConsoleView
     private readonly MainViewModel _viewModel;
     private readonly List<MenuItem> _menuItems;
     private bool _isRunning = true;
-    
+
     private static string T(string key) => LocalizationService.GetString(key);
-    
+
     public ConsoleView(MainViewModel viewModel)
     {
         _menuItems =
@@ -24,27 +24,38 @@ public class ConsoleView
             new MenuItem("MenuChangeLanguage", DisplayLanguageMenu),
             new MenuItem("MenuExit", ExitApp)
         ];
-        
+
         _viewModel = viewModel;
         _viewModel.BackupJobExecuted += DisplayJobExecuted;
         _viewModel.BackupJobAdded += DisplayJobAdded;
         _viewModel.BackupJobRemoved += DisplayJobRemoved;
     }
-    
+
     public void Render()
     {
         while (_isRunning)
         {
-            Console.Clear();
+            ConsoleHelper.Clear();
             ConsoleHelper.DisplayMotd(VersionManager.Version);
-            
-            DisplayJobs();
-            Console.WriteLine(ConsoleHelper.Separator);
 
+            DisplayJobs();
+            ConsoleHelper.DisplaySeparator();
             DisplayMenu();
-            
-            var choice = ConsoleHelper.AskForInt(T("SelectOption"), 1, _menuItems.Count);
-            _menuItems[choice - 1].Action();
+
+            var mainMenu = true;
+
+            try
+            {
+                var choice = ConsoleHelper.AskForInt(T("SelectOption"), 1, _menuItems.Count);
+                mainMenu = false;
+                _menuItems[choice - 1].Action();
+            }
+            catch (OperationCanceledException)
+            {
+                if (mainMenu) ExitApp();
+                else Console.WriteLine(T("Exiting"));
+            }
+
             ConsoleHelper.Pause();
         }
     }
@@ -57,9 +68,10 @@ public class ConsoleView
             var item = _menuItems[i];
             Console.WriteLine($"\t{i + 1}. {T(item.Title)}");
         }
+
         Console.WriteLine();
     }
-    
+
     private void DisplayJobs()
     {
         if (_viewModel.BackupJobs.Count == 0)
@@ -67,33 +79,33 @@ public class ConsoleView
             Console.WriteLine(T("NoJobsAvailable"));
             return;
         }
-        
+
         Console.WriteLine(T("JobsAvailable"));
-        
+
         for (var i = 0; i < _viewModel.BackupJobs.Count; i++)
         {
             var job = _viewModel.BackupJobs[i];
             Console.WriteLine($"\t[N°{i + 1}] {job.Name}");
         }
     }
-    
+
     private void ExecuteJobs()
     {
         var jobCount = _viewModel.BackupJobs.Count;
-        
+
         if (jobCount == 0)
         {
             Console.WriteLine(T("NoJobsAvailable"));
             return;
         }
-        
+
         var value = ConsoleHelper.AskForMultipleValues(T("SelectJobsToExecute"), 1, jobCount);
         foreach (var item in value)
         {
             _viewModel.ExecuteJob(item - 1);
         }
     }
-    
+
     private void AddJob()
     {
         var name = ConsoleHelper.AskForString(T("EnterJobName"), 3, 50);
@@ -101,45 +113,45 @@ public class ConsoleView
     }
 
     private void RemoveJob()
-    {   
+    {
         var jobCount = _viewModel.BackupJobs.Count;
-        
+
         if (jobCount == 0)
         {
             Console.WriteLine(T("NoJobsAvailable"));
             return;
         }
-        
+
         var value = ConsoleHelper.AskForInt(T("SelectJobToRemove"), 1, jobCount);
         _viewModel.RemoveJob(value - 1);
     }
-    
+
     private void DisplayJobExecuted(BackupJob job)
     {
         Console.WriteLine($"\t- {string.Format(T("JobExecuted"), job.Name)}");
     }
-    
+
     private void DisplayJobAdded(BackupJob job)
     {
         Console.WriteLine($"\t- {string.Format(T("JobAdded"), job.Name)}");
     }
-    
+
     private void DisplayJobRemoved(int index)
     {
         Console.WriteLine($"\t- {string.Format(T("JobRemoved"), index + 1)}");
     }
-    
+
     private void DisplayLanguageMenu()
     {
         Console.WriteLine(T("SelectLanguage"));
-        for(var i = 0; i < _viewModel.Languages.Count; i++)
+        for (var i = 0; i < _viewModel.Languages.Count; i++)
         {
             var language = _viewModel.Languages[i];
             Console.WriteLine($"\t{i + 1}. {T(language.Language)}");
         }
-        
+    
         var choice = ConsoleHelper.AskForInt(T("SelectOption"), 1, _viewModel.Languages.Count);
-        
+   
         _viewModel.ChangeLanguage(_viewModel.Languages[choice - 1]);
     }
     

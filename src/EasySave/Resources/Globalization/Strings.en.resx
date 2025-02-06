@@ -78,4 +78,7 @@
   <data name="Version" xml:space="preserve">
     <value>Version:</value>
   </data>
+  <data name="ExitToCancel" xml:space="preserve">
+    <value>'{0}' to cancel</value>
+  </data>
 </root>

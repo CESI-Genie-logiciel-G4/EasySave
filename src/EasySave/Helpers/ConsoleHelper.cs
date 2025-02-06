@@ -6,11 +6,14 @@ public static class ConsoleHelper
 {
     private const int MinDefaultValue = 0;
     private const int MaxDefaultValue = 100;
-    
-    public const string Separator = 
-        "\n   +-  --------------------------------------------  -+\n";
+    private const string ExitWord = "exit";
     
     private static string T(string key) => LocalizationService.GetString(key);
+    
+    public static void DisplaySeparator()
+    {
+        Console.WriteLine("\n   +-  --------------------------------------------  -+\n");
+    }
     
     public static void DisplayMotd(Version version)
     {
@@ -34,6 +37,38 @@ public static class ConsoleHelper
         Console.Read();
     }
     
+    public static void Clear()
+    {
+        if (Console.IsOutputRedirected)
+        {
+            return;
+        }
+        Console.Clear();
+    }
+
+    private static void DisplayError(string key)
+    {
+        var cancel = string.Format(T("ExitToCancel"), ExitWord);
+        Console.WriteLine($"\t- (!) {T(key)} [{cancel}]");
+    }
+    
+    /// <summary>
+    /// Reads a line from the console and trims it.
+    ///
+    /// @throws OperationCanceledException if the user types "exit".
+    /// </summary>
+    private static string ReadTrimmedConsole()
+    {
+        var input = Console.ReadLine()?.Trim() ?? string.Empty;
+        
+        if (input.ToLower().Equals(ExitWord))
+        {
+            throw new OperationCanceledException();
+        }
+        
+        return input; 
+    }
+    
     private static bool TryParseValidNumber(string input, int min, int max, out int number)
     {
         var isNumber = int.TryParse(input, out number);
@@ -48,12 +83,12 @@ public static class ConsoleHelper
         do
         {
             Console.Write($"{prompt} ({min}-{max}) : ");
-            var entry = Console.ReadLine()?.Trim() ?? string.Empty;
+            var entry = ReadTrimmedConsole();
             isValid = TryParseValidNumber(entry, min, max, out value);
 
             if (!isValid)
             {
-                Console.WriteLine( "\t❌\t" + T("InvalidNumber") + "\n");
+                DisplayError("InvalidNumber");
             }
         } while (!isValid);
 
@@ -71,12 +106,12 @@ public static class ConsoleHelper
             var range = string.Format(T("StringLengthRange"), min, max);
             Console.Write($"{prompt} {range}");
             
-            value = Console.ReadLine() ?? string.Empty;
+            value = ReadTrimmedConsole();
 
             isValid = value.Length >= min && value.Length <= max;
             if (!isValid)
             {
-                Console.WriteLine("\t❌\t" + T("InvalidStringLength") + "\n");
+                DisplayError("InvalidStringLength");
             }
         } while (!isValid);
 
@@ -93,18 +128,18 @@ public static class ConsoleHelper
         while (true)
         {
             Console.Write($"{prompt} ({min}-{max}) : ");
-            var input = Console.ReadLine()?.Trim();
+            var input = ReadTrimmedConsole();
 
             if (string.IsNullOrEmpty(input))
             {
-                Console.WriteLine("\t❌\t" + T("InvalidInput") + "\n");
+                DisplayError("InvalidInput");
                 continue;
             }
 
             var numbers = ParseIntRange(input, min, max);
             if (numbers != null) return numbers;
             
-            Console.WriteLine("\t❌\t" + T("InvalidFormat") + "\n");
+            DisplayError("InvalidFormat");
         }
     }
 
@@ -133,7 +168,7 @@ public static class ConsoleHelper
     /// </summary>
     private static List<int>? ParseSingle(string input, int min, int max)
     {
-        if (int.TryParse(input, out var number) && number >= min && number <= max)
+        if (TryParseValidNumber(input, min, max, out var number))
         {
             return [number];
         }
@@ -150,13 +185,13 @@ public static class ConsoleHelper
 
         if (!int.TryParse(parts[0], out var start) || !int.TryParse(parts[1], out var end))
             return null;
-
+        
         if (start < min || start > max || end < min || end > max || start > end)
         {
             return null;
         }
-
-        return Enumerable.Range(start, end - start + 1).ToList();
+        
+        return start == end ? [start] : Enumerable.Range(start, end - start + 1).ToList();
     }
 
     /// <summary>
@@ -165,13 +200,13 @@ public static class ConsoleHelper
     private static List<int>? ParseList(string input, int min, int max)
     {
         var parts = input.Split(';');
-        List<int> numbers = [];
+        HashSet<int> uniqueNumbers = [];
 
         foreach (var part in parts)
         {
-            if (int.TryParse(part, out var number) && number >= min && number <= max)
+            if (TryParseValidNumber(part, min, max, out var number))
             {
-                numbers.Add(number);
+                uniqueNumbers.Add(number);
             }
             else
             {
@@ -179,6 +214,6 @@ public static class ConsoleHelper
             }
         }
 
-        return numbers;
+        return uniqueNumbers.ToList();
     }
 }

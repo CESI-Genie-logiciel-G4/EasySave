@@ -20,7 +20,8 @@ public static class LocalizationService
 
     public static void SetLanguage(string cultureCode)
     {
-        CultureInfo.CurrentUICulture = new CultureInfo(cultureCode);
-        CultureInfo.CurrentCulture = new CultureInfo(cultureCode);
+        var newCulture = new CultureInfo(cultureCode);
+        CultureInfo.CurrentUICulture = newCulture;
+        CultureInfo.CurrentCulture = newCulture;
     }
 }

@@ -28,7 +28,18 @@ public class ConsoleHelperTests
         ConsoleHelper.DisplayMotd(version);
         
         Assert.Contains("Version: 1.2", stringWriter.ToString());
-    } 
+    }
+    
+    [Fact]
+    public void ConsoleSeparatorTest()
+    {
+        var stringWriter = new StringWriter();
+        Console.SetOut(stringWriter);
+        
+        ConsoleHelper.DisplaySeparator();
+        
+        Assert.Contains(new string('-',10), stringWriter.ToString());
+    }
     
     [Fact]
     public void ShouldConvertAskingNumberToInteger()
@@ -63,7 +74,9 @@ public class ConsoleHelperTests
     [Theory]
     [InlineData("3", new[] {3})]
     [InlineData("1-3", new[] {1, 2, 3})]
+    [InlineData("2-2", new[] {2})]
     [InlineData("1;2;4", new[] {1, 2, 4})]
+    [InlineData("1;3;3", new[] {1,3})]
     [InlineData("*", new[] {1, 2, 3, 4})]
     public void ShouldConvertAskingNumbersToIntegerArray(string input, int[] expectedArray)
     {

@@ -9,6 +9,8 @@
         <CollectCoverage>true</CollectCoverage>
         <CoverletOutputFormat>opencover</CoverletOutputFormat>
         <CoverletOutput>TestResults/coverage.xml</CoverletOutput>
+
+        <Parallelize>false</Parallelize>
     </PropertyGroup>
 
     <ItemGroup>
