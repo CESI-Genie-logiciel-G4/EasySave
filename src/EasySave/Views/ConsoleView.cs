@@ -36,7 +36,7 @@ public class ConsoleView
         while (_isRunning)
         {
             Console.Clear();
-            Console.WriteLine(ConsoleHelper.Motd);
+            ConsoleHelper.DisplayMotd(VersionManager.Version);
             
             DisplayJobs();
             Console.WriteLine(ConsoleHelper.Separator);

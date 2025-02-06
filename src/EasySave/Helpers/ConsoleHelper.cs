@@ -6,22 +6,27 @@ public static class ConsoleHelper
 {
     private const int MinDefaultValue = 0;
     private const int MaxDefaultValue = 100;
-    public const string Motd = 
-        """
-             ______                     _____                    
-            |  ____|                   / ____|                   
-            | |__    __ _  ___  _   _ | (___    __ _ __   __ ___ 
-            |  __|  / _` |/ __|| | | | \___ \  / _` |\ \ / // _ \
-            | |____| (_| |\__ \| |_| | ____) || (_| | \ V /|  __/
-            |______|\__,_||___/ \__, ||_____/  \__,_|  \_/  \___|
-                                 __/ |                           
-                                |___/   
-        """;
     
     public const string Separator = 
-        "\n   +-  --------------------------------------------  -*\n";
+        "\n   +-  --------------------------------------------  -+\n";
     
     private static string T(string key) => LocalizationService.GetString(key);
+    
+    public static void DisplayMotd(Version version)
+    {
+        Console.WriteLine(
+            $"""
+                 ______                     _____                    
+                |  ____|                   / ____|                   
+                | |__    __ _  ___  _   _ | (___    __ _ __   __ ___ 
+                |  __|  / _` |/ __|| | | | \___ \  / _` |\ \ / // _ \
+                | |____| (_| |\__ \| |_| | ____) || (_| | \ V /|  __/
+                |______|\__,_||___/ \__, ||_____/  \__,_|  \_/  \___|
+                                     __/ |                           
+                                    |___/         {T("Version")} {version.Major}.{version.Minor}
+                                    
+            """);
+    }
     
     public static void Pause()
     {

@@ -18,6 +18,19 @@ public class ConsoleHelperTests
     }
     
     [Fact]
+    public void ConsoleMotdTest()
+    {
+        var stringWriter = new StringWriter();
+        Console.SetOut(stringWriter);
+
+        var version = new Version(1, 2);
+        
+        ConsoleHelper.DisplayMotd(version);
+        
+        Assert.Contains("Version: 1.2", stringWriter.ToString());
+    } 
+    
+    [Fact]
     public void ShouldConvertAskingNumberToInteger()
     {
         const string input = "42";
