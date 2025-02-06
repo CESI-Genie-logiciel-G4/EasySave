@@ -1,17 +1,19 @@
 ﻿using EasySave.Views;
 using EasySave.ViewModels;
+using EasySave.Services;
 
 namespace EasySave
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             var viewModel = new MainViewModel();
-            
             var view = new ConsoleView(viewModel);
-
-            view.Render();  
+            
+            LocalizationService.SetLanguage("en");
+            
+            view.Render();
         }
     }
 }
