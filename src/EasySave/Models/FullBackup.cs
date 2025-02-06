@@ -1,11 +1,13 @@
+
+using EasySave.Helpers;
+
 namespace EasySave.Models;
 
 public class FullBackup : BackupType
 {
-    public override void Execute(string sourceFile, string destinationFile, Execution execution)
+    public override void Execute(string sourceFile, string destinationFile, Execution execution, BackupJob job)
     {
-        Directory.CreateDirectory(Path.GetDirectoryName(destinationFile)!);
-        File.Copy(sourceFile, destinationFile, true);
+        FileHelper.Copy(sourceFile, destinationFile, job);
         execution.UpdateProgress(10);
     }
 }

@@ -1,13 +1,14 @@
+using EasySave.Helpers;
+
 namespace EasySave.Models;
 
 public class DifferentialBackup : BackupType
 {
-    public override void Execute(string sourceFile, string destinationFile, Execution execution)
+    public override void Execute(string sourceFile, string destinationFile, Execution execution, BackupJob job)
     {
         if (!File.Exists(destinationFile) || File.GetLastWriteTime(sourceFile) > File.GetLastWriteTime(destinationFile))
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(destinationFile)!);
-            File.Copy(sourceFile, destinationFile, true);
+            FileHelper.Copy(sourceFile, destinationFile, job);
             Console.WriteLine($"Copied: {sourceFile} to {destinationFile}");
             execution.UpdateProgress(10);
         }
