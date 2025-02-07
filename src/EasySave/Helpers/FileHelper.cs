@@ -12,8 +12,27 @@ public static class FileHelper
         
         watch.Start();
         Directory.CreateDirectory(Path.GetDirectoryName(destinationFile)!);
+        
+        try {
+            File.Copy(sourceFile, destinationFile, true);
+        } catch (Exception e)
+        {
+            var log = new GlobalLogEntry("Backup", "An error occurred during the backup job", new()
+            {
+                ["Type"] = "error",
+                ["sourceFile"] = sourceFile,
+                ["destinationFile"] = destinationFile,
+                ["JobName"] = job.Name,
+                ["Error"] = e.Message
+            });
+
+            Logger.Logger.GetInstance().Log(log);
+            throw;
+        }
+        
         File.Copy(sourceFile, destinationFile, true);
         watch.Stop();
+        
         Logger.Logger.GetInstance().Log(new CopyFileLogEntry(
             job.Name,
             sourceFile,

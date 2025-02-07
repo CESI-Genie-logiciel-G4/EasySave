@@ -190,7 +190,7 @@ public class ConsoleView
     private void DisplayProgress(int progress, int total)
     {
         var percentage = total == 0 ? 0 : (int)((double)progress / total * 100);
-        Console.Write($"\r\t{T("Process")} [{progress}/{total}] {percentage}%");
+        Console.Write($"\r\t{T("Progress")} [{progress}/{total}] {percentage}%");
     }
     
     private void DisplayNotification(string message, bool isError = false)   

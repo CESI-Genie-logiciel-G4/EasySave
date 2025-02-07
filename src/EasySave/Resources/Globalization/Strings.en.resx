@@ -132,4 +132,10 @@
   <data name="StartBackupJob" xml:space="preserve">
     <value>Starting Job: </value>
   </data>
+  <data name="CheckLogs" xml:space="preserve">
+    <value>Check logs</value>
+  </data>
+  <data name="IOError" xml:space="preserve">
+    <value>Input/Output Error</value>
+  </data>
 </root>
