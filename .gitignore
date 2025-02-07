@@ -19,6 +19,7 @@ nupkg/
 *.sln.docstates
 
 # Build results
+[Dd]ocs/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -33,3 +34,6 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+
+# Test Results
+TestResults

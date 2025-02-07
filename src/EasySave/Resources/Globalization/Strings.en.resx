@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <data name="MenuExecuteJobs" xml:space="preserve">
+    <value>Execute one or more jobs</value>
+  </data>
+    <data name="MenuAddJob" xml:space="preserve">
+    <value>Add a new job</value>
+  </data>
+    <data name="MenuRemoveJob" xml:space="preserve">
+    <value>Remove a job</value>
+  </data>
+    <data name="MenuExit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+    <data name="MenuTitle" xml:space="preserve">
+    <value>Menu:</value>
+  </data>
+    <data name="NoJobsAvailable" xml:space="preserve">
+    <value>No jobs available</value>
+  </data>
+    <data name="JobsAvailable" xml:space="preserve">
+    <value>Jobs available:</value>
+  </data>
+    <data name="SelectOption" xml:space="preserve">
+    <value>Select an option</value>
+  </data>
+    <data name="SelectJobsToExecute" xml:space="preserve">
+    <value>Select the jobs to execute</value>
+  </data>
+    <data name="SelectJobToRemove" xml:space="preserve">
+    <value>Select the job to remove</value>
+  </data>
+    <data name="EnterJobName" xml:space="preserve">
+    <value>Enter the name of the job</value>
+  </data>
+  <data name="JobExecuted" xml:space="preserve">
+    <value>Backup [{0}] completed successfully</value>
+  </data>
+    <data name="JobAdded" xml:space="preserve">
+    <value>Job {0} added</value>
+  </data>
+    <data name="JobRemoved" xml:space="preserve">
+    <value>Job N°{0} removed</value>
+  </data>
+    <data name="Exiting" xml:space="preserve">
+    <value>Exiting...</value>
+  </data>
+  <data name="PressAnyKey" xml:space="preserve">
+    <value>- Press any key to continue -</value>
+  </data>
+    <data name="InvalidInput" xml:space="preserve">
+    <value>Invalid input, please try again.</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="French" xml:space="preserve">
+    <value>French</value>
+  </data>
+  <data name="SelectLanguage" xml:space="preserve">
+    <value>Select a language</value>
+  </data>
+  <data name="MenuChangeLanguage" xml:space="preserve">
+    <value>Change Language</value>
+  </data>
+  <data name="StringLengthRange" xml:space="preserve">
+    <value>({0}-{1} characters): </value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Please enter a valid number.</value>
+  </data>
+  <data name="InvalidStringLength" xml:space="preserve">
+    <value>Please enter a valid string.</value>
+  </data>
+  <data name="InvalidFormat" xml:space="preserve">
+    <value>Invalid format. Try: 5, 2-5, 1;3;7, *.</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="ExitToCancel" xml:space="preserve">
+    <value>'{0}' to cancel</value>
+  </data>
+  <data name="JobLimitReached" xml:space="preserve">
+    <value>Job limit reached</value>
+  </data>
+  <data name="SelectBackupType" xml:space="preserve">
+    <value>Select backup type</value>
+  </data>
+  <data name="EnterSourceDirectory" xml:space="preserve">
+    <value>Enter the source directory</value>
+  </data>
+  <data name="EnterDestinationDirectory" xml:space="preserve">
+    <value>Enter the destination directory</value>
+  </data>
+  <data name="InvalidDirectory" xml:space="preserve">
+    <value>Invalid directory</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>N°</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SourcePath" xml:space="preserve">
+    <value>Source Path</value>
+  </data>
+  <data name="DestinationPath" xml:space="preserve">
+    <value>Destination Path</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="FullBackup" xml:space="preserve">
+    <value>Full Backup</value>
+  </data>
+  <data name="DifferentialBackup" xml:space="preserve">
+    <value>Differential Backup</value>
+  </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
+  <data name="UnauthorizedAccess" xml:space="preserve">
+    <value>Unauthorized Access</value>
+  </data>
+  <data name="DirectoryNotFound" xml:space="preserve">
+    <value>Directory Not Found</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progress:</value>
+  </data>
+  <data name="StartBackupJob" xml:space="preserve">
+    <value>Starting Job: </value>
+  </data>
+  <data name="CheckLogs" xml:space="preserve">
+    <value>Check logs</value>
+  </data>
+  <data name="IOError" xml:space="preserve">
+    <value>Input/Output Error</value>
+  </data>
+</root>
