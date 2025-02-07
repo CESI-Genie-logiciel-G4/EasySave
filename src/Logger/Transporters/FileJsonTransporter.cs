@@ -13,7 +13,8 @@ public class FileJsonTransporter(string logRepositoryPath) : Transporter
         string logFilePath = GetLogFilePath();
         if (!File.Exists(logFilePath))
         {
-            File.CreateText(logFilePath);
+            StreamWriter streamWriter = File.CreateText(logFilePath);
+            streamWriter.Close();
         }
         
         string json = ReformatPaths(logEntry.ToJson());

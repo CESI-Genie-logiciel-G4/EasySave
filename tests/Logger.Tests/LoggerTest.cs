@@ -15,7 +15,7 @@ public class LoggerTest
         Assert.Same(logger1, logger2);
     }
     
-    [Fact(Skip = "Fix remote test")]
+    [Fact]
     public void CopyLogByJsonTest()
     {
         //Initialize
