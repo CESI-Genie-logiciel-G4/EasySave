@@ -39,7 +39,7 @@ public class ConsoleView
             ConsoleHelper.DisplayMotd(VersionManager.Version);
 
             DisplayJobs();
-            ConsoleHelper.DisplaySeparator();
+            Console.WriteLine();
             DisplayMenu();
 
             var mainMenu = true;
@@ -77,15 +77,24 @@ public class ConsoleView
         if (_viewModel.BackupJobs.Count == 0)
         {
             Console.WriteLine(T("NoJobsAvailable"));
+            ConsoleHelper.DisplaySeparator();
             return;
         }
 
-        Console.WriteLine(T("JobsAvailable"));
+        Console.WriteLine(T("JobsAvailable") + "\n");
 
+        const string ligneTemplate = "\t{0,-5} | {1,-20} | {2,-30} | {3,-30} | {4,-20}";
+        var header = string.Format(ligneTemplate, T("Number"), T("Name"), T("SourcePath"), T("DestinationPath"), T("Type"));
+        
+        Console.WriteLine(header);
+        
         for (var i = 0; i < _viewModel.BackupJobs.Count; i++)
         {
             var job = _viewModel.BackupJobs[i];
-            Console.WriteLine($"\t[N°{i + 1}] {job.Name}");
+            var sourceEllipsis = StringHelper.GetEllipsisSuffix(job.SourceFolder, 27);
+            var destinationEllipsis = StringHelper.GetEllipsisSuffix(job.DestinationFolder, 27);
+            
+            Console.WriteLine(ligneTemplate, i + 1, job.Name, sourceEllipsis, destinationEllipsis, T(job.BackupType.Name));
         }
     }
 

@@ -12,7 +12,7 @@ public static class ConsoleHelper
     
     public static void DisplaySeparator()
     {
-        Console.WriteLine("\n   +-  --------------------------------------------  -+\n");
+        Console.WriteLine($"\n   +-  {new string('-',47)}  -+");
     }
     
     public static void DisplayMotd(Version version)

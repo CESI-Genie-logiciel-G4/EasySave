@@ -96,4 +96,25 @@
   <data name="InvalidDirectory" xml:space="preserve">
     <value>Invalid directory</value>
   </data>
+  <data name="Number" xml:space="preserve">
+    <value>N°</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SourcePath" xml:space="preserve">
+    <value>Source Path</value>
+  </data>
+  <data name="DestinationPath" xml:space="preserve">
+    <value>Destination Path</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="FullBackup" xml:space="preserve">
+    <value>Full Backup</value>
+  </data>
+  <data name="DifferentialBackup" xml:space="preserve">
+    <value>Differential Backup</value>
+  </data>
 </root>

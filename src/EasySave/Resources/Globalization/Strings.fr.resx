@@ -96,4 +96,25 @@
   <data name="JobLimitReached" xml:space="preserve">
     <value>Limite de tâches atteinte</value>
   </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="SourcePath" xml:space="preserve">
+    <value>Chemin source</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>N°</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="FullBackup" xml:space="preserve">
+    <value>Sauvegarde complète</value>
+  </data>
+  <data name="DifferentialBackup" xml:space="preserve">
+    <value>Sauvegarde différentielle</value>
+  </data>
+  <data name="DestinationPath" xml:space="preserve">
+    <value>Chemin de destination</value>
+  </data>
 </root>

@@ -2,7 +2,7 @@ using EasySave.Helpers;
 
 namespace EasySave.Models;
 
-public class DifferentialBackup : BackupType
+public class DifferentialBackup() : BackupType("DifferentialBackup")
 {
     public override void Execute(string sourceFile, string destinationFile, Execution execution, BackupJob job)
     {

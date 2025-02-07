@@ -6,6 +6,8 @@ public class BackupJob(string name, string sourceFolder, string destinationFolde
 
     public string SourceFolder { get; } = sourceFolder;
     public string DestinationFolder { get; } = destinationFolder;
+    
+    public BackupType BackupType { get; } = backupType;
 
     public void Run()
     {
@@ -17,10 +19,10 @@ public class BackupJob(string name, string sourceFolder, string destinationFolde
 
         foreach (string sourceFile in files)
         {
-            string relativePath = Path.GetRelativePath(SourceFolder, sourceFile);
-            string destinationFile = Path.Combine(DestinationFolder, relativePath);
+            var relativePath = Path.GetRelativePath(SourceFolder, sourceFile);
+            var destinationFile = Path.Combine(DestinationFolder, relativePath);
 
-            backupType.Execute(sourceFile, destinationFile, execution, this);
+            BackupType.Execute(sourceFile, destinationFile, execution, this);
         }
 
         Console.WriteLine("Backup completed successfully!");
