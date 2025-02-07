@@ -29,6 +29,9 @@ public class ConsoleView
         _viewModel.BackupJobExecuted += DisplayJobExecuted;
         _viewModel.BackupJobAdded += DisplayJobAdded;
         _viewModel.BackupJobRemoved += DisplayJobRemoved;
+        
+        _viewModel.Notification += DisplayNotification;
+        _viewModel.ProgressUpdated += DisplayProgress;
     }
 
     public void Render()
@@ -83,8 +86,8 @@ public class ConsoleView
 
         Console.WriteLine(T("JobsAvailable") + "\n");
 
-        const string ligneTemplate = "\t{0,-5} | {1,-20} | {2,-30} | {3,-30} | {4,-20}";
-        var header = string.Format(ligneTemplate, T("Number"), T("Name"), T("SourcePath"), T("DestinationPath"), T("Type"));
+        const string lineTemplate = "\t{0,-5} | {1,-20} | {2,-30} | {3,-30} | {4,-20}";
+        var header = string.Format(lineTemplate, T("Number"), T("Name"), T("SourcePath"), T("DestinationPath"), T("Type"));
         
         Console.WriteLine(header);
         
@@ -94,7 +97,7 @@ public class ConsoleView
             var sourceEllipsis = StringHelper.GetEllipsisSuffix(job.SourceFolder, 27);
             var destinationEllipsis = StringHelper.GetEllipsisSuffix(job.DestinationFolder, 27);
             
-            Console.WriteLine(ligneTemplate, i + 1, job.Name, sourceEllipsis, destinationEllipsis, T(job.BackupType.Name));
+            Console.WriteLine(lineTemplate, i + 1, job.Name, sourceEllipsis, destinationEllipsis, T(job.BackupType.Name));
         }
     }
 
@@ -167,7 +170,7 @@ public class ConsoleView
     {
         Console.WriteLine($"\t- {string.Format(T("JobRemoved"), index + 1)}");
     }
-
+    
     private void DisplayLanguageMenu()
     {
         Console.WriteLine(T("SelectLanguage"));
@@ -180,6 +183,23 @@ public class ConsoleView
         var choice = ConsoleHelper.AskForInt(T("SelectOption"), 1, _viewModel.Languages.Count);
    
         _viewModel.ChangeLanguage(_viewModel.Languages[choice - 1]);
+    }
+    
+    private void DisplayProgress(int progress, int total)
+    {
+        var percentage = total == 0 ? 0 : (int)((double)progress / total * 100);
+        Console.Write($"\r\t{T("Process")} [{progress}/{total}] {percentage}%");
+    }
+    
+    private void DisplayNotification(string message, bool isError = false)   
+    {
+        if (isError)
+        {
+            ConsoleHelper.DisplayError(message, false);
+            return;
+        }
+        
+        Console.WriteLine($"\t- {message}");
     }
     
     private void ExitApp()

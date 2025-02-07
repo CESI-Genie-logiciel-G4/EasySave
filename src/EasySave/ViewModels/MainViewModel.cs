@@ -6,6 +6,7 @@ namespace EasySave.ViewModels;
 
 public class MainViewModel
 {
+    private static string T(string key) => LocalizationService.GetString(key);
     public List<BackupJob> BackupJobs { get; } = [
         new("Documents", @"D:\Brieuc\CESI\A3 FISA INFO\Génie Logiciel\ProjetTest\Source", @"D:\Brieuc\CESI\A3 FISA INFO\Génie Logiciel\ProjetTest\Directory", new FullBackup()),
         new("Images", @"C:\Users\John\Images", @"D:\Backups\Images", new FullBackup()),
@@ -27,8 +28,9 @@ public class MainViewModel
 
     public event Action<BackupJob>? BackupJobAdded;
     public event Action<BackupJob>? BackupJobExecuted;
-    
     public event Action<int>? BackupJobRemoved; 
+    public event Action<string, bool>? Notification; 
+    public event Action<int, int>? ProgressUpdated; 
     
     public void AddBackupJob(string name, string source, string destination, BackupType type)
     {
@@ -45,9 +47,33 @@ public class MainViewModel
     
     public void ExecuteJob(int index)
     {
+        var execution = new Execution();
+        execution.Notifier += (message, isError) => Notification?.Invoke(message, isError);
+        execution.ProgressUpdated += (current, total) => ProgressUpdated?.Invoke(current, total);
+        
         var job = BackupJobs[index];
-        job.Run();
-        BackupJobExecuted?.Invoke(job);
+        
+        execution.SetMessage($"{T("StartBackupJob")} {job.Name} [{job.SourceFolder} -> {job.DestinationFolder}]");
+
+        try
+        {
+            job.Run(execution);
+            BackupJobExecuted?.Invoke(job);
+        }
+
+        catch (DirectoryNotFoundException)
+        {
+            execution.SetError(T("DirectoryNotFound"));
+        }
+        catch (UnauthorizedAccessException)
+        {
+            execution.SetError(T("UnauthorizedAccess"));
+        }
+        catch (Exception)
+        {
+            execution.SetError(T("ErrorOccurred"));
+        }
+        
     }
     
     public void RemoveJob(int index)

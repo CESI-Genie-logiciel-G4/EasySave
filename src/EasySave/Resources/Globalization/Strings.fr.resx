@@ -33,8 +33,8 @@
     <data name="EnterJobName" xml:space="preserve">
     <value>Entrez le nom du travail</value>
   </data>
-    <data name="JobExecuted" xml:space="preserve">
-    <value>Travail {0} exécuté</value>
+  <data name="JobExecuted" xml:space="preserve">
+    <value>Sauvegarde [{0}] executée avec succès</value>
   </data>
     <data name="JobAdded" xml:space="preserve">
     <value>Travail {0} ajouté</value>
@@ -116,5 +116,20 @@
   </data>
   <data name="DestinationPath" xml:space="preserve">
     <value>Chemin de destination</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progression :</value>
+  </data>
+  <data name="UnauthorizedAccess" xml:space="preserve">
+    <value>Accès non autorisé </value>
+  </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>Une erreur c'est produite</value>
+  </data>
+  <data name="DirectoryNotFound" xml:space="preserve">
+    <value>Répertoire non trouvé</value>
+  </data>
+  <data name="StartBackupJob" xml:space="preserve">
+    <value>Execution de :</value>
   </data>
 </root>

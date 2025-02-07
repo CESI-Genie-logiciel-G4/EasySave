@@ -2,19 +2,38 @@ namespace EasySave.Models;
 
 public class Execution
 {
-    public event Action<int>? ProgressUpdated;
+    public event Action<string, bool>? Notifier;
+    public event Action<int, int>? ProgressUpdated; 
+    
     private int _currentProgress = 0;
-    private int _totalSteps;
-
-    public Execution(int totalSteps)
+    private int TotalSteps { get; set; }
+    
+    public void SetTotalSteps(int steps)
     {
-        _totalSteps = totalSteps > 0 ? totalSteps : 100;
+        TotalSteps = steps;
     }
-
+    
+    public void SetError(string message)
+    {
+        Notify(message,true);
+    }
+    
+    public void SetMessage(string message){
+        Notify(message, false);
+    }
+    
+    public void SetSuccess(string message)
+    {
+        Notify(message, false);
+    }
+    
+    public void Notify(string message, bool isError)
+    {
+        Notifier?.Invoke(message, isError);
+    }
     public void UpdateProgress(int step)
     {
         _currentProgress += step;
-        int progressPercentage = (_currentProgress * 100) / _totalSteps;
-        ProgressUpdated?.Invoke(progressPercentage);
+        ProgressUpdated?.Invoke(_currentProgress, TotalSteps);
     }
 }

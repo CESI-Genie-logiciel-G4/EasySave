@@ -9,8 +9,7 @@ public class DifferentialBackup() : BackupType("DifferentialBackup")
         if (!File.Exists(destinationFile) || File.GetLastWriteTime(sourceFile) > File.GetLastWriteTime(destinationFile))
         {
             FileHelper.Copy(sourceFile, destinationFile, job);
-            Console.WriteLine($"Copied: {sourceFile} to {destinationFile}");
-            execution.UpdateProgress(10);
         }
+        execution.UpdateProgress(1);
     }
 }
