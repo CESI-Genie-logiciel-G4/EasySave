@@ -1,10 +1,11 @@
 ﻿using EasySave.Models;
+using EasySave.Services;
 using EasySave.ViewModels;
 namespace EasySave.Tests.ViewModels;
 
 public class MainViewModelTests
 {
-    [Fact(Skip = "must mock file system")]
+    [Fact]
     public void AddBackupJobTest()
     {
         var viewModel = new MainViewModel();
@@ -12,7 +13,7 @@ public class MainViewModelTests
         const string expectedName = "New-Backup";
         viewModel.AddBackupJob(expectedName, "","",new FullBackup());
 
-        var lastJob = viewModel.BackupJobs[^1];
+        var lastJob = JobService.BackupJobs[^1];
         
         Assert.Equal(expectedName, lastJob.Name);
     }

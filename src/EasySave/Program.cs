@@ -10,10 +10,11 @@ namespace EasySave
     {
         private static void Main()
         {
-            string path = ".";
+            JobService.LoadJobs();
+            
             var logger = L.GetInstance();
             logger.SetupTransporters([
-                new FileJsonTransporter(path),
+                new FileJsonTransporter(".easysave/logs/"),
             ]);
             
             var viewModel = new MainViewModel();
