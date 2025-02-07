@@ -1,9 +1,9 @@
 using System.Text.Json.Serialization;
-using EasySave.Converters;
 
 namespace EasySave.Models;
 
-[JsonConverter(typeof(BackupTypeJsonConverter))]
+[JsonDerivedType(typeof(FullBackup), typeDiscriminator: "full")]
+[JsonDerivedType(typeof(DifferentialBackup), typeDiscriminator: "differential")]
 public abstract class BackupType(string name)
 {
     public string Name { get; } = name;
