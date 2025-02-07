@@ -11,7 +11,9 @@ public class ConsoleView
     private readonly MainViewModel _viewModel;
     private readonly List<MenuItem> _menuItems;
     private bool _isRunning = true;
-
+    
+    private readonly List<BackupJob> _backupJobs = JobService.BackupJobs;
+    
     private static string T(string key) => LocalizationService.GetString(key);
 
     public ConsoleView(MainViewModel viewModel)
@@ -77,7 +79,7 @@ public class ConsoleView
 
     private void DisplayJobs()
     {
-        if (_viewModel.BackupJobs.Count == 0)
+        if (_backupJobs.Count == 0)
         {
             Console.WriteLine(T("NoJobsAvailable"));
             ConsoleHelper.DisplaySeparator();
@@ -91,9 +93,9 @@ public class ConsoleView
         
         Console.WriteLine(header);
         
-        for (var i = 0; i < _viewModel.BackupJobs.Count; i++)
+        for (var i = 0; i < _backupJobs.Count; i++)
         {
-            var job = _viewModel.BackupJobs[i];
+            var job = _backupJobs[i];
             var sourceEllipsis = StringHelper.GetEllipsisSuffix(job.SourceFolder, 27);
             var destinationEllipsis = StringHelper.GetEllipsisSuffix(job.DestinationFolder, 27);
             
@@ -103,7 +105,7 @@ public class ConsoleView
 
     private void ExecuteJobs()
     {
-        var jobCount = _viewModel.BackupJobs.Count;
+        var jobCount = _backupJobs.Count;
 
         if (jobCount == 0)
         {
@@ -121,7 +123,7 @@ public class ConsoleView
     private void AddJob()
     {
         
-        if (_viewModel.BackupJobs.Count >= MainViewModel.BackupJobLimit)
+        if (_backupJobs.Count >= JobService.BackupJobLimit)
         {
             Console.WriteLine(T("JobLimitReached"));
             return;
@@ -144,7 +146,7 @@ public class ConsoleView
 
     private void RemoveJob()
     {
-        var jobCount = _viewModel.BackupJobs.Count;
+        var jobCount = _backupJobs.Count;
 
         if (jobCount == 0)
         {
