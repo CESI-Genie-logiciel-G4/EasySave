@@ -24,70 +24,169 @@
   </div>
 </section>
 
+</br>
 
-<h2>Description</h2>
-<p>
-<strong>EasySave 1.0</strong>  allows users to create and execute up to <strong>five backup tasks</strong>, supporting both <strong>full and differential backups</strong>. Users can run individual backups, multiple backups simultaneously, or execute all tasks sequentially via command-line input. The application supports <strong>English and French</strong> and can back up files from local disks, external drives, and network drives. Additionally, it features real-time logging, storing detailed backup information  in JSON files.
+## 📚 Overview
+
+</br>
+
+<div align="center">
+  <img src="./assets/easysave.png" alt="EasySave 1.0" width="70%">
+</div>
+
+</br>
+
+<p align="justify">
+  <strong>EasySave 1.0</strong> enables users to create and execute up to <strong>five backup tasks</strong>, supporting both <strong>full and differential backups</strong>.
+  It supports <strong>English</strong> and <strong>French</strong> and can back up files from local disks, external drives, and network drives. The application also features real-time logging, storing detailed backup information in JSON files.
 </p>
 
+</br>
+
+<div align="center">
+  <table>
+    <tr>
+      <td>💾 Backup tasks</td>
+      <td>📂 Full and differential backups</td>
+      <td>💻 Command-line input</td>
+    </tr>
+    <tr>
+      <td>🔄 Follows best practices</td>
+      <td>🌐 English and French support</td>
+      <td>📈 Real-time logging</td>
+    </tr>
+    <tr>
+      <td>🖥️ Multiplatform</td>
+      <td>✅ Tested</td>
+      <td>📚 Documented</td>
+    </tr>
+  </table>
+</div>
+
+</br>
+
+## 📖 Documentation
+
+Comprehensive user documentation is available to help you get started and understand the application's features.
+
+**User Guide**: Learn how to install, configure, and use EasySave efficiently.
+
+**[Read the Full Documentation](./wiki.pdf)**
+
+</br>
 
 
-<h2>Tools</h2>
+## 📦 Installation
 
-<table>
+Ensure **.NET 9** is installed before running the application..  
+The **EasySave** solution consists of **multiple projects**:
+
+
+``` python
+EasySave/                # Main solution
+│
+├── src/                 # Directory for source code Projects
+│   ├── EasySave/        # Core application
+│   └── Logger/          # Logging module
+│
+└── test/                # Directory for unit tests Projects
+    ├── EasySave.Tests/  # Unit tests for EasySave
+    └── Logger.Tests/    # Unit tests for Logger
+```
+
+</br>
+
+
+## 🚀 Getting Started
+
+To start the application, simply run the **EasySave** project:
+
+```python
+dotnet
+├── build                # Builds the application
+├── run                  # Runs the main project
+└── test                 # Executes unit tests
+```
+
+</br>
+
+
+<div align="center">
+  <table style="width: 100%;">
     <thead>
-        <tr>
-            <th scope="col">Category</th>
-            <th scope="col">Library</th>
-            <th scope="col">Description</th>
-        </tr>
+      <tr>
+        <th>Category</th>
+        <th>Library</th>
+        <th>Description</th>
+      </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>.NET Developement</td>
-            <td>
-                <ul style="list-style-type: none; padding: 0;">
-                    <li>Rider (.NET)</li>
-                    <li>Visual Studio (.NET Core)</li>
-                </ul>
-            </td>
-            <td>22</td>
-        </tr>
-        <tr>
-            <td>Management</td>
-            <td>
-                <ul style="list-style-type: none; padding: 0;">
-                    <li>Github</li>
-                    <li>Jira</li>
-                </ul>
-            </td>
-            <td>Versions management and project management</td>
-        </tr>
-        <tr>
-            <td>Software Testing</td>
-            <td>
-                <ul style="list-style-type: none; padding: 0;">
-                    <li>xUnit</li>
-                    <li>SonarQube</li>
-                </ul>
-            </td>
-            <td>36</td>
-        </tr>
+      <tr>
+        <td>.NET Development</td>
+        <td>
+          <ul style="list-style-type: none; padding: 0;">
+            <li><img src="https://img.shields.io/badge/Framework-.NET%209-black.svg" alt=".NET 9"></li>
+            <li><img src="https://img.shields.io/badge/IDE-Rider-black.svg" alt="Rider"></li>
+            <li><img src="https://img.shields.io/badge/IDE-Visual%20Studio-black.svg" alt="Visual Studio"></li>
+          </ul>
+        </td>
+        <td>Popular IDEs for .NET development.</td>
+      </tr>
+      <tr>
+        <td>Software Testing</td>
+        <td>
+          <ul style="list-style-type: none; padding: 0;">
+            <li><img src="https://img.shields.io/badge/Testing-xUnit-black.svg" alt="xUnit"></li>
+            <li><img src="https://img.shields.io/badge/Coverage-dotnet-black.svg" alt="dotnet coverage"></li>
+            <li><img src="https://img.shields.io/badge/Quality-SonarQube-black.svg" alt="SonarQube"></li>
+          </ul>
+        </td>
+        <td>Unit testing, coverage, and code quality tools.</td>
+      </tr>
+      <tr>
+        <td>Documentation</td>
+        <td>
+          <ul style="list-style-type: none; padding: 0;">
+            <li><img src="https://img.shields.io/badge/Docs-Doxygen-black.svg" alt="Doxygen"></li>
+          </ul>
+        </td>
+        <td>Generates documentation from source code.</td>
+      </tr>
+      <tr>
+        <td>Multiplatform</td>
+        <td>
+          <ul style="list-style-type: none; padding: 0;">
+            <li><img src="https://img.shields.io/badge/OS-MacOS-black.svg" alt="MacOS"></li>
+            <li><img src="https://img.shields.io/badge/OS-Linux-black.svg" alt="Linux"></li>
+            <li><img src="https://img.shields.io/badge/OS-Windows-black.svg" alt="Windows"></li>
+          </ul>
+        </td>
+        <td>Supports multiple operating systems.</td>
+      </tr>
+      <tr>
+        <td>Management</td>
+        <td>
+          <ul style="list-style-type: none; padding: 0;">
+            <li><img src="https://img.shields.io/badge/Repo-GitHub-black.svg" alt="GitHub"></li>
+            <li><img src="https://img.shields.io/badge/PM-Jira-black.svg" alt="Jira"></li>
+          </ul>
+        </td>
+        <td>Version control and project management.</td>
+      </tr>
     </tbody>
-</table>
+  </table>
+</div>
 
-<h2>WIKI</h2>
-<a href "./📕 EasySave WIKI.pdf">View Wiki</a>
+</br>
 
-<h2>Authors</h2>
+## ✍️ Authors 
 
-<ul>
-  <li><a href="mailto:florent.maillardsalin@viacesi.fr">Florent <strong>MAILLARD-SALIN</strong></a></li>
-  <li><a href="mailto:brieuc.olivieri@viacesi.fr">Brieuc <strong>OLIVIERI</strong></a></li>
-  <li><a href="mailto:lilian.baudry@viacesi.fr">Lilian <strong>BAUDRY</strong></a></li>
-</ul>
+- [Florent **MAILLARD-SALIN**](mailto:florent.maillardsalin@viacesi.fr)
+- [Brieuc **OLIVIERI**](mailto:brieuc.olivieri@viacesi.fr)
+- [Lilian **BAUDRY**](mailto:lilian.baudry@viacesi.fr)
 
+</br>
 
 <p align="center">
-  2025 © ProSoft™. Tous droits réservés.
+  2025 © <strong>ProSoft</strong>™. Tous droits réservés.
 </p>
