@@ -12,7 +12,7 @@ public static class ConsoleHelper
     
     public static void DisplaySeparator()
     {
-        Console.WriteLine("\n   +-  --------------------------------------------  -+\n");
+        Console.WriteLine($"\n   +-  {new string('-',47)}  -+");
     }
     
     public static void DisplayMotd(Version version)
@@ -34,7 +34,7 @@ public static class ConsoleHelper
     public static void Pause()
     {
         Console.Write("\n\t"+ T("PressAnyKey") + "\n");
-        Console.Read();
+        Console.ReadKey();
     }
     
     public static void Clear()
@@ -46,10 +46,12 @@ public static class ConsoleHelper
         Console.Clear();
     }
 
-    private static void DisplayError(string key)
+    public static void DisplayError(string error, bool enableCancel = true)
     {
         var cancel = string.Format(T("ExitToCancel"), ExitWord);
-        Console.WriteLine($"\t- (!) {T(key)} [{cancel}]");
+        var cancelMessage = enableCancel ? $"[{cancel}]" : string.Empty;
+        
+        Console.WriteLine($"\t\t(!) {error} {cancelMessage}\n");
     }
     
     /// <summary>
@@ -88,7 +90,7 @@ public static class ConsoleHelper
 
             if (!isValid)
             {
-                DisplayError("InvalidNumber");
+                DisplayError(T("InvalidNumber"));
             }
         } while (!isValid);
 
@@ -111,11 +113,26 @@ public static class ConsoleHelper
             isValid = value.Length >= min && value.Length <= max;
             if (!isValid)
             {
-                DisplayError("InvalidStringLength");
+                DisplayError(T("InvalidStringLength"));
             }
         } while (!isValid);
 
         return value;
+    }
+    
+    public static string AskForPath(string prompt)
+    {
+        while (true)
+        {
+            var currentDirectory = Directory.GetCurrentDirectory();
+            Console.Write($"\t({currentDirectory})\n{prompt} : ");
+            
+            var path = ReadTrimmedConsole();
+
+            if (Directory.Exists(path)) return path;
+            
+            DisplayError(T("InvalidDirectory"));
+        }
     }
     
     /// <summary>
@@ -132,14 +149,14 @@ public static class ConsoleHelper
 
             if (string.IsNullOrEmpty(input))
             {
-                DisplayError("InvalidInput");
+                DisplayError(T("InvalidInput"));
                 continue;
             }
 
             var numbers = ParseIntRange(input, min, max);
             if (numbers != null) return numbers;
             
-            DisplayError("InvalidFormat");
+            DisplayError(T("InvalidFormat"));
         }
     }
 

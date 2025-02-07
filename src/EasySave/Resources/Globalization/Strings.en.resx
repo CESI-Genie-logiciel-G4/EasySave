@@ -33,8 +33,8 @@
     <data name="EnterJobName" xml:space="preserve">
     <value>Enter the name of the job</value>
   </data>
-    <data name="JobExecuted" xml:space="preserve">
-    <value>Job {0} executed</value>
+  <data name="JobExecuted" xml:space="preserve">
+    <value>Backup [{0}] completed successfully</value>
   </data>
     <data name="JobAdded" xml:space="preserve">
     <value>Job {0} added</value>
@@ -80,5 +80,56 @@
   </data>
   <data name="ExitToCancel" xml:space="preserve">
     <value>'{0}' to cancel</value>
+  </data>
+  <data name="JobLimitReached" xml:space="preserve">
+    <value>Job limit reached</value>
+  </data>
+  <data name="SelectBackupType" xml:space="preserve">
+    <value>Select backup type</value>
+  </data>
+  <data name="EnterSourceDirectory" xml:space="preserve">
+    <value>Enter the source directory</value>
+  </data>
+  <data name="EnterDestinationDirectory" xml:space="preserve">
+    <value>Enter the destination directory</value>
+  </data>
+  <data name="InvalidDirectory" xml:space="preserve">
+    <value>Invalid directory</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>N°</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="SourcePath" xml:space="preserve">
+    <value>Source Path</value>
+  </data>
+  <data name="DestinationPath" xml:space="preserve">
+    <value>Destination Path</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="FullBackup" xml:space="preserve">
+    <value>Full Backup</value>
+  </data>
+  <data name="DifferentialBackup" xml:space="preserve">
+    <value>Differential Backup</value>
+  </data>
+  <data name="ErrorOccurred" xml:space="preserve">
+    <value>An error occurred</value>
+  </data>
+  <data name="UnauthorizedAccess" xml:space="preserve">
+    <value>Unauthorized Access</value>
+  </data>
+  <data name="DirectoryNotFound" xml:space="preserve">
+    <value>Directory Not Found</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>Progress:</value>
+  </data>
+  <data name="StartBackupJob" xml:space="preserve">
+    <value>Starting Job: </value>
   </data>
 </root>
