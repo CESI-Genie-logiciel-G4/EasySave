@@ -69,9 +69,9 @@
 
 Comprehensive user documentation is available to help you get started and understand the application's features.
 
-**User Guide**: Learn how to install, configure, and use EasySave efficiently.
+**User Guide**: Learn how EasySave efficiently.
 
-**[Read the Full Documentation](./wiki.pdf)**
+**[Read the Full Documentation](./USER-GUIDE.md)**
 
 </br>
 
