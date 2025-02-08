@@ -4,19 +4,26 @@ namespace EasySave.Models;
 
 public class DifferentialBackup() : BackupType("DifferentialBackup")
 {
-    private string? _lastFullBackupFile = null;
+    private string? _lastFullBackupFolder = null;
     public override void Execute(string sourceFile, string destinationFile, Execution execution, BackupJob job)
     {
-        _lastFullBackupFile ??= FileHelper.GetMirrorFilePath(
+        InitializeLastFullBackup(job);
+        var lastFullBackupFile = FileHelper.GetMirrorFilePath(
             job.SourceFolder, 
             sourceFile, 
-            FolderHelper.GetLastCompleteBackupFolder(job.SourceFolder)
+            _lastFullBackupFolder!
             );
         
-        if (!File.Exists(_lastFullBackupFile) || File.GetLastWriteTime(sourceFile) > File.GetLastWriteTime(_lastFullBackupFile))
+        if (!File.Exists(lastFullBackupFile) || File.GetLastWriteTime(sourceFile) > File.GetLastWriteTime(lastFullBackupFile))
         {
             FileHelper.Copy(sourceFile, destinationFile, job);
         }
         execution.UpdateProgress(1);
+    }
+
+
+    private void InitializeLastFullBackup(BackupJob job)
+    {
+        _lastFullBackupFolder ??= FolderHelper.GetLastCompleteBackupFolder(job.SourceFolder);
     }
 }
