@@ -1,4 +1,7 @@
-﻿namespace EasySave.Models;
+﻿using EasySave.Helpers;
+using EasySave.Services;
+
+namespace EasySave.Models;
 
 public class BackupJob(string name, string sourceFolder, string destinationFolder, BackupType backupType)
 {
@@ -14,10 +17,10 @@ public class BackupJob(string name, string sourceFolder, string destinationFolde
 
         foreach (var sourceFile in files)
         {
-            var relativePath = Path.GetRelativePath(SourceFolder, sourceFile);
-            var destinationFile = Path.Combine(DestinationFolder, relativePath);
+            var destinationFile = FileHelper.GetMirrorFilePath(sourceFolder, sourceFile, destinationFolder);
 
             BackupType.Execute(sourceFile, destinationFile, execution, this);
         }
+        JobService.StoreNewBackupJob(this);
     }
 }
