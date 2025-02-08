@@ -21,6 +21,6 @@ public class BackupJob(string name, string sourceFolder, string destinationFolde
 
             BackupType.Execute(sourceFile, destinationFile, execution, this);
         }
-        JobService.StoreNewBackupJob(this);
+        JobService.StoreCompletedBackupJob(this);
     }
 }
