@@ -6,17 +6,16 @@ namespace EasySave.Services;
 using Models;
 using System.Text.Json;
 
-public static class JobService
+public class JobService
 {
-    public static List<BackupJob> BackupJobs { get; } = [];
+    public List<BackupJob> BackupJobs { get; } = [];
     public const int BackupJobLimit = 5;
 
     public static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
     
     private const string BackupJobsFile = ".easysave/backup-jobs.json";
     
-    
-    public static BackupJob AddBackupJob(string name, string source, string destination, BackupType type)
+    public BackupJob AddBackupJob(string name, string source, string destination, BackupType type)
     {
         if (BackupJobs.Count >= BackupJobLimit)
         {
@@ -30,19 +29,19 @@ public static class JobService
         return newJob;
     }
     
-    public static void RemoveBackupJob(int index)
+    public void RemoveBackupJob(int index)
     {
         BackupJobs.RemoveAt(index);
         StoreJobs();
     }
     
-    private static void StoreJobs()
+    private void StoreJobs()
     {
         var json = JsonSerializer.Serialize(BackupJobs, DefaultJsonOptions);
         FileHelper.CreateAndWrite(BackupJobsFile, json);
     }
     
-    public static void LoadJobs()
+    public void LoadJobs()
     {
         if (!File.Exists(BackupJobsFile)) return;
         

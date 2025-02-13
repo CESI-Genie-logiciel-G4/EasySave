@@ -5,20 +5,20 @@ using System.Resources;
 
 using System.Reflection;
 
-public static class LocalizationService
+public class LocalizationService
 {
-    private static readonly ResourceManager ResourceManager = new ResourceManager("EasySave.Resources.Globalization.Strings", Assembly.GetExecutingAssembly());
+    private readonly ResourceManager _resourceManager = new ResourceManager("EasySave.Resources.Globalization.Strings", Assembly.GetExecutingAssembly());
 
-    public static string GetString(string key)
+    public string GetString(string key)
     {
         try {
-            return ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? key;
+            return _resourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? key;
         } catch (MissingManifestResourceException) {
             return $"[Missing Translation: ({key})]";
         }
     }
 
-    public static void SetLanguage(string cultureCode)
+    public void SetLanguage(string cultureCode)
     {
         var newCulture = new CultureInfo(cultureCode);
         CultureInfo.CurrentUICulture = newCulture;

@@ -8,14 +8,10 @@ namespace EasySave.ViewModels;
 
 public class MainViewModel
 {
-    private readonly List<BackupJob> _backupJobs = JobService.BackupJobs;
-    private static string T(string key) => LocalizationService.GetString(key);
-
-    public MainViewModel()
-    {
-        Logger.Logger.GetInstance()
-            .SetupTransporters(ExtractLogsTransporters());
-    }
+    private readonly JobService _jobService;
+    private readonly List<BackupJob> _backupJobs ;
+    private readonly LocalizationService _localizationService;
+    private readonly Logger.Logger _logger;
     
     public List<LanguageItem> Languages { get; } =
     [
@@ -36,6 +32,16 @@ public class MainViewModel
         new("XML", new FileXmlTransporter("./.easysave/logs/")),
         new("JSON", new FileJsonTransporter("./.easysave/logs/"))
     ];
+    
+    public MainViewModel(JobService jobService, LocalizationService localizationService, Logger.Logger logger)
+    {
+        _jobService = jobService;
+        _backupJobs = _jobService.BackupJobs;
+        _localizationService = localizationService;
+        _logger = logger;
+        
+        _logger.SetupTransporters(ExtractLogsTransporters());
+    }
 
     public event Action<BackupJob>? BackupJobAdded;
     public event Action<int>? BackupJobRemoved;
@@ -45,7 +51,7 @@ public class MainViewModel
 
     public void AddBackupJob(string name, string source, string destination, BackupType type)
     {
-        var newJob = JobService.AddBackupJob(name, source, destination, type);
+        var newJob = _jobService.AddBackupJob(name, source, destination, type);
         BackupJobAdded?.Invoke(newJob);
     }
 
@@ -65,13 +71,13 @@ public class MainViewModel
 
     public void RemoveJob(int index)
     {
-        JobService.RemoveBackupJob(index);
+        _jobService.RemoveBackupJob(index);
         BackupJobRemoved?.Invoke(index);
     }
 
     public void ChangeLanguage(LanguageItem language)
     {
-        LocalizationService.SetLanguage(language.Identifier);
+        _localizationService.SetLanguage(language.Identifier);
     }
     
     public void ChangeLogsTransporters(List<int> indexes)
@@ -82,8 +88,7 @@ public class MainViewModel
             transporter.IsEnabled = !transporter.IsEnabled;
         }
         
-        Logger.Logger.GetInstance()
-            .SetupTransporters(ExtractLogsTransporters());
+        _logger.SetupTransporters(ExtractLogsTransporters());
         
         LogsTransportersChanged?.Invoke();
     }

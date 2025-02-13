@@ -10,13 +10,14 @@ public class ConsoleView
 {
     private readonly MainViewModel _viewModel;
     private readonly List<MenuItem> _menuItems;
+    private readonly ConsoleHelper _consoleHelper;
     private bool _isRunning = true;
     
-    private readonly List<BackupJob> _backupJobs = JobService.BackupJobs;
+    private readonly List<BackupJob> _backupJobs;
     
-    private static string T(string key) => LocalizationService.GetString(key);
+    private readonly Func<string, string> _translate;
 
-    public ConsoleView(MainViewModel viewModel)
+    public ConsoleView(MainViewModel viewModel, JobService jobService, LocalizationService localizationService, ConsoleHelper consoleHelper)
     {
         _menuItems =
         [
@@ -27,7 +28,11 @@ public class ConsoleView
             new MenuItem("MenuLogsFormat", ChangeLogsFormat),
             new MenuItem("MenuExit", ExitApp)
         ];
-
+        
+        _backupJobs = jobService.BackupJobs;
+        _translate = localizationService.GetString;
+        _consoleHelper = consoleHelper;
+        
         _viewModel = viewModel;
         _viewModel.BackupJobAdded += DisplayJobAdded;
         _viewModel.BackupJobRemoved += DisplayJobRemoved;
@@ -41,8 +46,8 @@ public class ConsoleView
     {
         while (_isRunning)
         {
-            ConsoleHelper.Clear();
-            ConsoleHelper.DisplayMotd(VersionManager.Version);
+            _consoleHelper.Clear();
+            _consoleHelper.DisplayMotd(VersionManager.Version);
 
             DisplayJobs();
             Console.WriteLine();
@@ -52,27 +57,27 @@ public class ConsoleView
 
             try
             {
-                var choice = ConsoleHelper.AskForInt(T("SelectOption"), 1, _menuItems.Count);
+                var choice = _consoleHelper.AskForInt(_translate("SelectOption"), 1, _menuItems.Count);
                 mainMenu = false;
                 _menuItems[choice - 1].Action();
             }
             catch (OperationCanceledException)
             {
                 if (mainMenu) ExitApp();
-                else Console.WriteLine(T("Exiting"));
+                else Console.WriteLine(_translate("Exiting"));
             }
 
-            ConsoleHelper.Pause();
+            _consoleHelper.Pause();
         }
     }
 
     private void DisplayMenu()
     {
-        Console.WriteLine(T("MenuTitle"));
+        Console.WriteLine(_translate("MenuTitle"));
         for (var i = 0; i < _menuItems.Count; i++)
         {
             var item = _menuItems[i];
-            Console.WriteLine($"\t{i + 1}. {T(item.Title)}");
+            Console.WriteLine($"\t{i + 1}. {_translate(item.Title)}");
         }
 
         Console.WriteLine();
@@ -82,25 +87,25 @@ public class ConsoleView
     {
         if (_backupJobs.Count == 0)
         {
-            Console.WriteLine(T("NoJobsAvailable"));
-            ConsoleHelper.DisplaySeparator();
+            Console.WriteLine(_translate("NoJobsAvailable"));
+            _consoleHelper.DisplaySeparator();
             return;
         }
 
-        Console.WriteLine(T("JobsAvailable") + "\n");
+        Console.WriteLine(_translate("JobsAvailable") + "\n");
 
         const string lineTemplate = "\t{0,-5} | {1,-20} | {2,-30} | {3,-30} | {4,-20}";
-        var header = string.Format(lineTemplate, T("Number"), T("Name"), T("SourcePath"), T("DestinationPath"), T("Type"));
+        var header = string.Format(lineTemplate, _translate("Number"), _translate("Name"), _translate("SourcePath"), _translate("DestinationPath"), _translate("Type"));
         
         Console.WriteLine(header);
         
         for (var i = 0; i < _backupJobs.Count; i++)
         {
             var job = _backupJobs[i];
-            var sourceEllipsis = StringHelper.GetEllipsisSuffix(job.SourceFolder, 27);
-            var destinationEllipsis = StringHelper.GetEllipsisSuffix(job.DestinationFolder, 27);
+            var sourceEllipsis = StringHelper.GetEllipsisSuffix(job.SourceFolder);
+            var destinationEllipsis = StringHelper.GetEllipsisSuffix(job.DestinationFolder);
             
-            Console.WriteLine(lineTemplate, i + 1, job.Name, sourceEllipsis, destinationEllipsis, T(job.BackupType.Name));
+            Console.WriteLine(lineTemplate, i + 1, job.Name, sourceEllipsis, destinationEllipsis, _translate(job.BackupType.Name));
         }
     }
 
@@ -110,11 +115,11 @@ public class ConsoleView
 
         if (jobCount == 0)
         {
-            Console.WriteLine(T("NoJobsAvailable"));
+            Console.WriteLine(_translate("NoJobsAvailable"));
             return;
         }
 
-        var value = ConsoleHelper.AskForMultipleValues(T("SelectJobsToExecute"), 1, jobCount);
+        var value = _consoleHelper.AskForMultipleValues(_translate("SelectJobsToExecute"), 1, jobCount);
         foreach (var item in value)
         {
             _viewModel.ExecuteJob(item - 1);
@@ -125,20 +130,19 @@ public class ConsoleView
     {
         if (_backupJobs.Count >= JobService.BackupJobLimit)
         {
-            Console.WriteLine(T("JobLimitReached"));
+            Console.WriteLine(_translate("JobLimitReached"));
             return;
         }
-        
-        var name = ConsoleHelper.AskForString(T("EnterJobName"), 3, 50);
-        var source = ConsoleHelper.AskForPath(T("EnterSourceDirectory"));
-        var destination = ConsoleHelper.AskForPath(T("EnterDestinationDirectory"));
+        var name = _consoleHelper.AskForString(_translate("EnterJobName"), 3, 50);
+        var source = _consoleHelper.AskForPath(_translate("EnterSourceDirectory"));
+        var destination = _consoleHelper.AskForPath(_translate("EnterDestinationDirectory"));
         
         for (var i = 0; i < _viewModel.BackupTypes.Count; i++)
         {
             var backupType = _viewModel.BackupTypes.ElementAt(i);
             Console.WriteLine($"\t{i + 1}. {backupType.Key}");
         }
-        var typeChoice = ConsoleHelper.AskForInt(T("SelectBackupType"), 1, _viewModel.BackupTypes.Count);
+        var typeChoice = _consoleHelper.AskForInt(_translate("SelectBackupType"), 1, _viewModel.BackupTypes.Count);
         var type = _viewModel.BackupTypes.ElementAt(typeChoice - 1).Value;
         
         _viewModel.AddBackupJob(name, source, destination, type);
@@ -150,47 +154,47 @@ public class ConsoleView
 
         if (jobCount == 0)
         {
-            Console.WriteLine(T("NoJobsAvailable"));
+            Console.WriteLine(_translate("NoJobsAvailable"));
             return;
         }
 
-        var value = ConsoleHelper.AskForInt(T("SelectJobToRemove"), 1, jobCount);
+        var value = _consoleHelper.AskForInt(_translate("SelectJobToRemove"), 1, jobCount);
         _viewModel.RemoveJob(value - 1);
     }
 
     private void ChangeLogsFormat()
     {
-        Console.WriteLine(T("SelectLogsTransporters"));
+        Console.WriteLine(_translate("SelectLogsTransporters"));
         for (var i = 0; i < _viewModel.LogTransporters.Count; i++)
         {
             var transporter = _viewModel.LogTransporters[i];
             var check = transporter.IsEnabled ? "[X]" : "[ ]";
-            Console.WriteLine($"\t{i + 1}. {check} {T(transporter.Title)}");
+            Console.WriteLine($"\t{i + 1}. {check} {_translate(transporter.Title)}");
         }
-        var values = ConsoleHelper.AskForMultipleValues(T("SelectLogsTransporters"), 1, _viewModel.LogTransporters.Count);
+        var values = _consoleHelper.AskForMultipleValues(_translate("SelectLogsTransporters"), 1, _viewModel.LogTransporters.Count);
         _viewModel.ChangeLogsTransporters(values);
     }
 
     private void DisplayJobAdded(BackupJob job)
     {
-        Console.WriteLine($"\t- {string.Format(T("JobAdded"), job.Name)}");
+        Console.WriteLine($"\t- {string.Format(_translate("JobAdded"), job.Name)}");
     }
 
     private void DisplayJobRemoved(int index)
     {
-        Console.WriteLine($"\t- {string.Format(T("JobRemoved"), index + 1)}");
+        Console.WriteLine($"\t- {string.Format(_translate("JobRemoved"), index + 1)}");
     }
     
     private void DisplayLanguageMenu()
     {
-        Console.WriteLine(T("SelectLanguage"));
+        Console.WriteLine(_translate("SelectLanguage"));
         for (var i = 0; i < _viewModel.Languages.Count; i++)
         {
             var language = _viewModel.Languages[i];
-            Console.WriteLine($"\t{i + 1}. {T(language.Language)}");
+            Console.WriteLine($"\t{i + 1}. {_translate(language.Language)}");
         }
     
-        var choice = ConsoleHelper.AskForInt(T("SelectOption"), 1, _viewModel.Languages.Count);
+        var choice = _consoleHelper.AskForInt(_translate("SelectOption"), 1, _viewModel.Languages.Count);
    
         _viewModel.ChangeLanguage(_viewModel.Languages[choice - 1]);
     }
@@ -200,18 +204,18 @@ public class ConsoleView
         if (execution.State == ExecutionState.Pending || execution.TotalSteps == 0)
         {
             var link = execution.BackupJob.SourceFolder + " -> " + execution.BackupJob.DestinationFolder;
-            Console.WriteLine($"\t - {T("StartBackupJob")} {execution.BackupJob.Name} [{link}]");
+            Console.WriteLine($"\t - {_translate("StartBackupJob")} {execution.BackupJob.Name} [{link}]");
         }
         
         if (execution.TotalSteps == 0)
         {
-            Console.Write($"\r\t{T("Progress")} [0/0] 0%");
+            Console.Write($"\r\t{_translate("Progress")} [0/0] 0%");
             return;
         }
         
         if (execution.State == ExecutionState.Completed)
         {
-            var message = string.Format(T("JobExecuted"), execution.BackupJob.Name);
+            var message = string.Format(_translate("JobExecuted"), execution.BackupJob.Name);
             Console.WriteLine($" - {message}");
             return;
         }
@@ -219,7 +223,7 @@ public class ConsoleView
         var currentStep = execution.CurrentProgress;
         var totalSteps = execution.TotalSteps;
         var percentage = (int)((double)currentStep / totalSteps * 100);
-        var progressText = T("Progress");
+        var progressText = _translate("Progress");
 
         Console.Write($"\r\t{progressText} [{currentStep}/{totalSteps}] {percentage}%");
     }
@@ -228,24 +232,24 @@ public class ConsoleView
     {
         var message = e switch
         {
-            UnauthorizedAccessException => T("UnauthorizedAccess"),
-            DirectoryNotFoundException => T("DirectoryNotFound"),
-            OperationCanceledException => T("OperationCancelled"),
-            IOException => T("IOError") + " - " + T("CheckLogs"),
-            _ => T("ErrorOccurred") + " - " + T("CheckLogs")
+            UnauthorizedAccessException => _translate("UnauthorizedAccess"),
+            DirectoryNotFoundException => _translate("DirectoryNotFound"),
+            OperationCanceledException => _translate("OperationCancelled"),
+            IOException => _translate("IOError") + " - " + _translate("CheckLogs"),
+            _ => _translate("ErrorOccurred") + " - " + _translate("CheckLogs")
         };
         
-        ConsoleHelper.DisplayError(message, false);
+        _consoleHelper.DisplayError(message, false);
     }
     
     private void DisplayLogsTransportersChanged()
     {
-        Console.WriteLine(T("LogsFormatChanged"));
+        Console.WriteLine(_translate("LogsFormatChanged"));
     }
     
     private void ExitApp()
     {
-        Console.WriteLine(T("Exiting"));
+        Console.WriteLine(_translate("Exiting"));
         _isRunning = false;
     }
 }

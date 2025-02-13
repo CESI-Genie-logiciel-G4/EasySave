@@ -2,20 +2,28 @@ using EasySave.Services;
 
 namespace EasySave.Helpers;
 
-public static class ConsoleHelper
+public class ConsoleHelper
 {
+    private readonly LocalizationService _localizationService;
+    private readonly Func<string, string> _translate;
+    
+    public ConsoleHelper(LocalizationService localizationService)
+    {
+        _localizationService = localizationService;
+        _translate = localizationService.GetString;
+    }
+    
     private const int MinDefaultValue = 0;
     private const int MaxDefaultValue = 100;
     private const string ExitWord = "exit";
     
-    private static string T(string key) => LocalizationService.GetString(key);
     
-    public static void DisplaySeparator()
+    public void DisplaySeparator()
     {
         Console.WriteLine($"\n   +-  {new string('-',47)}  -+");
     }
     
-    public static void DisplayMotd(Version version)
+    public void DisplayMotd(Version version)
     {
         Console.WriteLine(
             $"""
@@ -26,29 +34,27 @@ public static class ConsoleHelper
                 | |____| (_| |\__ \| |_| | ____) || (_| | \ V /|  __/
                 |______|\__,_||___/ \__, ||_____/  \__,_|  \_/  \___|
                                      __/ |                           
-                                    |___/         {T("Version")} {version.Major}.{version.Minor}
+                                    |___/         {_translate("Version")} {version.Major}.{version.Minor}
                                     
             """);
     }
     
-    public static void Pause()
+    public void Pause()
     {
-        Console.Write("\n\t"+ T("PressAnyKey") + "\n");
+        Console.Write("\n\t"+ _translate("PressAnyKey") + "\n");
+        if (Console.IsOutputRedirected) return;
         Console.ReadKey();
     }
     
-    public static void Clear()
+    public void Clear()
     {
-        if (Console.IsOutputRedirected)
-        {
-            return;
-        }
+        if (Console.IsOutputRedirected) return;
         Console.Clear();
     }
 
-    public static void DisplayError(string error, bool enableCancel = true)
+    public void DisplayError(string error, bool enableCancel = true)
     {
-        var cancel = string.Format(T("ExitToCancel"), ExitWord);
+        var cancel = string.Format(_translate("ExitToCancel"), ExitWord);
         var cancelMessage = enableCancel ? $"[{cancel}]" : string.Empty;
         
         Console.WriteLine($"\t\t(!) {error} {cancelMessage}\n");
@@ -59,7 +65,7 @@ public static class ConsoleHelper
     ///
     /// @throws OperationCanceledException if the user types "exit".
     /// </summary>
-    private static string ReadTrimmedConsole()
+    private string ReadTrimmedConsole()
     {
         var input = Console.ReadLine()?.Trim() ?? string.Empty;
         
@@ -71,13 +77,13 @@ public static class ConsoleHelper
         return input; 
     }
     
-    private static bool TryParseValidNumber(string input, int min, int max, out int number)
+    private bool TryParseValidNumber(string input, int min, int max, out int number)
     {
         var isNumber = int.TryParse(input, out number);
         return isNumber && number >= min && number <= max;
     }
 
-    public static int AskForInt(string prompt, int min = MinDefaultValue, int max = MaxDefaultValue)
+    public int AskForInt(string prompt, int min = MinDefaultValue, int max = MaxDefaultValue)
     {
         int value;
         bool isValid;
@@ -90,14 +96,14 @@ public static class ConsoleHelper
 
             if (!isValid)
             {
-                DisplayError(T("InvalidNumber"));
+                DisplayError(_translate("InvalidNumber"));
             }
         } while (!isValid);
 
         return value;
     }
 
-    public static string AskForString(string prompt, int min = 0, int max = MaxDefaultValue)
+    public string AskForString(string prompt, int min = 0, int max = MaxDefaultValue)
     {
         string value;
         bool isValid;
@@ -105,7 +111,7 @@ public static class ConsoleHelper
         do
         {
             
-            var range = string.Format(T("StringLengthRange"), min, max);
+            var range = string.Format(_translate("StringLengthRange"), min, max);
             Console.Write($"{prompt} {range}");
             
             value = ReadTrimmedConsole();
@@ -113,14 +119,14 @@ public static class ConsoleHelper
             isValid = value.Length >= min && value.Length <= max;
             if (!isValid)
             {
-                DisplayError(T("InvalidStringLength"));
+                DisplayError(_translate("InvalidStringLength"));
             }
         } while (!isValid);
 
         return value;
     }
     
-    public static string AskForPath(string prompt)
+    public string AskForPath(string prompt)
     {
         while (true)
         {
@@ -131,7 +137,7 @@ public static class ConsoleHelper
 
             if (Directory.Exists(path)) return path;
             
-            DisplayError(T("InvalidDirectory"));
+            DisplayError(_translate("InvalidDirectory"));
         }
     }
     
@@ -140,7 +146,7 @@ public static class ConsoleHelper
     ///
     /// The user can enter a single number (x), a range (x-y), a list (x;y;z) or all numbers (*).
     /// </summary>
-    public static List<int> AskForMultipleValues(string prompt, int min = MinDefaultValue, int max = MaxDefaultValue)
+    public List<int> AskForMultipleValues(string prompt, int min = MinDefaultValue, int max = MaxDefaultValue)
     {
         while (true)
         {
@@ -149,21 +155,21 @@ public static class ConsoleHelper
 
             if (string.IsNullOrEmpty(input))
             {
-                DisplayError(T("InvalidInput"));
+                DisplayError(_translate("InvalidInput"));
                 continue;
             }
 
             var numbers = ParseIntRange(input, min, max);
             if (numbers != null) return numbers;
             
-            DisplayError(T("InvalidFormat"));
+            DisplayError(_translate("InvalidFormat"));
         }
     }
 
     /// <summary>
     /// Parses an input string and returns a list of integers if valid, otherwise null.
     /// </summary>
-    private static List<int>? ParseIntRange(string input, int min, int max)
+    private List<int>? ParseIntRange(string input, int min, int max)
     {
         if (input == "*")
         {
@@ -183,7 +189,7 @@ public static class ConsoleHelper
     /// <summary>
     /// Handles a single number input ("5") and returns a list containing only that number.
     /// </summary>
-    private static List<int>? ParseSingle(string input, int min, int max)
+    private List<int>? ParseSingle(string input, int min, int max)
     {
         if (TryParseValidNumber(input, min, max, out var number))
         {
@@ -195,7 +201,7 @@ public static class ConsoleHelper
     /// <summary>
     /// Handles a range input "x-y" and returns a list of integers if valid.
     /// </summary>
-    private static List<int>? ParseRange(string input, int min, int max)
+    private List<int>? ParseRange(string input, int min, int max)
     {
         var parts = input.Split('-');
         if (parts.Length != 2) return null;
@@ -214,7 +220,7 @@ public static class ConsoleHelper
     /// <summary>
     /// Handles a list input "x;y;z" and returns a list of integers if valid.
     /// </summary>
-    private static List<int>? ParseList(string input, int min, int max)
+    private List<int>? ParseList(string input, int min, int max)
     {
         var parts = input.Split(';');
         HashSet<int> uniqueNumbers = [];
