@@ -1,7 +1,6 @@
-
 using EasySave.Helpers;
 
-namespace EasySave.Models;
+namespace EasySave.Models.Backups;
 
 public class FullBackup() : BackupType("FullBackup")
 {

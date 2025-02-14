@@ -1,4 +1,5 @@
 ﻿using EasySave.Models;
+using EasySave.Models.Backups;
 using EasySave.Services;
 using EasySave.Utils;
 
@@ -18,7 +19,8 @@ public class MainViewModel
     public Dictionary<string, BackupType> BackupTypes { get; } = new()
     {
         ["Full"] = new FullBackup(),
-        ["Differential"] = new DifferentialBackup()
+        ["Synthetic-Full"] = new SyntheticFullBackup(),
+        ["Differential"] = new DifferentialBackup(),
     };
 
     public event Action<BackupJob>? BackupJobAdded;

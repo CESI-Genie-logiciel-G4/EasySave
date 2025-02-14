@@ -138,4 +138,7 @@
   <data name="IOError" xml:space="preserve">
     <value>Erreur d'entrée/sortie</value>
   </data>
+  <data name="SyntheticFullBackup" xml:space="preserve">
+    <value>Sauvegarde complète synthétique</value>
+  </data>
 </root>
