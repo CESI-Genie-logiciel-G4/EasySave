@@ -28,12 +28,11 @@ public class ConsoleView
         ];
 
         _viewModel = viewModel;
-        _viewModel.BackupJobExecuted += DisplayJobExecuted;
         _viewModel.BackupJobAdded += DisplayJobAdded;
         _viewModel.BackupJobRemoved += DisplayJobRemoved;
         
-        _viewModel.Notification += DisplayNotification;
         _viewModel.ProgressUpdated += DisplayProgress;
+        _viewModel.ErrorOccurred += DisplayError;
     }
 
     public void Render()
@@ -122,7 +121,6 @@ public class ConsoleView
 
     private void AddJob()
     {
-        
         if (_backupJobs.Count >= JobService.BackupJobLimit)
         {
             Console.WriteLine(T("JobLimitReached"));
@@ -157,12 +155,7 @@ public class ConsoleView
         var value = ConsoleHelper.AskForInt(T("SelectJobToRemove"), 1, jobCount);
         _viewModel.RemoveJob(value - 1);
     }
-
-    private void DisplayJobExecuted(BackupJob job)
-    {
-        Console.WriteLine($"\t- {string.Format(T("JobExecuted"), job.Name)}");
-    }
-
+    
     private void DisplayJobAdded(BackupJob job)
     {
         Console.WriteLine($"\t- {string.Format(T("JobAdded"), job.Name)}");
@@ -187,21 +180,47 @@ public class ConsoleView
         _viewModel.ChangeLanguage(_viewModel.Languages[choice - 1]);
     }
     
-    private void DisplayProgress(int progress, int total)
+    private void DisplayProgress(Execution execution)
     {
-        var percentage = total == 0 ? 0 : (int)((double)progress / total * 100);
-        Console.Write($"\r\t{T("Progress")} [{progress}/{total}] {percentage}%");
-    }
-    
-    private void DisplayNotification(string message, bool isError = false)   
-    {
-        if (isError)
+        if (execution.State == ExecutionState.Pending || execution.TotalSteps == 0)
         {
-            ConsoleHelper.DisplayError(message, false);
+            var link = execution.BackupJob.SourceFolder + " -> " + execution.BackupJob.DestinationFolder;
+            Console.WriteLine($"\t - {T("StartBackupJob")} {execution.BackupJob.Name} [{link}]");
+        }
+        
+        if (execution.TotalSteps == 0)
+        {
+            Console.Write($"\r\t{T("Progress")} [0/0] 0%");
             return;
         }
         
-        Console.WriteLine($"\t- {message}");
+        if (execution.State == ExecutionState.Completed)
+        {
+            var message = string.Format(T("JobExecuted"), execution.BackupJob.Name);
+            Console.WriteLine($" - {message}");
+            return;
+        }
+
+        var currentStep = execution.CurrentProgress;
+        var totalSteps = execution.TotalSteps;
+        var percentage = (int)((double)currentStep / totalSteps * 100);
+        var progressText = T("Progress");
+
+        Console.Write($"\r\t{progressText} [{currentStep}/{totalSteps}] {percentage}%");
+    }
+    
+    private void DisplayError(Exception e)
+    {
+        var message = e switch
+        {
+            UnauthorizedAccessException => T("UnauthorizedAccess"),
+            DirectoryNotFoundException => T("DirectoryNotFound"),
+            OperationCanceledException => T("OperationCancelled"),
+            IOException => T("IOError") + " - " + T("CheckLogs"),
+            _ => T("ErrorOccurred") + " - " + T("CheckLogs")
+        };
+        
+        ConsoleHelper.DisplayError(message, false);
     }
     
     private void ExitApp()

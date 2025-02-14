@@ -22,11 +22,11 @@ public class MainViewModel
     };
 
     public event Action<BackupJob>? BackupJobAdded;
-    public event Action<BackupJob>? BackupJobExecuted;
     public event Action<int>? BackupJobRemoved;
-    public event Action<string, bool>? Notification;
-    public event Action<int, int>? ProgressUpdated;
-
+    public event Action<Execution>? ProgressUpdated;
+    
+    public event Action<Exception>? ErrorOccurred;
+    
     public void AddBackupJob(string name, string source, string destination, BackupType type)
     {
         var newJob = JobService.AddBackupJob(name, source, destination, type);
@@ -35,48 +35,15 @@ public class MainViewModel
 
     public void ExecuteJob(int index)
     {
-        var execution = new Execution();
-        execution.Notifier += (message, isError) => Notification?.Invoke(message, isError);
-        execution.ProgressUpdated += (current, total) => ProgressUpdated?.Invoke(current, total);
-
         var job = _backupJobs[index];
-
-        execution.SetMessage($"{T("StartBackupJob")} {job.Name} [{job.SourceFolder} -> {job.DestinationFolder}]");
-
-        try
+        var execution = new Execution(job);
+        
+        execution.ProgressUpdated += (e) => ProgressUpdated?.Invoke(e);
+        execution.Run();
+        
+        if(execution.State == ExecutionState.Failed)
         {
-            job.Run(execution);
-            BackupJobExecuted?.Invoke(job);
-        }
-
-        catch (DirectoryNotFoundException)
-        {
-            execution.SetError(T("DirectoryNotFound"));
-        }
-        catch (UnauthorizedAccessException)
-        {
-            execution.SetError(T("UnauthorizedAccess"));
-        }
-        catch (Exception e)
-        {
-            switch (e)
-            {
-                case UnauthorizedAccessException:
-                    execution.SetError(T("UnauthorizedAccess"));
-                    break;
-                case DirectoryNotFoundException:
-                    execution.SetError(T("DirectoryNotFound"));
-                    break;
-                case OperationCanceledException:
-                    execution.SetError(T("OperationCancelled"));
-                    break;
-                case IOException:
-                    execution.SetError(T("IOError") + " - " + T("CheckLogs"));
-                    break;
-                default:
-                    execution.SetError(T("ErrorOccurred") + " - " + T("CheckLogs"));
-                    break;
-            }
+            ErrorOccurred?.Invoke(execution.Exception!);
         }
     }
 
