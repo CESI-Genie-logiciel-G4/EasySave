@@ -1,10 +1,7 @@
-﻿using System.Text;
-using EasySave.Helpers;
+﻿using EasySave.ViewModels;
+using EasySave.Views;
 
 namespace EasySave.Tests.Views;
-
-using EasySave.ViewModels;
-using EasySave.Views;
 
 public class ConsoleViewTests
 {

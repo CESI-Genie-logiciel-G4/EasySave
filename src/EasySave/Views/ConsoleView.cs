@@ -154,8 +154,11 @@ public class ConsoleView
             return;
         }
 
-        var value = ConsoleHelper.AskForInt(T("SelectJobToRemove"), 1, jobCount);
-        _viewModel.RemoveJob(value - 1);
+        var value = ConsoleHelper.AskForMultipleValues(T("SelectJob(s)ToRemove"), 1, jobCount);
+        foreach (var item in value.OrderByDescending(x => x))
+        {
+            _viewModel.RemoveJob(item - 1);
+        }
     }
 
     private void DisplayJobExecuted(BackupJob job)

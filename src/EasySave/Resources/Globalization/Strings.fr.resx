@@ -7,7 +7,7 @@
     <value>Ajouter un nouveau travail</value>
   </data>
     <data name="MenuRemoveJob" xml:space="preserve">
-    <value>Supprimer un travail</value>
+    <value>Supprimer un ou plusieurs travaux</value>
   </data>
     <data name="MenuExit" xml:space="preserve">
     <value>Quitter</value>
@@ -27,8 +27,8 @@
     <data name="SelectJobsToExecute" xml:space="preserve">
     <value>Sélectionnez les travaux à exécuter</value>
   </data>
-    <data name="SelectJobToRemove" xml:space="preserve">
-    <value>Sélectionnez le travail à supprimer</value>
+    <data name="SelectJob(s)ToRemove" xml:space="preserve">
+    <value>Sélectionnez un ou plusieurs travaux de sauvegarde à supprimer</value>
   </data>
     <data name="EnterJobName" xml:space="preserve">
     <value>Entrez le nom du travail</value>

@@ -7,7 +7,7 @@
     <value>Add a new job</value>
   </data>
     <data name="MenuRemoveJob" xml:space="preserve">
-    <value>Remove a job</value>
+    <value>Remove job(s)</value>
   </data>
     <data name="MenuExit" xml:space="preserve">
     <value>Exit</value>
@@ -27,8 +27,8 @@
     <data name="SelectJobsToExecute" xml:space="preserve">
     <value>Select the jobs to execute</value>
   </data>
-    <data name="SelectJobToRemove" xml:space="preserve">
-    <value>Select the job to remove</value>
+    <data name="SelectJob(s)ToRemove" xml:space="preserve">
+    <value>Select one or more backup jobs to remove</value>
   </data>
     <data name="EnterJobName" xml:space="preserve">
     <value>Enter the name of the job</value>
