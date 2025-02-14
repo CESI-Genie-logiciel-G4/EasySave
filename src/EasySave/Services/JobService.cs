@@ -81,6 +81,7 @@ public static class JobService
         if (File.GetLastWriteTime(BackupJobsHistoricalFile) <= LastLoadHistoricalBackupTime) return;
         var readJson = File.ReadAllText(BackupJobsHistoricalFile);
         CompletedBackupJobs = JsonSerializer.Deserialize<List<BackupJob>>(readJson)?? [];
+        LastLoadHistoricalBackupTime = DateTime.Now;
     }
     
     public static BackupJob? GetLastCompleteBackupJob(string jobSourcePath)
