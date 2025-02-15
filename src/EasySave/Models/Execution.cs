@@ -1,6 +1,7 @@
 namespace EasySave.Models;
 
 using Helpers;
+using static Services.HistoryService;
 
 public class Execution(BackupJob backupJob)
 {
@@ -44,5 +45,7 @@ public class Execution(BackupJob backupJob)
             State = ExecutionState.Failed;
             Exception = e;
         }
+
+        StoreCompletedExecution(this);
     }
 }

@@ -1,5 +1,4 @@
-using EasySave.Models;
-using static EasySave.Services.JobService;
+using static EasySave.Services.HistoryService;
 
 namespace EasySave.Helpers;
 
@@ -8,7 +7,6 @@ public static class FolderHelper
     public static string GetLastCompleteBackupFolder(string sourceFolder)
     {
         var lastCompleteBackupJob = GetLastCompleteBackupJob(sourceFolder);
-        if (lastCompleteBackupJob == null) return "";
-        return lastCompleteBackupJob.DestinationFolder;
+        return lastCompleteBackupJob == null ? "" : lastCompleteBackupJob.DestinationFolder;
     }
 }
