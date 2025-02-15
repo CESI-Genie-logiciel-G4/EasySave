@@ -1,24 +1,34 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace Logger.LogEntries;
 
-public class CopyFileLogEntry(
-    string backupName,
-    string sourcePath,
-    string destinationPath,
-    long fileSize,
-    double transferTimeMs)
-    : ILogEntry
+public class CopyFileLogEntry() : LogEntry("Copy a file")
 {
-    public DateTime Timestamp { get; } = DateTime.UtcNow;
-    public string LoggedOperation { get; set; } = "Copy a file";
-    public string BackupName { get; set; } = backupName;
-    public string SourcePath { get; set; } = sourcePath;
-    public string DestinationPath { get; set; } = destinationPath;
-    public long FileSize { get; set; } = fileSize;
-    public double TransferTimeMs { get; set; } = transferTimeMs;
+    [JsonPropertyOrder(3)] 
+    public string BackupName { get; set; } = null!;
+
+    [JsonPropertyOrder(4)]
+    public string SourcePath { get; set; } = null!;
+
+    [JsonPropertyOrder(5)]
+    public string DestinationPath { get; set; } = null!;
+
+    [JsonPropertyOrder(6)]
+    public long FileSize { get; set; }
+    [JsonPropertyOrder(7)]
+    public double TransferTimeMs { get; set; }
     
-    public override string ToString() => $"[{Timestamp}] - {LoggedOperation} in {TransferTimeMs} - {BackupName} backup in progress";
-    public string ToJson() => JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+    public CopyFileLogEntry(string backupName, string sourcePath, string destinationPath, long fileSize, double transferTimeMs) : this()
+    {
+        BackupName = backupName;
+        SourcePath = sourcePath;
+        DestinationPath = destinationPath;
+        FileSize = fileSize;
+        TransferTimeMs = transferTimeMs;
+    }
+
+    public override string ToString() => $" [{Timestamp}] - {LoggedOperation} in {TransferTimeMs} ms - {BackupName} backup in progress";
 }
