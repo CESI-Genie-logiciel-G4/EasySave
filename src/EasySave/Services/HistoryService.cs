@@ -47,7 +47,7 @@ public static class HistoryService
         var lastFullBackupExecution = CompletedExecutions.LastOrDefault(
             execution =>
                 execution.BackupJob.SourceFolder == jobSourcePath 
-                && execution.BackupJob.BackupType is FullBackup
+                && execution.BackupJob.BackupType is FullBackup or SyntheticFullBackup
             );
         return lastFullBackupExecution?.BackupJob;
     }

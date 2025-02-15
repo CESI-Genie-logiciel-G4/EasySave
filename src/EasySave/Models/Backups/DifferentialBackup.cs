@@ -8,11 +8,11 @@ public class DifferentialBackup() : BackupType("DifferentialBackup")
     
     public override void Initialize(BackupJob job)
     {
+        _lastFullBackupFolder = FolderHelper.GetLastCompleteBackupFolder(job.SourceFolder);
     }
 
     public override void Execute(string sourceFile, string destinationFile, BackupJob job)
     {
-        InitializeLastFullBackup(job);
         var lastFullBackupFile = FileHelper.GetMirrorFilePath(
             job.SourceFolder, 
             sourceFile, 
@@ -23,10 +23,5 @@ public class DifferentialBackup() : BackupType("DifferentialBackup")
         {
             FileHelper.Copy(sourceFile, destinationFile, job);
         }
-    }
-    
-    private void InitializeLastFullBackup(BackupJob job)
-    {
-        _lastFullBackupFolder ??= FolderHelper.GetLastCompleteBackupFolder(job.SourceFolder);
     }
 }
