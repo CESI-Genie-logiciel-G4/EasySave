@@ -1,4 +1,5 @@
 using EasySave.Helpers;
+using EasySave.Services;
 
 namespace EasySave.Models.Backups;
 
@@ -8,7 +9,7 @@ public class DifferentialBackup() : BackupType("DifferentialBackup")
     
     public override void Initialize(BackupJob job)
     {
-        _lastFullBackupFolder = FolderHelper.GetLastCompleteBackupFolder(job.SourceFolder);
+        _lastFullBackupFolder = HistoryService.GetLastCompleteBackupFolder(job.SourceFolder);
     }
 
     public override void Execute(string sourceFile, string destinationFile, BackupJob job)
