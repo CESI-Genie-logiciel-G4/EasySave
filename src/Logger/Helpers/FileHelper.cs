@@ -10,9 +10,13 @@ static class FileHelper
         return Path.Combine(logRepositoryPath, $"log_{date}{extension}");
     }
 
-    public static void CreateLogDirectoryIfNotExists(string logPath)
+    public static void CreateLogDirectoryIfNotExists(string path)
     {
-        var parentDir = Path.GetDirectoryName(logPath)!;
-        Directory.CreateDirectory(parentDir);
+        var directory = Path.GetDirectoryName(path);
+        
+        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
     }
 }

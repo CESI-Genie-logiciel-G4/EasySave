@@ -24,6 +24,7 @@ public class ConsoleView
             new MenuItem("MenuAddJob", AddJob),
             new MenuItem("MenuRemoveJob", RemoveJob),
             new MenuItem("MenuChangeLanguage", DisplayLanguageMenu),
+            new MenuItem("MenuLogsFormat", ChangeLogsFormat),
             new MenuItem("MenuExit", ExitApp)
         ];
 
@@ -33,6 +34,7 @@ public class ConsoleView
         
         _viewModel.ProgressUpdated += DisplayProgress;
         _viewModel.ErrorOccurred += DisplayError;
+        _viewModel.LogsTransportersChanged += DisplayLogsTransportersChanged;
     }
 
     public void Render()
@@ -155,7 +157,20 @@ public class ConsoleView
         var value = ConsoleHelper.AskForInt(T("SelectJobToRemove"), 1, jobCount);
         _viewModel.RemoveJob(value - 1);
     }
-    
+
+    private void ChangeLogsFormat()
+    {
+        Console.WriteLine(T("SelectLogsTransporters"));
+        for (var i = 0; i < _viewModel.LogTransporters.Count; i++)
+        {
+            var transporter = _viewModel.LogTransporters[i];
+            var check = transporter.IsEnabled ? "[X]" : "[ ]";
+            Console.WriteLine($"\t{i + 1}. {check} {T(transporter.Title)}");
+        }
+        var values = ConsoleHelper.AskForMultipleValues(T("SelectLogsTransporters"), 1, _viewModel.LogTransporters.Count);
+        _viewModel.ChangeLogsTransporters(values);
+    }
+
     private void DisplayJobAdded(BackupJob job)
     {
         Console.WriteLine($"\t- {string.Format(T("JobAdded"), job.Name)}");
@@ -221,6 +236,11 @@ public class ConsoleView
         };
         
         ConsoleHelper.DisplayError(message, false);
+    }
+    
+    private void DisplayLogsTransportersChanged()
+    {
+        Console.WriteLine(T("LogsFormatChanged"));
     }
     
     private void ExitApp()

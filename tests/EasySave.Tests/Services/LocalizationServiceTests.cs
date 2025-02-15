@@ -6,11 +6,11 @@ using EasySave.Services;
 public class LocalizationServiceTests
 {
     [Fact]
-    public void ShouldReturnMissingTranslationMessageWhenKeyIsNotFound()
+    public void ShouldReturnTheKeyWhenTranslationIsMissing()
     {
         const string key = "fakeKey";
         var value = LocalizationService.GetString(key);
-        Assert.Equal($"[Missing Translation: ({key})]", value); 
+        Assert.Equal($"{key}", value);
     }
     
     [Fact]

@@ -41,6 +41,8 @@ public class Execution(BackupJob backupJob)
             }
             
             State = ExecutionState.Completed;
+            EndTime = DateTime.UtcNow;
+            StoreCompletedExecution(this);
             ProgressUpdated?.Invoke(this);
         }
         catch (Exception e)
@@ -48,7 +50,5 @@ public class Execution(BackupJob backupJob)
             State = ExecutionState.Failed;
             Exception = e;
         }
-        EndTime = DateTime.UtcNow;
-        StoreCompletedExecution(this);
     }
 }

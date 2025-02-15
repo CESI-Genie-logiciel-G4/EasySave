@@ -141,4 +141,25 @@
   <data name="SyntheticFullBackup" xml:space="preserve">
     <value>Sauvegarde complète synthétique</value>
   </data>
+  <data name="MenuLogsFormat" xml:space="preserve">
+    <value>Changer format des Logs</value>
+  </data>
+  <data name="JSON" xml:space="preserve">
+    <value>JSON</value>
+  </data>
+  <data name="XML" xml:space="preserve">
+    <value>XML</value>
+  </data>
+  <data name="Console" xml:space="preserve">
+    <value>Console</value>
+  </data>
+  <data name="SelectLogsTransporters" xml:space="preserve">
+    <value>Sélectionnez les formats de sortie de logs à activer/désactiver</value>
+  </data>
+  <data name="LogsFormatChanged" xml:space="preserve">
+    <value>Les formats de logs ont été modifiés avec succès</value>
+  </data>
+  <data name="AvailableLogsFormats" xml:space="preserve">
+    <value>Formats de sortie des logs disponibles :</value>
+  </data>
 </root>
