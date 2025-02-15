@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 using EasySave.Models;
 using Logger.LogEntries;
 
@@ -62,5 +63,12 @@ public static class FileHelper
             throw new Exception("Parent directory is null");
         }
         Directory.CreateDirectory(parentDir);
+    }
+
+    public static string? GetMirrorFilePath(string sourceFolder, string sourceFile, string? mirrorFolder)
+    {
+        if(mirrorFolder == null) return null;
+        var relativePath = Path.GetRelativePath(sourceFolder, sourceFile);
+        return Path.Combine(mirrorFolder, relativePath);
     }
 }

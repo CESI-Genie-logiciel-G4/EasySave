@@ -11,6 +11,7 @@ namespace EasySave
         private static void Main()
         {
             JobService.LoadJobs();
+            HistoryService.LoadHistory();
             
             var logger = L.GetInstance();
             logger.SetupTransporters([

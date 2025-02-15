@@ -1,4 +1,5 @@
 ﻿using EasySave.Helpers;
+using EasySave.Models.Backups;
 
 namespace EasySave.Services;
 
@@ -9,8 +10,11 @@ public static class JobService
 {
     public static List<BackupJob> BackupJobs { get; } = [];
     public const int BackupJobLimit = 5;
+
+    public static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
     
     private const string BackupJobsFile = ".easysave/backup-jobs.json";
+    
     
     public static BackupJob AddBackupJob(string name, string source, string destination, BackupType type)
     {
@@ -34,9 +38,7 @@ public static class JobService
     
     private static void StoreJobs()
     {
-        var options = new JsonSerializerOptions { WriteIndented = true };
-        
-        var json = JsonSerializer.Serialize(BackupJobs, options);
+        var json = JsonSerializer.Serialize(BackupJobs, DefaultJsonOptions);
         FileHelper.CreateAndWrite(BackupJobsFile, json);
     }
     
