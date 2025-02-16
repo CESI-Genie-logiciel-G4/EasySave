@@ -69,18 +69,19 @@
 
 Comprehensive user documentation is available to help you get started and understand the application's features.
 
-**User Guide**: Learn how EasySave efficiently.
+**User Guide**: Learn how to use EasySave and navigate the application's menu.
 
 **[Read the Full Documentation](./USER-GUIDE.md)**
 
 </br>
 
-
 ## 📦 Installation
 
-Ensure **.NET 9** is installed before running the application..  
-The **EasySave** solution consists of **multiple projects**:
+Download and execute the latest version of **EasySave** from the [EasySave v1.1 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v1.1).
 
+If you are building from source, ensure **.NET 9** is installed before running the application.  
+
+The **EasySave** solution consists of **multiple projects**:
 
 ``` python
 EasySave/                # Main solution
@@ -109,7 +110,6 @@ dotnet
 ```
 
 </br>
-
 
 <div align="center">
   <table style="width: 100%;">
