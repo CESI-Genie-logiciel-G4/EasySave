@@ -13,7 +13,7 @@ public static class JobService
 
     public static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
     
-    private const string BackupJobsFile = ".easysave/backup-jobs.json";
+    private const string BackupJobsFile = ".easysave/jobs-list.json";
     
     
     public static BackupJob AddBackupJob(string name, string source, string destination, BackupType type)
