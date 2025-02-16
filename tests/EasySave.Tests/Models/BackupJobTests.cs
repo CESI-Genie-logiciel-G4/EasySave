@@ -1,4 +1,6 @@
-﻿namespace EasySave.Tests.Models;
+﻿using EasySave.Models.Backups;
+
+namespace EasySave.Tests.Models;
 
 using EasySave.Models;
 

@@ -33,7 +33,7 @@
     <data name="EnterJobName" xml:space="preserve">
     <value>Enter the name of the job</value>
   </data>
-  <data name="JobExecuted" xml:space="preserve">
+    <data name="JobExecuted" xml:space="preserve">
     <value>Backup [{0}] completed successfully</value>
   </data>
     <data name="JobAdded" xml:space="preserve">
@@ -45,97 +45,121 @@
     <data name="Exiting" xml:space="preserve">
     <value>Exiting...</value>
   </data>
-  <data name="PressAnyKey" xml:space="preserve">
+    <data name="PressAnyKey" xml:space="preserve">
     <value>- Press any key to continue -</value>
   </data>
     <data name="InvalidInput" xml:space="preserve">
     <value>Invalid input, please try again.</value>
   </data>
-  <data name="English" xml:space="preserve">
+    <data name="English" xml:space="preserve">
     <value>English</value>
   </data>
-  <data name="French" xml:space="preserve">
+    <data name="French" xml:space="preserve">
     <value>French</value>
   </data>
-  <data name="SelectLanguage" xml:space="preserve">
+    <data name="SelectLanguage" xml:space="preserve">
     <value>Select a language</value>
   </data>
-  <data name="MenuChangeLanguage" xml:space="preserve">
-    <value>Change Language</value>
+    <data name="MenuChangeLanguage" xml:space="preserve">
+    <value>Change language</value>
   </data>
-  <data name="StringLengthRange" xml:space="preserve">
+    <data name="StringLengthRange" xml:space="preserve">
     <value>({0}-{1} characters): </value>
   </data>
-  <data name="InvalidNumber" xml:space="preserve">
+    <data name="InvalidNumber" xml:space="preserve">
     <value>Please enter a valid number.</value>
   </data>
-  <data name="InvalidStringLength" xml:space="preserve">
+    <data name="InvalidStringLength" xml:space="preserve">
     <value>Please enter a valid string.</value>
   </data>
-  <data name="InvalidFormat" xml:space="preserve">
+    <data name="InvalidFormat" xml:space="preserve">
     <value>Invalid format. Try: 5, 2-5, 1;3;7, *.</value>
   </data>
-  <data name="Version" xml:space="preserve">
+    <data name="Version" xml:space="preserve">
     <value>Version:</value>
   </data>
-  <data name="ExitToCancel" xml:space="preserve">
+    <data name="ExitToCancel" xml:space="preserve">
     <value>'{0}' to cancel</value>
   </data>
-  <data name="JobLimitReached" xml:space="preserve">
+    <data name="JobLimitReached" xml:space="preserve">
     <value>Job limit reached</value>
   </data>
-  <data name="SelectBackupType" xml:space="preserve">
+    <data name="SelectBackupType" xml:space="preserve">
     <value>Select backup type</value>
   </data>
-  <data name="EnterSourceDirectory" xml:space="preserve">
+    <data name="EnterSourceDirectory" xml:space="preserve">
     <value>Enter the source directory</value>
   </data>
-  <data name="EnterDestinationDirectory" xml:space="preserve">
+    <data name="EnterDestinationDirectory" xml:space="preserve">
     <value>Enter the destination directory</value>
   </data>
-  <data name="InvalidDirectory" xml:space="preserve">
+    <data name="InvalidDirectory" xml:space="preserve">
     <value>Invalid directory</value>
   </data>
-  <data name="Number" xml:space="preserve">
+    <data name="Number" xml:space="preserve">
     <value>N°</value>
   </data>
-  <data name="Name" xml:space="preserve">
+    <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="SourcePath" xml:space="preserve">
+    <data name="SourcePath" xml:space="preserve">
     <value>Source Path</value>
   </data>
-  <data name="DestinationPath" xml:space="preserve">
+    <data name="DestinationPath" xml:space="preserve">
     <value>Destination Path</value>
   </data>
-  <data name="Type" xml:space="preserve">
+    <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
-  <data name="FullBackup" xml:space="preserve">
+    <data name="FullBackup" xml:space="preserve">
     <value>Full Backup</value>
   </data>
-  <data name="DifferentialBackup" xml:space="preserve">
+    <data name="DifferentialBackup" xml:space="preserve">
     <value>Differential Backup</value>
   </data>
-  <data name="ErrorOccurred" xml:space="preserve">
+    <data name="ErrorOccurred" xml:space="preserve">
     <value>An error occurred</value>
   </data>
-  <data name="UnauthorizedAccess" xml:space="preserve">
+    <data name="UnauthorizedAccess" xml:space="preserve">
     <value>Unauthorized Access</value>
   </data>
-  <data name="DirectoryNotFound" xml:space="preserve">
+    <data name="DirectoryNotFound" xml:space="preserve">
     <value>Directory Not Found</value>
   </data>
-  <data name="Progress" xml:space="preserve">
+    <data name="Progress" xml:space="preserve">
     <value>Progress:</value>
   </data>
-  <data name="StartBackupJob" xml:space="preserve">
+    <data name="StartBackupJob" xml:space="preserve">
     <value>Starting Job: </value>
   </data>
-  <data name="CheckLogs" xml:space="preserve">
+    <data name="CheckLogs" xml:space="preserve">
     <value>Check logs</value>
   </data>
-  <data name="IOError" xml:space="preserve">
+    <data name="IOError" xml:space="preserve">
     <value>Input/Output Error</value>
+  </data>
+  <data name="SyntheticFullBackup" xml:space="preserve">
+    <value>Synthetic Full Backup</value>
+  </data>
+    <data name="MenuLogsFormat" xml:space="preserve">
+    <value>Change log format</value>
+  </data>
+    <data name="Console" xml:space="preserve">
+    <value>Console</value>
+  </data>
+    <data name="XML" xml:space="preserve">
+    <value>XML</value>
+  </data>
+    <data name="JSON" xml:space="preserve">
+    <value>JSON</value>
+  </data>
+    <data name="SelectLogsTransporters" xml:space="preserve">
+    <value>Select the desired log output formats to enable/disable</value>
+  </data>
+    <data name="LogsFormatChanged" xml:space="preserve">
+    <value>The log formats have been successfully changed</value>
+  </data>
+    <data name="AvailableLogsFormats" xml:space="preserve">
+    <value>Available log output formats:</value>
   </data>
 </root>

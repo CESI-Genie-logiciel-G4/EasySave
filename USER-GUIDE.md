@@ -3,8 +3,8 @@
 
 # 📘 **User Guide - EasySave**
 
-![Date](https://img.shields.io/badge/Date-2025_02_06-blue)
-![Version](https://img.shields.io/badge/Version-1.0-green)
+![Date](https://img.shields.io/badge/Date-2025_02_16-blue)
+![Version](https://img.shields.io/badge/Version-1.1-green)
 
 **Welcome to our user Wiki!** This document explains how to use our app.
 
@@ -18,9 +18,7 @@
 **EasySave** is a robust, multi-platform, console-based backup tool. It enables users to **create**, **manage**, and **execute** backup jobs with ease.
 Whether performing **full** or **differential** backups, EasySave ensures your data is securely backed up.
 
-You can **download** and **execute** the EasySave app from the following link: [EasySave v1.0 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v1.0).
-
-
+You can **download** and **execute** the EasySave app from the following link: [EasySave v1.1 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v1.1).
 
 ## **Main Features**
 
@@ -38,11 +36,13 @@ Using an interactive menu system, each action is selectable by entering its corr
 ### **Creating a Backup Job**
 A backup job is a named link between two **existing** files. Once created, it allows copying content from the source to the destination on demand.
 
-Two backup strategies are available:
+Three backup strategies are available:
 - **Full**: Recopies all files at each execution.
-- **Differential**: Copies only recently modified files.
+- **Synthetic Full**: Only new files are copied, creating a full backup by merging changes with the last 
+full backup.
+ **Differential**: Copies only new or modified files since the last full backup, saving them in a separate location.
 
-> **Limit**: The community version allows creating up to **5** backup jobs.
+> **Limit**: No limit on the number of backup jobs.
 
 <div align="center">
 
@@ -84,6 +84,8 @@ EasySave offers flexible management of backup jobs through simplified expression
 - Displays backup progress status.
 - Immediate indication of encountered errors.
 - Automatically generates logs in `.easysave/logs` within the executable directory.
+- Logs can be configured to output in `XML`, `JSON`, or `Console` format and are displayed in real-time in the interface.
+- All logs are journaled for persistent record-keeping.
 
 <br/>
 
@@ -93,7 +95,7 @@ The application is **bilingual** (French and English) and can be extended to oth
 <br/>
 
 ## **Need Help?**
-📌 Visit our **[GitHub](#)** or contact us on **LinkedIn** for further inquiries.
+📌 Visit our **GitHub** or contact us on **LinkedIn** for further inquiries.
 
 <br/>
 <br/>
