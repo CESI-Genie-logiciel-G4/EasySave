@@ -11,5 +11,11 @@
     <ItemGroup>
       <ProjectReference Include="..\Logger\Logger.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="Avalonia" Version="11.2.4" />
+      <PackageReference Include="Avalonia.Desktop" Version="11.2.4" />
+      <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.4" />
+    </ItemGroup>
 
 </Project>

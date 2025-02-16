@@ -1,6 +1,7 @@
-﻿using EasySave.Views;
+﻿using Avalonia;
 using EasySave.ViewModels;
 using EasySave.Services;
+using EasySave.Views.Console;
 
 namespace EasySave
 {
@@ -11,13 +12,29 @@ namespace EasySave
             JobService.LoadJobs();
             ExtensionService.LoadEncryptedExtensions();
             HistoryService.LoadHistory();
-            
-            var viewModel = new MainViewModel();
-            var view = new ConsoleView(viewModel);
-            
             LocalizationService.SetLanguage("en");
             
-            view.Render();
+            var ui = "gui";
+            
+            switch (ui)
+            {
+                case "console":
+                    var viewModel = new MainViewModel();
+                    var view = new ConsoleView(viewModel);
+                    view.Render();
+                    break;
+                case "gui":
+                    BuildAvaloniaApp().StartWithClassicDesktopLifetime([]);
+                    break;
+                default:
+                    throw new Exception("Invalid UI");
+            }
+            
         }
+
+        private static AppBuilder BuildAvaloniaApp() =>
+            AppBuilder.Configure<App>()
+                .UsePlatformDetect()
+                .LogToTrace();
     }
 }
