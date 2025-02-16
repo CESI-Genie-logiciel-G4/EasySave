@@ -8,6 +8,7 @@ namespace EasySave.Services;
 public static class HistoryService
 {
     private static List<Execution> CompletedExecutions { get; set; } = [];
+    private static DateTime LastHistoryLoad { get; set; } = DateTime.MinValue;
     private const string ExecutionHistoryFile = ".easysave/executions-history.json";
 
     private static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
@@ -24,22 +25,68 @@ public static class HistoryService
     public static void LoadHistory()
     {
         if (!File.Exists(ExecutionHistoryFile)) return;
+        if (LastHistoryLoad > File.GetLastWriteTimeUtc(ExecutionHistoryFile)) return;
         var readJson = File.ReadAllText(ExecutionHistoryFile);
         CompletedExecutions = JsonSerializer.Deserialize<List<Execution>>(readJson)?? [];
+        LastHistoryLoad = DateTime.Now;
     }
     
-    public static BackupJob? GetLastCompleteBackupJob(string jobSourcePath)
+    // Execution searcher
+    private static Execution? GetLastFullBackupJobExecution(string jobSourcePath)
     {
-        var lastFullBackupExecution = CompletedExecutions.LastOrDefault(
+        return CompletedExecutions.LastOrDefault(
             execution =>
                 execution.BackupJob.SourceFolder == jobSourcePath 
                 && execution.BackupJob.BackupType is FullBackup or SyntheticFullBackup
-            );
-        return lastFullBackupExecution?.BackupJob;
+        );
     }
     
+    private static Execution? GetLastBackupExecutionForFolder(string sourceFolder)
+    {
+        return CompletedExecutions.LastOrDefault(
+            execution => execution.BackupJob.SourceFolder == sourceFolder
+        );
+    }
+
+    private static Execution? GetLastBackupJobExecution(BackupJob backupJob)
+    {
+        return CompletedExecutions.LastOrDefault(
+            execution =>
+                execution.BackupJob.Name == backupJob.Name 
+                &&  execution.BackupJob.SourceFolder == backupJob.SourceFolder
+                &&  execution.BackupJob.DestinationFolder == backupJob.DestinationFolder
+                &&  execution.BackupJob.BackupType == backupJob.BackupType
+        );
+    }
+
+    // Specific searched data
     public static string? GetLastCompleteBackupFolder(string sourceFolder)
     {
-        return GetLastCompleteBackupJob(sourceFolder)?.DestinationFolder;
+        return GetLastFullBackupJobExecution(sourceFolder)?.BackupJob.DestinationFolder;
     }
+
+    public static DateTime? GetLastBackupExecutionDate(string sourceFolder)
+    {
+        var lastBackupExecution = CompletedExecutions.LastOrDefault(
+            execution =>
+                execution.BackupJob.SourceFolder == sourceFolder
+        );
+        return lastBackupExecution?.StartTime;
+    }
+    
+    public static DateTime? GetLastBackupJobExecutionDate(BackupJob backupJob)
+    {
+        return GetLastBackupJobExecution(backupJob)?.StartTime;
+    }
+
+    public static bool IsLastExecuteBackupJob(BackupJob backupJob)
+    {
+        return backupJob == GetLastBackupExecutionForFolder(backupJob.SourceFolder)?.BackupJob;
+    }
+
+    public static bool CanCreateDifferentialBackup(string sourceFolder)
+    {
+        return GetLastFullBackupJobExecution(sourceFolder) != null;
+    }
+
 }
