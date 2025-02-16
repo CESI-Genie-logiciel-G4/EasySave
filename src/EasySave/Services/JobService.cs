@@ -9,8 +9,6 @@ using System.Text.Json;
 public static class JobService
 {
     public static List<BackupJob> BackupJobs { get; } = [];
-    public const int BackupJobLimit = 5;
-
     public static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
     
     private const string BackupJobsFile = ".easysave/jobs-list.json";
@@ -18,11 +16,6 @@ public static class JobService
     
     public static BackupJob AddBackupJob(string name, string source, string destination, BackupType type)
     {
-        if (BackupJobs.Count >= BackupJobLimit)
-        {
-            throw new InvalidOperationException("Backup job limit reached");
-        }
-        
         var newJob = new BackupJob(name, source, destination, type);
         BackupJobs.Add(newJob);
         StoreJobs();

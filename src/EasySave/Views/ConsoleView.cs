@@ -123,12 +123,6 @@ public class ConsoleView
 
     private void AddJob()
     {
-        if (_backupJobs.Count >= JobService.BackupJobLimit)
-        {
-            Console.WriteLine(T("JobLimitReached"));
-            return;
-        }
-        
         var name = ConsoleHelper.AskForString(T("EnterJobName"), 3, 50);
         var source = ConsoleHelper.AskForPath(T("EnterSourceDirectory"));
         var destination = ConsoleHelper.AskForPath(T("EnterDestinationDirectory"));
