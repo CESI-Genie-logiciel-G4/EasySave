@@ -1,21 +1,25 @@
+using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace Logger.LogEntries;
 
-public class GlobalLogEntry(
-    string loggedOperation, 
-    string message, 
-    Dictionary<string, object>? metadata = null)
-    : ILogEntry
+public class GlobalLogEntry : LogEntry
 {
-    public DateTime Timestamp { get; } = DateTime.UtcNow;
-    public string LoggedOperation { get; set; } = loggedOperation;
-    public string Message { get; set; } = message;
+    public GlobalLogEntry() : base("") {}
+    public GlobalLogEntry(string loggedOperation, string message, Dictionary<string, object>? metadata = null) : base(loggedOperation)
+    {
+        Message = message;
+        Metadata = metadata;
+    }
+    
+    [JsonPropertyOrder(3)]
+    public string Message { get; set; } = null!;
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public Dictionary<string, object>? Metadata { get; set; } = metadata;
+    [JsonPropertyOrder(4)] [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    [XmlIgnore]
+    public Dictionary<string, object>? Metadata { get; set; }
 
     public override string ToString() => $"[{Timestamp}] - {LoggedOperation} - {Message}";
-    public string ToJson() => JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
 }

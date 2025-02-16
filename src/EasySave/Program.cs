@@ -1,7 +1,5 @@
 ﻿using EasySave.Views;
 using EasySave.ViewModels;
-using Logger.Transporters;
-using L = Logger.Logger;
 using EasySave.Services;
 
 namespace EasySave
@@ -12,11 +10,6 @@ namespace EasySave
         {
             JobService.LoadJobs();
             HistoryService.LoadHistory();
-            
-            var logger = L.GetInstance();
-            logger.SetupTransporters([
-                new FileJsonTransporter(".easysave/logs/"),
-            ]);
             
             var viewModel = new MainViewModel();
             var view = new ConsoleView(viewModel);

@@ -1,3 +1,5 @@
+using System.Text.Json;
+using Logger.Helpers;
 using Logger.LogEntries;
 
 namespace Logger.Transporters;
@@ -6,9 +8,8 @@ public class FileJsonTransporter(string logRepositoryPath) : Transporter
 {
     public override void Write(ILogEntry logEntry)
     {
-        var logFilePath = GetLogFilePath();
-        var parentDir = Path.GetDirectoryName(logFilePath)!;
-        Directory.CreateDirectory(parentDir);
+        var logFilePath = FileHelper.GetLogFilePath(logRepositoryPath, ".json");
+        FileHelper.CreateLogDirectoryIfNotExists(logFilePath);
         
         if (!File.Exists(logFilePath))
         {
@@ -24,12 +25,6 @@ public class FileJsonTransporter(string logRepositoryPath) : Transporter
             sw.Write(json);
         }
         sw.Close();
-    }
-    
-    private string GetLogFilePath()
-    {
-        var date = DateTime.Now.ToString("yyyy-MM-dd");
-        return Path.Combine(logRepositoryPath, $"log_{date}.json");
     }
 
     private string ReformatPaths(string json)
