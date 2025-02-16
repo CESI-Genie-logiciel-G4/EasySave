@@ -75,7 +75,6 @@ Comprehensive user documentation is available to help you get started and unders
 
 </br>
 
-
 ## 📦 Installation
 
 Download and execute the latest version of **EasySave** from the [EasySave v1.1 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v1.1).
@@ -111,7 +110,6 @@ dotnet
 ```
 
 </br>
-
 
 <div align="center">
   <table style="width: 100%;">
