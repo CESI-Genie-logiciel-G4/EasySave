@@ -9,7 +9,7 @@ using System.Text.Json;
 public static class JobService
 {
     public static List<BackupJob> BackupJobs { get; } = [];
-    public static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
+    private static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
     
     private const string BackupJobsFile = ".easysave/jobs-list.json";
     

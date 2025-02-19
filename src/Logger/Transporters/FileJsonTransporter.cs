@@ -1,4 +1,4 @@
-using System.Text.Json;
+using System.Runtime.CompilerServices;
 using Logger.Helpers;
 using Logger.LogEntries;
 
@@ -6,6 +6,7 @@ namespace Logger.Transporters;
 
 public class FileJsonTransporter(string logRepositoryPath) : Transporter
 {
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public override void Write(ILogEntry logEntry)
     {
         var logFilePath = FileHelper.GetLogFilePath(logRepositoryPath, ".json");

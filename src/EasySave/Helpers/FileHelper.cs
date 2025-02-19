@@ -22,7 +22,7 @@ public static class FileHelper
     public static void CreateParentDirectory(string path)
     {
         var parentDir = Path.GetDirectoryName(path);
-        if (string.IsNullOrEmpty(parentDir))
+        if (parentDir is null)
         {
             throw new Exception("Parent directory is null");
         }

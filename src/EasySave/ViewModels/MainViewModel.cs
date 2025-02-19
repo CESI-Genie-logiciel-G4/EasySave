@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using EasySave.Exceptions;
 using EasySave.Models;
 using EasySave.Models.Backups;
@@ -8,14 +10,22 @@ using Logger.Transporters;
 
 namespace EasySave.ViewModels;
 
-public class MainViewModel
+public partial class MainViewModel : ObservableObject
 {
-    private readonly List<BackupJob> _backupJobs = JobService.BackupJobs;
     public readonly ObservableCollection<string> EncryptedExtensions = ExtensionService.EncryptedExtensions;
     private static string T(string key) => LocalizationService.GetString(key);
-
+    
+    [ObservableProperty]
+    private ObservableCollection<BackupJob> _backupJobs;
+    
+    [ObservableProperty]
+    private ObservableCollection<Execution> _executions;
+    
     public MainViewModel()
     {
+        BackupJobs = new(JobService.BackupJobs);
+        Executions = new();
+        
         Logger.Logger.GetInstance()
             .SetupTransporters(ExtractLogsTransporters());
     }
@@ -56,18 +66,31 @@ public class MainViewModel
         BackupJobAdded?.Invoke(newJob);
     }
 
-    public void ExecuteJob(int index)
+    public Task ExecuteJob(int index)
     {
-        var job = _backupJobs[index];
+        var job = BackupJobs[index];
         var execution = new Execution(job);
         
-        execution.ProgressUpdated += (e) => ProgressUpdated?.Invoke(e);
-        execution.Run();
+        execution.ProgressUpdated += (e) =>
+        {
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                var index = Executions.IndexOf(e);
+                if (index >= 0) 
+                    Executions[index] = e;
+            });
+            
+            ProgressUpdated?.Invoke(e);
+        };
+        
+        Task.Run(() => execution.Run());
         
         if(execution.State == ExecutionState.Failed)
         {
             ErrorOccurred?.Invoke(execution.Exception!);
         }
+
+        return Task.CompletedTask;
     }
 
     public void RemoveJob(int index)

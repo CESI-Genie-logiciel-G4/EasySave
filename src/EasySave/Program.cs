@@ -13,18 +13,17 @@ namespace EasySave
             ExtensionService.LoadEncryptedExtensions();
             HistoryService.LoadHistory();
             LocalizationService.SetLanguage("en");
-            
+
+            var viewModel = new MainViewModel();
             var ui = "gui";
-            
             switch (ui)
             {
                 case "console":
-                    var viewModel = new MainViewModel();
                     var view = new ConsoleView(viewModel);
                     view.Render();
                     break;
                 case "gui":
-                    BuildAvaloniaApp().StartWithClassicDesktopLifetime([]);
+                    BuildAvaloniaApp(viewModel).StartWithClassicDesktopLifetime([]);
                     break;
                 default:
                     throw new Exception("Invalid UI");
@@ -32,8 +31,8 @@ namespace EasySave
             
         }
 
-        private static AppBuilder BuildAvaloniaApp() =>
-            AppBuilder.Configure<App>()
+        private static AppBuilder BuildAvaloniaApp(MainViewModel mainViewModel)
+            => AppBuilder.Configure(() => new App(mainViewModel))
                 .UsePlatformDetect()
                 .LogToTrace();
     }
