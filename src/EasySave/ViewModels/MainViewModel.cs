@@ -17,14 +17,14 @@ public partial class MainViewModel : ObservableObject
     
     [ObservableProperty]
     private ObservableCollection<BackupJob> _backupJobs;
-    
+
     [ObservableProperty]
-    private ObservableCollection<Execution> _executions;
+    private ObservableCollection<Execution> _history;
     
     public MainViewModel()
     {
         BackupJobs = new(JobService.BackupJobs);
-        Executions = new();
+        History = new(HistoryService.CompletedExecutions);
         
         Logger.Logger.GetInstance()
             .SetupTransporters(ExtractLogsTransporters());
@@ -36,12 +36,12 @@ public partial class MainViewModel : ObservableObject
         new("French", "fr")
     ];
 
-    public Dictionary<string, BackupType> BackupTypes { get; } = new()
-    {
-        ["Full"] = new FullBackup(),
-        ["Synthetic-Full"] = new SyntheticFullBackup(),
-        ["Differential"] = new DifferentialBackup(),
-    };
+    public List<BackupType> BackupTypes { get; } =
+    [
+        new FullBackup(),
+        new SyntheticFullBackup(),
+        new DifferentialBackup()
+    ];
     
     public List<TransporterItem> LogTransporters { get; } =
     [
@@ -66,31 +66,23 @@ public partial class MainViewModel : ObservableObject
         BackupJobAdded?.Invoke(newJob);
     }
 
-    public Task ExecuteJob(int index)
+    public async void ExecuteJob(int index)
     {
         var job = BackupJobs[index];
         var execution = new Execution(job);
         
         execution.ProgressUpdated += (e) =>
         {
-            Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                var index = Executions.IndexOf(e);
-                if (index >= 0) 
-                    Executions[index] = e;
-            });
-            
             ProgressUpdated?.Invoke(e);
         };
         
-        Task.Run(() => execution.Run());
+        await Task.Run(() => execution.Run());
         
         if(execution.State == ExecutionState.Failed)
         {
             ErrorOccurred?.Invoke(execution.Exception!);
         }
 
-        return Task.CompletedTask;
     }
 
     public void RemoveJob(int index)

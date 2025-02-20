@@ -7,11 +7,10 @@ namespace EasySave.Services;
 
 public static class HistoryService
 {
-    private static List<Execution> CompletedExecutions { get; set; } = [];
+    public static List<Execution> CompletedExecutions { get; set; } = [];
     private const string ExecutionHistoryFile = ".easysave/executions-history.json";
 
     private static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
-    
     
     public static void StoreCompletedExecution(Execution execution)
     {

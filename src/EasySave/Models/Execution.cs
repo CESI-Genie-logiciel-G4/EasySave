@@ -8,12 +8,12 @@ public class Execution(BackupJob backupJob)
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public ExecutionState State { get; set; } = ExecutionState.Pending;
-    public Exception? Exception { get; set; } = null;
+    public Exception? Exception { get; set; }
     public BackupJob BackupJob { get; } = backupJob;
     public event Action<Execution>? ProgressUpdated;
     public int CurrentProgress { get; set; } = 0;
     public int TotalSteps { get; set; }
-    
+
     public void Run()
     {
         StartTime = DateTime.UtcNow;

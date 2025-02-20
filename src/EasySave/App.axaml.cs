@@ -17,10 +17,7 @@ namespace EasySave
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = mainViewModel
-                };
+                desktop.MainWindow = new MainWindow(mainViewModel);
             }
 
             base.OnFrameworkInitializationCompleted();

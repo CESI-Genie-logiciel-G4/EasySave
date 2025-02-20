@@ -1,67 +1,80 @@
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
-using EasySave.Models;
 using EasySave.ViewModels;
 
 namespace EasySave.Views.app;
 
 public partial class MainWindow : Window
 {
-    private MainViewModel ViewModel => DataContext as MainViewModel ?? throw new InvalidOperationException("DataContext is not MainViewModel");
-    
-    public MainWindow()
+    private readonly MainViewModel _viewModel;
+
+    public MainWindow(MainViewModel viewModel)
     {
         InitializeComponent();
+        _viewModel = viewModel;
+        DataContext = viewModel;
+        AdjustMenuForMacOS();
     }
-
-    private void OnAddJob(object? sender, RoutedEventArgs e)
+    
+    private void OnStartJobButton(object? sender, RoutedEventArgs e)
     {
-        System.Console.WriteLine("Add job clicked");
+        System.Console.WriteLine("Start job clicked");
     }
-
-    private void OnRemoveJob(object? sender, RoutedEventArgs e)
+    
+    private void OnCreateJobButton(object? sender, RoutedEventArgs e)
     {
-        System.Console.WriteLine("Remove job clicked");
-    }
-
-    private void OnExecuteJobs(object? sender, RoutedEventArgs e)
-    {
-        ViewModel.Executions.Clear();
-        System.Console.WriteLine("Execute job clicked");
+        var name = JobName.Text;
+        var source = SourcePath.Text;
+        var target = TargetPath.Text;
+        var modeIndex = Mode.SelectedIndex;
         
-        foreach (var job in JobList.SelectedItems)
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target) || modeIndex == -1)
         {
-            var index = JobList.Items.IndexOf(job);
-            ViewModel.ExecuteJob(index);
+            return;
+        }
+
+        var backupType = _viewModel.BackupTypes[modeIndex];
+        _viewModel.AddBackupJob(name, source, target, backupType);
+        
+        JobName.Text = "";
+        SourcePath.Text = "";
+        TargetPath.Text = "";
+        
+        SidebarTabs.SelectedIndex = 0;
+    }
+ 
+    private async void OnSelectSourceFolder(object sender, RoutedEventArgs e)
+    {
+        var dialog = new OpenFolderDialog { Title = "Sélectionnez un dossier source" };
+        var result = await dialog.ShowAsync(this);
+        if (!string.IsNullOrEmpty(result))
+        {
+            SourcePath.Text = result;
         }
     }
 
-    private void OnChangeLogsFormat(object? sender, RoutedEventArgs e)
+    private async void OnSelectTargetFolder(object sender, RoutedEventArgs e)
     {
-        System.Console.WriteLine("Change logs format clicked");
+        var dialog = new OpenFolderDialog { Title = "Sélectionnez un dossier de destination" };
+        var result = await dialog.ShowAsync(this);
+        if (!string.IsNullOrEmpty(result))
+        {
+            TargetPath.Text = result;
+        }
     }
 
-    private void OnBackupJobAdded(BackupJob job)
+    private void OnMenuPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        System.Console.WriteLine("Job added");
-    }
-
-    private void OnBackupJobRemoved(int index)
-    {
-        System.Console.WriteLine("Job removed");
+        BeginMoveDrag(e);
     }
     
-    private void OnErrorOccurred(Exception e)
+    private void AdjustMenuForMacOS()
     {
-        var message = e switch
+        if (OperatingSystem.IsMacOS())
         {
-            UnauthorizedAccessException => "Access denied. Please check permissions.",
-            DirectoryNotFoundException => "Directory not found. Please verify the path.",
-            OperationCanceledException => "Operation was cancelled.",
-            IOException => "I/O error occurred. Please check the logs for details.",
-            _ => "An error occurred. Please check the logs for details."
-        };
-        
-        System.Console.WriteLine(message);
+            MainMenu.Padding = new Thickness(70, 0, 0, 0);
+        }
     }
 }

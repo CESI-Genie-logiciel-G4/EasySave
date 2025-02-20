@@ -148,11 +148,11 @@ public class ConsoleView
         
         for (var i = 0; i < _viewModel.BackupTypes.Count; i++)
         {
-            var backupType = _viewModel.BackupTypes.ElementAt(i);
-            System.Console.WriteLine($"\t{i + 1}. {backupType.Key}");
+            var backupType = _viewModel.BackupTypes[i];
+            System.Console.WriteLine($"\t{i + 1}. {T(backupType.Name)}");
         }
         var typeChoice = ConsoleHelper.AskForInt(T("SelectBackupType"), 1, _viewModel.BackupTypes.Count);
-        var type = _viewModel.BackupTypes.ElementAt(typeChoice - 1).Value;
+        var type = _viewModel.BackupTypes[typeChoice - 1];
         
         var encryption = ConsoleHelper.AskForBool(T("UseEncryption"));
         _viewModel.AddBackupJob(name, source, destination, type, encryption);

@@ -3,69 +3,121 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:EasySave.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        mc:Ignorable="d"
         x:Class="EasySave.Views.app.MainWindow"
         x:DataType="vm:MainViewModel"
+        Height="550"
+        Width="950"
         Title="EasySave"
-        >
+        ExtendClientAreaToDecorationsHint="True">
 
     <Window.DataContext>
-        <vm:MainViewModel/>
+        <vm:MainViewModel />
     </Window.DataContext>
 
-    <Grid RowDefinitions="Auto,*,Auto" Margin="20">
-        <!-- Header -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="EasySave" FontSize="24" FontWeight="Bold"/>
-            <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
-                <ComboBox x:Name="LanguageSelector" Width="150"
-                         ItemsSource="{Binding Languages}"
-                         DisplayMemberBinding="{Binding Language}"/>
-                <Button Content="Change Logs Format" Click="OnChangeLogsFormat"/>
-            </StackPanel>
-        </StackPanel>
-        
-        <!-- Main Content -->
-        <Grid Grid.Row="0">
-            <!-- Nommer la ListBox et utiliser SelectedIndex -->
-            <ListBox x:Name="JobList" 
-                     ItemsSource="{Binding BackupJobs}"
-                     HorizontalAlignment="Stretch" 
-                     VerticalAlignment="Stretch"
-                     SelectionMode="Multiple"
-                     >
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical" Margin="5"> 
-                            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                            <TextBlock Text="{Binding SourceFolder}" FontStyle="Italic"/>
-                            <TextBlock Text="{Binding DestinationFolder}" Foreground="Gray"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Grid>
-        
-        <Grid Grid.Row="1" RowDefinitions="Auto,*">
-            <ListBox ItemsSource="{Binding Executions}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Margin="5">
-                            <TextBlock Text="{Binding BackupJob.Name}" FontWeight="Bold"/>
-                            <ProgressBar Minimum="0" Maximum="{Binding TotalSteps}"
-                                         Value="{Binding CurrentProgress}" 
-                                         Height="10"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Grid>
+    <DockPanel LastChildFill="True">
+        <Menu Background="#383A42" x:Name="MainMenu" PointerPressed="OnMenuPointerPressed" DockPanel.Dock="Top">
+            <MenuItem Header="EasySave" Foreground="White">
+                <MenuItem Header="Quitter" />
+            </MenuItem>
+            <MenuItem Header="Fichier" Foreground="White">
+                <MenuItem Header="Paramètres" />
+            </MenuItem>
+            <MenuItem Header="Aide" Foreground="White">
+                <MenuItem Header="A propos" />
+            </MenuItem>
+        </Menu>
 
-        <!-- Bottom Controls -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="10">
-            <Button Content="Add Job" Click="OnAddJob"/>
-            <Button Content="Remove Job" Click="OnRemoveJob"/>
-            <Button Content="Execute Selected" Click="OnExecuteJobs"/>
-        </StackPanel>
-    </Grid>
+        <TabControl x:Name="SidebarTabs"
+                    TabStripPlacement="Left"
+                    BorderThickness="0"
+                    Background="#F7F8FA">
+            <TabItem Header="Mes Sauvegardes" FontSize="18">
+                <ListBox x:Name="JobList" ItemsSource="{Binding BackupJobs}" Background="White">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical" Spacing="5">
+
+                                <Grid Margin="5" ColumnDefinitions="*,60">
+
+                                    <StackPanel Grid.Column="0" Orientation="Vertical">
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                                        <TextBlock Text="{Binding BackupType.Name}" Foreground="Gray" />
+                                        <TextBlock Text="{Binding SourceFolder}" FontStyle="Italic" />
+                                        <TextBlock Text="{Binding DestinationFolder}" Foreground="Gray" />
+                                    </StackPanel>
+
+                                    <Button Grid.Column="1" Content="▶" Click="OnStartJobButton" />
+                                </Grid>
+
+                                <ProgressBar Minimum="0"
+                                             Maximum="{Binding Execution.TotalSteps}"
+                                             Value="{Binding Execution.CurrentStep}"
+                                             Height="5"
+                                             Foreground="Green"
+                                             Background="LightGray" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+            </TabItem>
+            <TabItem Header="Nouvelle Sauvegarde" FontSize="18">
+                <Border Padding="10" Background="White">
+                    <StackPanel Orientation="Vertical" Spacing="10" VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Width="200">Nom de la sauvegarde</TextBlock>
+                            <TextBox x:Name="JobName" Width="300" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Width="200">Dossier source</TextBlock>
+                            <TextBox x:Name="SourcePath" Width="300" />
+                            <Button Content="📁" Click="OnSelectSourceFolder" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Width="200">
+                                Dossier destination
+                            </TextBlock>
+                            <TextBox x:Name="TargetPath" Width="300" />
+                            <Button Content="📁" Click="OnSelectTargetFolder" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Width="200">Mode</TextBlock>
+                            <ComboBox Width="300" x:Name="Mode" ItemsSource="{Binding BackupTypes}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <Button Content="Créer" Click="OnCreateJobButton" Padding="20 5" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+
+            </TabItem>
+            <TabItem Header="Historique" FontSize="18">
+                <ListBox ItemsSource="{Binding History}" Background="White">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="5" ColumnDefinitions="100,1*,150">
+                                <TextBlock Grid.Column="0" Text="{Binding BackupJob.Name}" FontWeight="Bold"
+                                           Width="100" />
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{Binding BackupJob.SourceFolder}" FontStyle="Italic" />
+                                    <TextBlock Text="{Binding BackupJob.DestinationFolder}" FontStyle="Italic" />
+                                </StackPanel>
+                                <TextBlock Grid.Column="2" Text="{Binding StartTime}" Foreground="Gray" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>
