@@ -2,6 +2,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Platform.Storage;
+using EasySave.Models;
 using EasySave.ViewModels;
 
 namespace EasySave.Views.app;
@@ -18,9 +20,11 @@ public partial class MainWindow : Window
         AdjustMenuForMacOS();
     }
     
-    private void OnStartJobButton(object? sender, RoutedEventArgs e)
+    public void OnStartJobButton (object? sender, RoutedEventArgs e)
     {
-        System.Console.WriteLine("Start job clicked");
+        var job = (BackupJob) ((Button) sender!)?.DataContext!;
+        var index = _viewModel.BackupJobs.IndexOf(job);
+        _viewModel.ExecuteJob(index);
     }
     
     private void OnCreateJobButton(object? sender, RoutedEventArgs e)
@@ -44,27 +48,50 @@ public partial class MainWindow : Window
         
         SidebarTabs.SelectedIndex = 0;
     }
- 
-    private async void OnSelectSourceFolder(object sender, RoutedEventArgs e)
+
+    private async Task<IReadOnlyList<IStorageFolder>> AskFolder()
     {
-        var dialog = new OpenFolderDialog { Title = "Sélectionnez un dossier source" };
-        var result = await dialog.ShowAsync(this);
-        if (!string.IsNullOrEmpty(result))
+        var topLevel = GetTopLevel(this);
+
+        var files = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
         {
-            SourcePath.Text = result;
+            Title = "Sélectionnez un dossier de destination"
+        });
+        
+        if (files.Count == 0)
+        {
+            throw new Exception("No folder selected");
         }
+        
+        return files;
     }
 
     private async void OnSelectTargetFolder(object sender, RoutedEventArgs e)
     {
-        var dialog = new OpenFolderDialog { Title = "Sélectionnez un dossier de destination" };
-        var result = await dialog.ShowAsync(this);
-        if (!string.IsNullOrEmpty(result))
+        try
         {
-            TargetPath.Text = result;
+            var files = await AskFolder();
+            TargetPath.Text = files[0].Path.AbsolutePath;
+        }
+        catch (Exception ex)
+        {
+            System.Console.WriteLine(ex);
         }
     }
-
+    
+    private async void OnSelectSourceFolder(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var files = await AskFolder();
+            SourcePath.Text = files[0].Path.AbsolutePath;
+        }
+        catch (Exception ex)
+        {
+            System.Console.WriteLine(ex);
+        }
+    }
+    
     private void OnMenuPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         BeginMoveDrag(e);

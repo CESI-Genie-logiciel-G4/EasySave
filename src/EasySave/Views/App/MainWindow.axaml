@@ -27,7 +27,6 @@
                 <MenuItem Header="A propos" />
             </MenuItem>
         </Menu>
-
         <TabControl x:Name="SidebarTabs"
                     TabStripPlacement="Left"
                     BorderThickness="0"
@@ -36,31 +35,40 @@
                 <ListBox x:Name="JobList" ItemsSource="{Binding BackupJobs}" Background="White">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Vertical" Spacing="5">
+                            <StackPanel Orientation="Vertical">
 
-                                <Grid Margin="5" ColumnDefinitions="*,60">
+                                <Grid Margin="5 5 5 0 " ColumnDefinitions="*,60">
 
-                                    <StackPanel Grid.Column="0" Orientation="Vertical">
+                                    <StackPanel Grid.Column="0" Orientation="Vertical" Spacing="2">
                                         <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                                         <TextBlock Text="{Binding BackupType.Name}" Foreground="Gray" />
                                         <TextBlock Text="{Binding SourceFolder}" FontStyle="Italic" />
                                         <TextBlock Text="{Binding DestinationFolder}" Foreground="Gray" />
                                     </StackPanel>
 
-                                    <Button Grid.Column="1" Content="▶" Click="OnStartJobButton" />
+                                    <Button Grid.Column="1" Content="▶" Click="OnStartJobButton"
+                                            IsEnabled="{Binding CanExecute}" />
                                 </Grid>
 
+                                <TextBlock Text="{Binding CurrentExecution.Exception.Message}"
+                                           Foreground="Red"
+                                           TextWrapping="Wrap"
+                                           IsVisible="{Binding 
+                                CurrentExecution.Exception.Message, 
+                                                Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                                
                                 <ProgressBar Minimum="0"
-                                             Maximum="{Binding Execution.TotalSteps}"
-                                             Value="{Binding Execution.CurrentStep}"
+                                             Maximum="{Binding CurrentExecution.TotalSteps}"
+                                             Value="{Binding CurrentExecution.CurrentProgress}"
                                              Height="5"
-                                             Foreground="Green"
-                                             Background="LightGray" />
+                                             Foreground="DodgerBlue"
+                                             Background="LightGray"
+                                             Opacity="{Binding !!CurrentExecution}" />
+
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-
             </TabItem>
             <TabItem Header="Nouvelle Sauvegarde" FontSize="18">
                 <Border Padding="10" Background="White">

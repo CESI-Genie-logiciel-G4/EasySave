@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using EasySave.Exceptions;
 using EasySave.Models;
@@ -66,23 +65,22 @@ public partial class MainViewModel : ObservableObject
         BackupJobAdded?.Invoke(newJob);
     }
 
-    public async void ExecuteJob(int index)
+    public async Task ExecuteJob(int index)
     {
         var job = BackupJobs[index];
-        var execution = new Execution(job);
+        var execution = job.InitializeExecution();
         
         execution.ProgressUpdated += (e) =>
         {
             ProgressUpdated?.Invoke(e);
         };
-        
-        await Task.Run(() => execution.Run());
+
+        await job.ExecuteAsync();
         
         if(execution.State == ExecutionState.Failed)
         {
             ErrorOccurred?.Invoke(execution.Exception!);
         }
-
     }
 
     public void RemoveJob(int index)

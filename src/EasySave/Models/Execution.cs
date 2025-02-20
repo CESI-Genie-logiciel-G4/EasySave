@@ -1,37 +1,49 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using EasySave.Helpers;
+using static EasySave.Services.HistoryService;
+
 namespace EasySave.Models;
 
-using Helpers;
-using static Services.HistoryService;
-
-public class Execution(BackupJob backupJob)
+public partial class Execution : ObservableObject
 {
-    public DateTime StartTime { get; set; }
-    public DateTime EndTime { get; set; }
-    public ExecutionState State { get; set; } = ExecutionState.Pending;
-    public Exception? Exception { get; set; }
-    public BackupJob BackupJob { get; } = backupJob;
+    public Execution(BackupJob backupJob)
+    {
+        BackupJob = backupJob ?? throw new ArgumentNullException(nameof(backupJob));
+        State = ExecutionState.Pending;
+        Exception = null;
+    }
+
+    public DateTime StartTime { get; private set; }
+    public DateTime EndTime { get; private set; }
+    public BackupJob BackupJob { get; }
+
     public event Action<Execution>? ProgressUpdated;
-    public int CurrentProgress { get; set; } = 0;
-    public int TotalSteps { get; set; }
+
+    [ObservableProperty] private ExecutionState state;
+
+    [ObservableProperty] private Exception? exception;
+
+    [ObservableProperty] private int currentProgress;
+
+    [ObservableProperty] private int totalSteps;
 
     public void Run()
     {
         StartTime = DateTime.UtcNow;
         ProgressUpdated?.Invoke(this);
         State = ExecutionState.Running;
-        
-        var rootFolder = BackupJob.SourceFolder;
-        var destinationFolder = BackupJob.DestinationFolder;
-        
-        var files = Directory.GetFiles(rootFolder, "*", SearchOption.AllDirectories);
-        TotalSteps = files.Length;
-        
-        ProgressUpdated?.Invoke(this);
-        
+
         try
         {
+            var rootFolder = BackupJob.SourceFolder;
+            var destinationFolder = BackupJob.DestinationFolder;
+            var files = Directory.GetFiles(rootFolder, "*", SearchOption.AllDirectories);
+
+            TotalSteps = files.Length;
+            ProgressUpdated?.Invoke(this);
+
             BackupJob.BackupType.Initialize(BackupJob);
-            
+
             foreach (var sourceFile in files)
             {
                 var destinationFile = FileHelper.GetMirrorFilePath(rootFolder, sourceFile, destinationFolder);
@@ -41,7 +53,7 @@ public class Execution(BackupJob backupJob)
             }
             
             State = ExecutionState.Completed;
-            EndTime = DateTime.UtcNow;
+
             StoreCompletedExecution(this);
             ProgressUpdated?.Invoke(this);
         }
@@ -50,5 +62,7 @@ public class Execution(BackupJob backupJob)
             State = ExecutionState.Failed;
             Exception = e;
         }
+
+        EndTime = DateTime.UtcNow;
     }
 }
