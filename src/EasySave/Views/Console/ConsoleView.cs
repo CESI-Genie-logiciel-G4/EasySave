@@ -53,7 +53,7 @@ public class ConsoleView
         
     }
 
-    public void Render()
+    public async Task Render()
     {
         while (_isRunning)
         {
@@ -70,7 +70,7 @@ public class ConsoleView
             {
                 var choice = ConsoleHelper.AskForInt(T("SelectOption"), 1, _menuItems.Count);
                 mainMenu = false;
-                _menuItems[choice - 1].Action();
+                await _menuItems[choice - 1].Action();
             }
             catch (OperationCanceledException)
             {
@@ -123,7 +123,7 @@ public class ConsoleView
         }
     }
 
-    private void ExecuteJobs()
+    private async Task ExecuteJobs()
     {
         var jobCount = _backupJobs.Count;
 
@@ -136,7 +136,7 @@ public class ConsoleView
         var value = ConsoleHelper.AskForMultipleValues(T("SelectJobsToExecute"), 1, jobCount);
         foreach (var item in value)
         {
-            _viewModel.ExecuteJob(item - 1);
+            await _viewModel.ExecuteJob(item - 1);
         }
     }
 

@@ -7,7 +7,7 @@ namespace EasySave.Services;
 
 public static class HistoryService
 {
-    public static List<Execution> CompletedExecutions { get; set; } = [];
+    public static List<Execution> CompletedExecutions { get; } = [];
     private const string ExecutionHistoryFile = ".easysave/executions-history.json";
 
     private static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
@@ -24,10 +24,11 @@ public static class HistoryService
     {
         if (!File.Exists(ExecutionHistoryFile)) return;
         var readJson = File.ReadAllText(ExecutionHistoryFile);
-        CompletedExecutions = JsonSerializer.Deserialize<List<Execution>>(readJson)?? [];
+        CompletedExecutions.Clear();
+        CompletedExecutions.AddRange(JsonSerializer.Deserialize<List<Execution>>(readJson) ?? []);
     }
-    
-    public static BackupJob? GetLastCompleteBackupJob(string jobSourcePath)
+
+    private static BackupJob? GetLastCompleteBackupJob(string jobSourcePath)
     {
         var lastFullBackupExecution = CompletedExecutions.LastOrDefault(
             execution =>

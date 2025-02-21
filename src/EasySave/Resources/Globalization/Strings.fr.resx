@@ -219,4 +219,19 @@
   <data name="CryptoError" xml:space="preserve">
     <value>Erreur lors du chiffrement/déchiffrement</value>
   </data>
+  <data name="UiType_Gui" xml:space="preserve">
+    <value>Lance l'interface graphique</value>
+  </data>
+  <data name="UiType_Console" xml:space="preserve">
+    <value>Lance le mode console</value>
+  </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Utilisation :</value>
+  </data>
+  <data name="InvalidUiType" xml:space="preserve">
+    <value>Type d'interface invalide.</value>
+  </data>
+  <data name="AvailableModes" xml:space="preserve">
+    <value>Modes disponibles :</value>
+  </data>
 </root>

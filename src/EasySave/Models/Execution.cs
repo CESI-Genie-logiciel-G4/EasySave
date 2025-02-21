@@ -13,19 +13,23 @@ public partial class Execution : ObservableObject
         Exception = null;
     }
 
-    public DateTime StartTime { get; private set; }
-    public DateTime EndTime { get; private set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
     public BackupJob BackupJob { get; }
 
     public event Action<Execution>? ProgressUpdated;
 
-    [ObservableProperty] private ExecutionState state;
+    [ObservableProperty] 
+    private ExecutionState state;
 
-    [ObservableProperty] private Exception? exception;
+    [ObservableProperty] 
+    private Exception? exception;
 
-    [ObservableProperty] private int currentProgress;
+    [ObservableProperty] 
+    private int currentProgress;
 
-    [ObservableProperty] private int totalSteps;
+    [ObservableProperty] 
+    private int totalSteps;
 
     public void Run()
     {
@@ -54,6 +58,7 @@ public partial class Execution : ObservableObject
             
             State = ExecutionState.Completed;
 
+            EndTime = DateTime.UtcNow;
             StoreCompletedExecution(this);
             ProgressUpdated?.Invoke(this);
         }
@@ -62,7 +67,5 @@ public partial class Execution : ObservableObject
             State = ExecutionState.Failed;
             Exception = e;
         }
-
-        EndTime = DateTime.UtcNow;
     }
 }

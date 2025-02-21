@@ -11,6 +11,7 @@ namespace EasySave.Views.app;
 public partial class MainWindow : Window
 {
     private readonly MainViewModel _viewModel;
+    private bool _menuItemClicked;
 
     public MainWindow(MainViewModel viewModel)
     {
@@ -40,7 +41,7 @@ public partial class MainWindow : Window
         }
 
         var backupType = _viewModel.BackupTypes[modeIndex];
-        _viewModel.AddBackupJob(name, source, target, backupType);
+        _viewModel.AddBackupJob(name, source, target, backupType, true);
         
         JobName.Text = "";
         SourcePath.Text = "";
@@ -51,11 +52,11 @@ public partial class MainWindow : Window
 
     private async Task<IReadOnlyList<IStorageFolder>> AskFolder()
     {
-        var topLevel = GetTopLevel(this);
+        var topLevel = GetTopLevel(this)!;
 
-        var files = await topLevel.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-        {
-            Title = "Sélectionnez un dossier de destination"
+        var files = await topLevel.StorageProvider.OpenFolderPickerAsync(
+            new FolderPickerOpenOptions {
+            Title = "Sélectionnez un dossier"
         });
         
         if (files.Count == 0)
@@ -92,8 +93,18 @@ public partial class MainWindow : Window
         }
     }
     
+    private void OnMenuItemPointerPressed(object? sender, RoutedEventArgs e)
+    {
+        _menuItemClicked = true;
+    }
+
     private void OnMenuPointerPressed(object? sender, PointerPressedEventArgs e)
     {
+        if (_menuItemClicked)
+        {
+            _menuItemClicked = false;
+            return;
+        }
         BeginMoveDrag(e);
     }
     
@@ -103,5 +114,10 @@ public partial class MainWindow : Window
         {
             MainMenu.Padding = new Thickness(70, 0, 0, 0);
         }
+    }
+    
+    private void OnClose(object? sender, RoutedEventArgs e)
+    {
+        Close();
     }
 }

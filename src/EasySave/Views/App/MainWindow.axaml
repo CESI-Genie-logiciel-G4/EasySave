@@ -17,16 +17,53 @@
 
     <DockPanel LastChildFill="True">
         <Menu Background="#383A42" x:Name="MainMenu" PointerPressed="OnMenuPointerPressed" DockPanel.Dock="Top">
-            <MenuItem Header="EasySave" Foreground="White">
-                <MenuItem Header="Quitter" />
+            <MenuItem Header="EasySave" Foreground="White" PointerPressed="OnMenuItemPointerPressed">
+                <MenuItem Header="Quitter" Click="OnClose" />
             </MenuItem>
-            <MenuItem Header="Fichier" Foreground="White">
-                <MenuItem Header="Paramètres" />
+
+            <!-- Section File -->
+            <MenuItem Header="Fichier" Foreground="White" PointerPressed="OnMenuItemPointerPressed">
+                <MenuItem Header="Paramètres">
+                    <MenuItem Header="Langue">
+                        <MenuItem Header="Français">
+                            <MenuItem.Icon>
+                                <RadioButton GroupName="Language" IsChecked="True" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="English">
+                            <MenuItem.Icon>
+                                <RadioButton GroupName="Language" IsChecked="False" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+
+                    <!-- Sous-menu Format des Logs -->
+                    <MenuItem Header="Format des logs">
+                        <MenuItem Header="XML">
+                            <MenuItem.Icon>
+                                <CheckBox IsChecked="True" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="JSON">
+                            <MenuItem.Icon>
+                                <CheckBox IsChecked="False" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Console">
+                            <MenuItem.Icon>
+                                <CheckBox IsChecked="False" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </MenuItem>
+                </MenuItem>
             </MenuItem>
-            <MenuItem Header="Aide" Foreground="White">
-                <MenuItem Header="A propos" />
+
+            <!-- Section Aide -->
+            <MenuItem Header="Aide" Foreground="White" PointerPressed="OnMenuItemPointerPressed">
+                <MenuItem Header="À propos" />
             </MenuItem>
         </Menu>
+
         <TabControl x:Name="SidebarTabs"
                     TabStripPlacement="Left"
                     BorderThickness="0"
@@ -46,8 +83,7 @@
                                         <TextBlock Text="{Binding DestinationFolder}" Foreground="Gray" />
                                     </StackPanel>
 
-                                    <Button Grid.Column="1" Content="▶" Click="OnStartJobButton"
-                                            IsEnabled="{Binding CanExecute}" />
+                                    <Button Grid.Column="1" Content="▶" Click="OnStartJobButton" />
                                 </Grid>
 
                                 <TextBlock Text="{Binding CurrentExecution.Exception.Message}"
@@ -56,7 +92,7 @@
                                            IsVisible="{Binding 
                                 CurrentExecution.Exception.Message, 
                                                 Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                                
+
                                 <ProgressBar Minimum="0"
                                              Maximum="{Binding CurrentExecution.TotalSteps}"
                                              Value="{Binding CurrentExecution.CurrentProgress}"

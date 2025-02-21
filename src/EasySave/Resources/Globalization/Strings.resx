@@ -219,4 +219,19 @@
   <data name="CryptoError" xml:space="preserve">
     <value>Error during encryption/decryption</value>
   </data>
+  <data name="UiType_Gui" xml:space="preserve">
+    <value>Launches the graphical UI</value>
+  </data>
+  <data name="UiType_Console" xml:space="preserve">
+    <value>Launches the console UI</value>
+  </data>
+  <data name="Usage" xml:space="preserve">
+    <value>Usage:</value>
+  </data>
+  <data name="InvalidUiType" xml:space="preserve">
+    <value>Invalid UI type.</value>
+  </data>
+  <data name="AvailableModes" xml:space="preserve">
+    <value>Available modes:</value>
+  </data>
 </root>
