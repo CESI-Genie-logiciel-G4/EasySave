@@ -1,4 +1,6 @@
+using System.Collections.ObjectModel;
 using System.Text.Json;
+using DynamicData;
 using EasySave.Helpers;
 using EasySave.Models;
 using EasySave.Models.Backups;
@@ -7,7 +9,7 @@ namespace EasySave.Services;
 
 public static class HistoryService
 {
-    public static List<Execution> CompletedExecutions { get; } = [];
+    public static ObservableCollection<Execution> CompletedExecutions { get; } = [];
     private const string ExecutionHistoryFile = ".easysave/executions-history.json";
 
     private static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };

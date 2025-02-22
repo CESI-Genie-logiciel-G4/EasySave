@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using EasySave.Services;
 using EasySave.ViewModels;
 using EasySave.Views.app;
 
@@ -11,6 +12,7 @@ namespace EasySave
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+            LocalizationService.UpdateAvaloniaResources();
         }
 
         public override void OnFrameworkInitializationCompleted()

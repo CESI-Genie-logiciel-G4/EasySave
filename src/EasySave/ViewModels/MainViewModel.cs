@@ -22,8 +22,8 @@ public partial class MainViewModel : ObservableObject
     
     public MainViewModel()
     {
-        BackupJobs = new(JobService.BackupJobs);
-        History = new(HistoryService.CompletedExecutions);
+        BackupJobs = JobService.BackupJobs;
+        History = HistoryService.CompletedExecutions;
         
         Logger.Logger.GetInstance()
             .SetupTransporters(ExtractLogsTransporters());
@@ -42,7 +42,8 @@ public partial class MainViewModel : ObservableObject
         new DifferentialBackup()
     ];
     
-    public List<TransporterItem> LogTransporters { get; } =
+    [ObservableProperty]
+    private ObservableCollection<TransporterItem> _logTransporters  =
     [
         new("Console", new ConsoleTransporter(), false),
         new("XML", new FileXmlTransporter("./.easysave/logs/")),
@@ -92,13 +93,14 @@ public partial class MainViewModel : ObservableObject
     public void ChangeLanguage(LanguageItem language)
     {
         LocalizationService.SetLanguage(language.Identifier);
+        LocalizationService.UpdateAvaloniaResources();
     }
     
     public void ChangeLogsTransporters(List<int> indexes)
     {
         foreach (var numericalIndex in indexes)
         {
-            var transporter = LogTransporters[numericalIndex - 1];
+            var transporter = LogTransporters.ElementAt(numericalIndex - 1);
             transporter.IsEnabled = !transporter.IsEnabled;
         }
         

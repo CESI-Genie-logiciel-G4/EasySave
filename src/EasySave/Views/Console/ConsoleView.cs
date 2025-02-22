@@ -1,5 +1,6 @@
-﻿
+
 using System.Security.Cryptography;
+using System.Collections.ObjectModel;
 using EasySave.Helpers;
 using EasySave.Utils;
 using EasySave.ViewModels;
@@ -15,7 +16,7 @@ public class ConsoleView
     private readonly List<MenuItem> _extensionsMenuItems;
     private bool _isRunning = true;
     
-    private readonly List<BackupJob> _backupJobs = JobService.BackupJobs;
+    private readonly ObservableCollection<BackupJob> _backupJobs = JobService.BackupJobs;
     
     private static string T(string key) => LocalizationService.GetString(key);
 

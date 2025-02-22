@@ -22,42 +22,31 @@
             </MenuItem>
 
             <!-- Section File -->
-            <MenuItem Header="Fichier" Foreground="White" PointerPressed="OnMenuItemPointerPressed">
-                <MenuItem Header="Paramètres">
-                    <MenuItem Header="Langue">
-                        <MenuItem Header="Français">
-                            <MenuItem.Icon>
-                                <RadioButton GroupName="Language" IsChecked="True" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="English">
-                            <MenuItem.Icon>
-                                <RadioButton GroupName="Language" IsChecked="False" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
+            <MenuItem Header="Paramètres" Foreground="White" PointerPressed="OnMenuItemPointerPressed">
 
-                    <!-- Sous-menu Format des Logs -->
-                    <MenuItem Header="Format des logs">
-                        <MenuItem Header="XML">
-                            <MenuItem.Icon>
-                                <CheckBox IsChecked="True" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="JSON">
-                            <MenuItem.Icon>
-                                <CheckBox IsChecked="False" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Header="Console">
-                            <MenuItem.Icon>
-                                <CheckBox IsChecked="False" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
+                <MenuItem Header="Langue" ItemsSource="{Binding Languages}">
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem Header="{Binding Identifier}" Click="OnLanguageChanged" />
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
+                </MenuItem>
+
+                <!-- Sous-menu Format des Logs -->
+                <MenuItem Header="Format des logs" ItemsSource="{Binding LogTransporters}">
+                    <MenuItem.ItemTemplate>
+                        <DataTemplate>
+                            <MenuItem Header="{Binding Title}" Click="OnLogsTransporterChanged">
+                                <MenuItem.Icon>
+                                    <CheckBox IsChecked="{Binding IsEnabled }" BorderThickness="0"
+                                              IsHitTestVisible="False" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </DataTemplate>
+                    </MenuItem.ItemTemplate>
                 </MenuItem>
             </MenuItem>
-
+            
             <!-- Section Aide -->
             <MenuItem Header="Aide" Foreground="White" PointerPressed="OnMenuItemPointerPressed">
                 <MenuItem Header="À propos" />
@@ -162,6 +151,9 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </TabItem>
+        <TabItem Header="Prototype" FontSize="18">
+            <TextBlock Text="{DynamicResource EnterDestinationDirectory}" />
+        </TabItem>
         </TabControl>
     </DockPanel>
 </Window>

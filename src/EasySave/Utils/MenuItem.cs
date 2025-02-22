@@ -14,6 +14,9 @@ public class MenuItem
     public MenuItem(string title, Action action)
     {
         Title = title;
-        Action = () => Task.Run(action);
+        Action = () => {
+            action(); 
+            return Task.CompletedTask;
+        };
     }
 }

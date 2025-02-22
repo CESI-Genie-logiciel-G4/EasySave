@@ -4,7 +4,9 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using EasySave.Models;
+using EasySave.Utils;
 using EasySave.ViewModels;
+using MenuItem = Avalonia.Controls.MenuItem;
 
 namespace EasySave.Views.app;
 
@@ -106,6 +108,26 @@ public partial class MainWindow : Window
             return;
         }
         BeginMoveDrag(e);
+    }
+    
+    private void OnLanguageChanged(object sender, RoutedEventArgs e)
+    {
+        var menuItem = (MenuItem)sender;
+
+        if (menuItem.DataContext is LanguageItem selectedLanguage)
+        {
+            _viewModel.ChangeLanguage(selectedLanguage);
+        }
+    }
+    
+    private void OnLogsTransporterChanged(object sender, RoutedEventArgs e)
+    {
+        var menuItem = (MenuItem)sender;
+
+        if (menuItem.DataContext is not TransporterItem selectedTransporter) return;
+        
+        List<int> indexes = [_viewModel.LogTransporters.IndexOf(selectedTransporter)+1];
+        _viewModel.ChangeLogsTransporters(indexes);
     }
     
     private void AdjustMenuForMacOS()
