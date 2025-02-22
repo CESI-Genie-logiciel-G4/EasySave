@@ -33,7 +33,7 @@
     <data name="EnterJobName" xml:space="preserve">
     <value>Entrez le nom du travail</value>
   </data>
-  <data name="JobExecuted" xml:space="preserve">
+    <data name="JobExecuted" xml:space="preserve">
     <value>Sauvegarde [{0}] executée avec succès</value>
   </data>
     <data name="JobAdded" xml:space="preserve">
@@ -45,28 +45,28 @@
     <data name="Exiting" xml:space="preserve">
     <value>Fermeture en cours...</value>
   </data>
-  <data name="PressAnyKey" xml:space="preserve">
+    <data name="PressAnyKey" xml:space="preserve">
     <value>- Appuyez sur une touche pour continuer -</value>
   </data>
     <data name="InvalidInput" xml:space="preserve">
     <value>Entrée invalide, veuillez réessayer.</value>
   </data>
-  <data name="SelectLanguage" xml:space="preserve">
+    <data name="SelectLanguage" xml:space="preserve">
     <value>Sélectionnez une langue</value>
   </data>
-  <data name="French" xml:space="preserve">
+    <data name="French" xml:space="preserve">
     <value>Français</value>
   </data>
-  <data name="English" xml:space="preserve">
+    <data name="English" xml:space="preserve">
     <value>Anglais</value>
   </data>
-  <data name="MenuChangeLanguage" xml:space="preserve">
+    <data name="MenuChangeLanguage" xml:space="preserve">
     <value>Changer la langue</value>
   </data>
-  <data name="StringLengthRange" xml:space="preserve">
+    <data name="StringLengthRange" xml:space="preserve">
     <value>({0}-{1} caractères) :</value>
   </data>
-  <data name="InvalidStringLength" xml:space="preserve">
+    <data name="InvalidStringLength" xml:space="preserve">
     <value>Veuillez entrer une chaîne de caractères valide.</value>
   </data>
   <data name="InvalidStringList" xml:space="preserve">
@@ -78,40 +78,40 @@
   <data name="InvalidNumber" xml:space="preserve">
     <value>Veuillez entrer un nombre valide.</value>
   </data>
-  <data name="InvalidFormat" xml:space="preserve">
+    <data name="InvalidFormat" xml:space="preserve">
     <value>Format invalide. Essayez: 5, 2-5, 1;3;7, *.</value>
   </data>
-  <data name="Version" xml:space="preserve">
+    <data name="Version" xml:space="preserve">
     <value>Version :</value>
   </data>
-  <data name="ExitToCancel" xml:space="preserve">
+    <data name="ExitToCancel" xml:space="preserve">
     <value>'{0}' pour annuler</value>
   </data>
-  <data name="EnterDestinationDirectory" xml:space="preserve">
+    <data name="EnterDestinationDirectory" xml:space="preserve">
     <value>Entrer le répertoire de destination</value>
   </data>
-  <data name="EnterSourceDirectory" xml:space="preserve">
+    <data name="EnterSourceDirectory" xml:space="preserve">
     <value>Entrer le répertoire source</value>
   </data>
-  <data name="InvalidDirectory" xml:space="preserve">
+    <data name="InvalidDirectory" xml:space="preserve">
     <value>Répertoire invalide</value>
   </data>
-  <data name="SelectBackupType" xml:space="preserve">
+    <data name="SelectBackupType" xml:space="preserve">
     <value>Sélectionner le type de sauvegarde</value>
   </data>
-  <data name="JobLimitReached" xml:space="preserve">
+    <data name="JobLimitReached" xml:space="preserve">
     <value>Limite de tâches atteinte</value>
   </data>
-  <data name="Type" xml:space="preserve">
+    <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
-  <data name="SourcePath" xml:space="preserve">
+    <data name="SourcePath" xml:space="preserve">
     <value>Chemin source</value>
   </data>
-  <data name="Number" xml:space="preserve">
+    <data name="Number" xml:space="preserve">
     <value>N°</value>
   </data>
-  <data name="Name" xml:space="preserve">
+    <data name="Name" xml:space="preserve">
     <value>Nom</value>
   </data>
   <data name="FullBackup" xml:space="preserve">
@@ -120,7 +120,7 @@
   <data name="DifferentialBackup" xml:space="preserve">
     <value>Différentielle</value>
   </data>
-  <data name="DestinationPath" xml:space="preserve">
+    <data name="DestinationPath" xml:space="preserve">
     <value>Chemin de destination</value>
   </data>
   <data name="MenuEncryptedExtensions" xml:space="preserve">
@@ -174,46 +174,46 @@
   <data name="Progress" xml:space="preserve">
     <value>Progression :</value>
   </data>
-  <data name="UnauthorizedAccess" xml:space="preserve">
+    <data name="UnauthorizedAccess" xml:space="preserve">
     <value>Accès non autorisé </value>
   </data>
-  <data name="ErrorOccurred" xml:space="preserve">
+    <data name="ErrorOccurred" xml:space="preserve">
     <value>Une erreur c'est produite</value>
   </data>
-  <data name="DirectoryNotFound" xml:space="preserve">
+    <data name="DirectoryNotFound" xml:space="preserve">
     <value>Répertoire non trouvé</value>
   </data>
-  <data name="StartBackupJob" xml:space="preserve">
+    <data name="StartBackupJob" xml:space="preserve">
     <value>Execution de :</value>
   </data>
-  <data name="CheckLogs" xml:space="preserve">
+    <data name="CheckLogs" xml:space="preserve">
     <value>Vérifiez les logs</value>
   </data>
-  <data name="IOError" xml:space="preserve">
+    <data name="IOError" xml:space="preserve">
     <value>Erreur d'entrée/sortie</value>
   </data>
   <data name="SyntheticFullBackup" xml:space="preserve">
     <value>Complète synthétique</value>
   </data>
-  <data name="MenuLogsFormat" xml:space="preserve">
+    <data name="MenuLogsFormat" xml:space="preserve">
     <value>Changer format des Logs</value>
   </data>
-  <data name="JSON" xml:space="preserve">
+    <data name="JSON" xml:space="preserve">
     <value>JSON</value>
   </data>
-  <data name="XML" xml:space="preserve">
+    <data name="XML" xml:space="preserve">
     <value>XML</value>
   </data>
-  <data name="Console" xml:space="preserve">
+    <data name="Console" xml:space="preserve">
     <value>Console</value>
   </data>
-  <data name="SelectLogsTransporters" xml:space="preserve">
+    <data name="SelectLogsTransporters" xml:space="preserve">
     <value>Sélectionnez les formats de sortie de logs à activer/désactiver</value>
   </data>
-  <data name="LogsFormatChanged" xml:space="preserve">
+    <data name="LogsFormatChanged" xml:space="preserve">
     <value>Les formats de logs ont été modifiés avec succès</value>
   </data>
-  <data name="AvailableLogsFormats" xml:space="preserve">
+    <data name="AvailableLogsFormats" xml:space="preserve">
     <value>Formats de sortie des logs disponibles :</value>
   </data>
   <data name="CryptoError" xml:space="preserve">
@@ -222,16 +222,58 @@
   <data name="UiType_Gui" xml:space="preserve">
     <value>Lance l'interface graphique</value>
   </data>
-  <data name="UiType_Console" xml:space="preserve">
+    <data name="UiType_Console" xml:space="preserve">
     <value>Lance le mode console</value>
   </data>
-  <data name="Usage" xml:space="preserve">
+    <data name="Usage" xml:space="preserve">
     <value>Utilisation :</value>
   </data>
-  <data name="InvalidUiType" xml:space="preserve">
+    <data name="InvalidUiType" xml:space="preserve">
     <value>Type d'interface invalide.</value>
   </data>
-  <data name="AvailableModes" xml:space="preserve">
+    <data name="AvailableModes" xml:space="preserve">
     <value>Modes disponibles :</value>
+  </data>
+    <data name="MyBackups" xml:space="preserve">
+    <value>Mes Sauvegardes</value>
+  </data>
+      <data name="NewBackup" xml:space="preserve">
+      <value>Nouvelle Sauvegarde</value>
+  </data>
+      <data name="History" xml:space="preserve">
+      <value>Historique</value>
+  </data>
+      <data name="Settings" xml:space="preserve">
+      <value>Paramètres</value>
+  </data>
+      <data name="Language" xml:space="preserve">
+      <value>Langue</value>
+  </data>
+      <data name="LogFormat" xml:space="preserve">
+      <value>Format des logs</value>
+  </data>
+      <data name="Help" xml:space="preserve">
+      <value>Aide</value>
+  </data>
+      <data name="About" xml:space="preserve">
+      <value>À propos</value> d
+  </data>
+      <data name="Exit" xml:space="preserve">
+      <value>Quitter</value>
+  </data>
+      <data name="BackupName" xml:space="preserve">
+      <value>Nom de la sauvegarde</value>
+  </data>
+      <data name="SourceFolder" xml:space="preserve">
+      <value>Dossier source</value>
+  </data>
+      <data name="DestinationFolder" xml:space="preserve">
+      <value>Dossier de destination</value>
+  </data>
+      <data name="Mode" xml:space="preserve">
+      <value>Mode</value>
+  </data>
+      <data name="Create" xml:space="preserve">
+      <value>Créer</value>
   </data>
 </root>

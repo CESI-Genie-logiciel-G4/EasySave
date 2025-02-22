@@ -222,16 +222,58 @@
   <data name="UiType_Gui" xml:space="preserve">
     <value>Launches the graphical UI</value>
   </data>
-  <data name="UiType_Console" xml:space="preserve">
+    <data name="UiType_Console" xml:space="preserve">
     <value>Launches the console UI</value>
   </data>
-  <data name="Usage" xml:space="preserve">
+    <data name="Usage" xml:space="preserve">
     <value>Usage:</value>
   </data>
-  <data name="InvalidUiType" xml:space="preserve">
+    <data name="InvalidUiType" xml:space="preserve">
     <value>Invalid UI type.</value>
   </data>
-  <data name="AvailableModes" xml:space="preserve">
+    <data name="AvailableModes" xml:space="preserve">
     <value>Available modes:</value>
+  </data>
+    <data name="MyBackups" xml:space="preserve">
+    <value>My Backups</value>
+  </data>
+    <data name="NewBackup" xml:space="preserve">
+    <value>New Backup</value>
+  </data>
+    <data name="History" xml:space="preserve">
+    <value>History</value>
+  </data>
+    <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+    <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+    <data name="LogFormat" xml:space="preserve">
+    <value>Log Format</value>
+  </data>
+    <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+    <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+    <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+    <data name="BackupName" xml:space="preserve">
+    <value>Backup Name</value>
+  </data>
+    <data name="SourceFolder" xml:space="preserve">
+    <value>Source Folder</value>
+  </data>
+    <data name="DestinationFolder" xml:space="preserve">
+    <value>Destination Folder</value>
+  </data>
+    <data name="Mode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+    <data name="Create" xml:space="preserve">
+    <value>Create</value>
   </data>
 </root>
