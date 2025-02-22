@@ -266,8 +266,6 @@ public class ConsoleView
         {
             Console.WriteLine($"\t- {extension}");
         }
-        ConsoleHelper.DisplaySeparator();
-        
         while (true)
         {
             DisplayMenu(_extensionsMenuItems);
@@ -315,7 +313,7 @@ public class ConsoleView
     
     private void DisplayEncryptedExtensionsChanged(List<string> extensions)
     {
-        Console.WriteLine(T("EncryptedExtensionsChanged")+": " + string.Join(", ", extensions));
+        Console.WriteLine(T("EncryptedExtensionsChanged")+": " + string.Join(", ", extensions.Select(e => e.ToLower())));
         
     }
     

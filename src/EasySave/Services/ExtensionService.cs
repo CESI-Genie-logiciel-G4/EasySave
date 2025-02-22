@@ -1,25 +1,46 @@
-namespace EasySave.Services
+namespace EasySave.Services;
+
+public static class ExtensionService
 {
-    public static class ExtensionService
+    private static List<string> _encryptedExtensions = [];
+    private static readonly Lock Lock = new();
+
+    public static List<string> EncryptedExtensions
     {
-        public static List<string> EncryptedExtensions { get; private set; } = [];
-
-        public static void SetEncryptedExtensions(List<string> extensions)
+        get
         {
-            EncryptedExtensions = new List<string>(extensions);
-        }
-
-        public static void AddEncryptedExtension(string extension)
-        {
-            if (!EncryptedExtensions.Contains(extension))
+            lock (Lock)
             {
-                EncryptedExtensions.Add(extension);
+                return [.._encryptedExtensions];
             }
         }
+    }
 
-        public static void RemoveEncryptedExtension(string extension)
+    public static void SetEncryptedExtensions(List<string> extensions)
+    {
+        lock (Lock)
         {
-            EncryptedExtensions.Remove(extension);
+            _encryptedExtensions = new List<string>(extensions.Select(e => e.ToLower()));
+        }
+    }
+
+    public static void AddEncryptedExtension(string extension)
+    {
+        lock (Lock)
+        {
+            var lowerExt = extension.ToLower();
+            if (!_encryptedExtensions.Contains(lowerExt))
+            {
+                _encryptedExtensions.Add(lowerExt);
+            }
+        }
+    }
+
+    public static void RemoveEncryptedExtension(string extension)
+    {
+        lock (Lock)
+        {
+            _encryptedExtensions.Remove(extension.ToLower());
         }
     }
 }
