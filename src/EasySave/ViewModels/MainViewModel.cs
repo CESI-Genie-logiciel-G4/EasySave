@@ -9,6 +9,7 @@ namespace EasySave.ViewModels;
 public class MainViewModel
 {
     private readonly List<BackupJob> _backupJobs = JobService.BackupJobs;
+    public List<string> EncryptedExtensions => ExtensionService.EncryptedExtensions;
     private static string T(string key) => LocalizationService.GetString(key);
 
     public MainViewModel()
@@ -42,10 +43,13 @@ public class MainViewModel
     public event Action<Execution>? ProgressUpdated;
     public event Action<Exception>? ErrorOccurred;
     public event Action? LogsTransportersChanged;
+    public event Action<List<string>>? EncryptedExtensionsChanged;
+    public event Action<string>? ExtensionsAdded;
+    public event Action<string>? ExtensionsRemoved;
 
-    public void AddBackupJob(string name, string source, string destination, BackupType type)
+    public void AddBackupJob(string name, string source, string destination, BackupType type, bool encryption)
     {
-        var newJob = JobService.AddBackupJob(name, source, destination, type);
+        var newJob = JobService.AddBackupJob(name, source, destination, type, encryption);
         BackupJobAdded?.Invoke(newJob);
     }
 
@@ -53,6 +57,12 @@ public class MainViewModel
     {
         var job = _backupJobs[index];
         var execution = new Execution(job);
+        
+        if (job.UseEncryption && ExtensionService.EncryptedExtensions.Count == 0)
+        {
+            ErrorOccurred?.Invoke(execution.Exception!);
+            return;
+        }
         
         execution.ProgressUpdated += (e) => ProgressUpdated?.Invoke(e);
         execution.Run();
@@ -93,5 +103,27 @@ public class MainViewModel
         return LogTransporters.Where(t => t.IsEnabled)
             .Select(t => t.Transporter)
             .ToList();
+    }
+    
+    public void SetupEncryptedExtensions(List<string> extensions)
+    {
+        ExtensionService.SetEncryptedExtensions(extensions);
+        EncryptedExtensionsChanged?.Invoke(extensions);
+    }
+
+    public void AddExtensions(string extension)
+    {
+        ExtensionService.AddEncryptedExtension(extension);
+        ExtensionsAdded?.Invoke(extension);
+    }
+
+    public void RemoveExtension(List<int> indexes)
+    {
+        foreach (var index in indexes.OrderByDescending(i => i))
+        {
+            var extension = ExtensionService.EncryptedExtensions[index - 1];
+            ExtensionService.RemoveEncryptedExtension(extension);
+            ExtensionsRemoved?.Invoke(extension);
+        }
     }
 }

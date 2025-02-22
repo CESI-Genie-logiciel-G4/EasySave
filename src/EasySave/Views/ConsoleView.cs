@@ -10,6 +10,7 @@ public class ConsoleView
 {
     private readonly MainViewModel _viewModel;
     private readonly List<MenuItem> _menuItems;
+    private readonly List<MenuItem> _extensionsMenuItems;
     private bool _isRunning = true;
     
     private readonly List<BackupJob> _backupJobs = JobService.BackupJobs;
@@ -23,9 +24,16 @@ public class ConsoleView
             new MenuItem("MenuExecuteJobs", ExecuteJobs),
             new MenuItem("MenuAddJob", AddJob),
             new MenuItem("MenuRemoveJob", RemoveJob),
+            new MenuItem("MenuEncryptedExtensions", HandleEncryptedExtensions),
             new MenuItem("MenuChangeLanguage", DisplayLanguageMenu),
             new MenuItem("MenuLogsFormat", ChangeLogsFormat),
             new MenuItem("MenuExit", ExitApp)
+        ];
+        _extensionsMenuItems =
+        [
+            new MenuItem("MenuAddExtension", AddExtension),
+            new MenuItem("MenuRemoveExtension", RemoveExtension),
+            new MenuItem("MenuReturn", null!)
         ];
 
         _viewModel = viewModel;
@@ -35,6 +43,11 @@ public class ConsoleView
         _viewModel.ProgressUpdated += DisplayProgress;
         _viewModel.ErrorOccurred += DisplayError;
         _viewModel.LogsTransportersChanged += DisplayLogsTransportersChanged;
+        
+        _viewModel.EncryptedExtensionsChanged += DisplayEncryptedExtensionsChanged;
+        _viewModel.ExtensionsAdded += DisplayExtensionsAdded;
+        _viewModel.ExtensionsRemoved += DisplayExtensionsRemoved;
+        
     }
 
     public void Render()
@@ -46,7 +59,7 @@ public class ConsoleView
 
             DisplayJobs();
             Console.WriteLine();
-            DisplayMenu();
+            DisplayMenu(_menuItems);
 
             var mainMenu = true;
 
@@ -66,12 +79,12 @@ public class ConsoleView
         }
     }
 
-    private void DisplayMenu()
+    private void DisplayMenu(List<MenuItem> menuItems)
     {
         Console.WriteLine(T("MenuTitle"));
-        for (var i = 0; i < _menuItems.Count; i++)
+        for (var i = 0; i < menuItems.Count; i++)
         {
-            var item = _menuItems[i];
+            var item = menuItems[i];
             Console.WriteLine($"\t{i + 1}. {T(item.Title)}");
         }
 
@@ -89,8 +102,8 @@ public class ConsoleView
 
         Console.WriteLine(T("JobsAvailable") + "\n");
 
-        const string lineTemplate = "\t{0,-5} | {1,-20} | {2,-30} | {3,-30} | {4,-20}";
-        var header = string.Format(lineTemplate, T("Number"), T("Name"), T("SourcePath"), T("DestinationPath"), T("Type"));
+        const string lineTemplate = "\t{0,-5} | {1,-20} | {2,-30} | {3,-30} | {4,-20} | {5,-15}";
+        var header = string.Format(lineTemplate, T("Number"), T("Name"), T("SourcePath"), T("DestinationPath"), T("Type"), T("Encryption"));
         
         Console.WriteLine(header);
         
@@ -99,8 +112,9 @@ public class ConsoleView
             var job = _backupJobs[i];
             var sourceEllipsis = StringHelper.GetEllipsisSuffix(job.SourceFolder, 27);
             var destinationEllipsis = StringHelper.GetEllipsisSuffix(job.DestinationFolder, 27);
-            
-            Console.WriteLine(lineTemplate, i + 1, job.Name, sourceEllipsis, destinationEllipsis, T(job.BackupType.Name));
+            var encryption = job.UseEncryption ? T("Yes") : T("No");
+
+            Console.WriteLine(lineTemplate, i + 1, job.Name, sourceEllipsis, destinationEllipsis, T(job.BackupType.Name), encryption);
         }
     }
 
@@ -135,7 +149,8 @@ public class ConsoleView
         var typeChoice = ConsoleHelper.AskForInt(T("SelectBackupType"), 1, _viewModel.BackupTypes.Count);
         var type = _viewModel.BackupTypes.ElementAt(typeChoice - 1).Value;
         
-        _viewModel.AddBackupJob(name, source, destination, type);
+        var encryption = ConsoleHelper.AskForBool(T("UseEncryption"));
+        _viewModel.AddBackupJob(name, source, destination, type, encryption);
     }
 
     private void RemoveJob()
@@ -235,6 +250,87 @@ public class ConsoleView
     private void DisplayLogsTransportersChanged()
     {
         Console.WriteLine(T("LogsFormatChanged"));
+    }
+    
+    private void HandleEncryptedExtensions()
+    {
+        if (_viewModel.EncryptedExtensions.Count == 0)
+        {
+            var extensions = ConsoleHelper.AskForStringList(T("EnterEncryptedExtensions") + ": ");
+            _viewModel.SetupEncryptedExtensions(extensions);
+            return;
+        }
+
+        Console.WriteLine(T("CurrentEncryptedExtensions") + ":");
+        foreach (var extension in _viewModel.EncryptedExtensions)
+        {
+            Console.WriteLine($"\t- {extension}");
+        }
+        ConsoleHelper.DisplaySeparator();
+        
+        while (true)
+        {
+            DisplayMenu(_extensionsMenuItems);
+            var choice = ConsoleHelper.AskForInt(T("SelectOption"), 1, _extensionsMenuItems.Count);
+            if (choice == _extensionsMenuItems.Count) return;
+            _extensionsMenuItems[choice - 1].Action();
+        }
+    }
+
+    private void RemoveExtension()
+    {
+        if (_viewModel.EncryptedExtensions.Count == 0)
+        {
+            Console.WriteLine(T("NoExtensionsAvailable"));
+            return;
+        }
+        Console.WriteLine(T("SelectExtensionToRemove") + ":");
+        for (var i = 0; i < _viewModel.EncryptedExtensions.Count; i++)
+        {
+            Console.WriteLine($"\t{i + 1}. {_viewModel.EncryptedExtensions[i]}");
+        }
+
+        var choice = ConsoleHelper.AskForMultipleValues(T("SelectOption"), 1, _viewModel.EncryptedExtensions.Count);
+        _viewModel.RemoveExtension(choice);
+    }
+
+    private void AddExtension()
+    {
+        var newExtensions = ConsoleHelper.AskForStringList(T("EnterNewExtensions") + ": ");
+
+        foreach (var ext in newExtensions)
+        {
+            if (!_viewModel.EncryptedExtensions.Contains(ext))
+            {
+                _viewModel.AddExtensions(ext);
+            }
+            else
+            {
+                Console.WriteLine($"\t- {ext} {T("ExtensionAlreadyExists")}");
+            }
+        }
+
+        _viewModel.SetupEncryptedExtensions(_viewModel.EncryptedExtensions);
+    }
+    
+    private void DisplayEncryptedExtensionsChanged(List<string> extensions)
+    {
+        Console.WriteLine(T("EncryptedExtensionsChanged")+": " + string.Join(", ", extensions));
+        
+    }
+    
+    private void DisplayExtensionsAdded(string ext)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"{T("ExtensionAdded")} {ext}");
+        Console.ResetColor();
+    }
+
+    private void DisplayExtensionsRemoved(string ext)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine($"{T("ExtensionRemoved")} {ext}");
+        Console.ResetColor();
     }
     
     private void ExitApp()
