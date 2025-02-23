@@ -192,7 +192,7 @@ public static class ConsoleHelper
     {
         while (true)
         {
-            Console.WriteLine($"{prompt}");
+            Console.Write($"{prompt}");
             var input = ReadTrimmedConsole();
 
             if (!string.IsNullOrWhiteSpace(input))

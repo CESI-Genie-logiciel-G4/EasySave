@@ -1,4 +1,5 @@
-﻿using EasySave.Models;
+﻿using System.Collections.ObjectModel;
+using EasySave.Models;
 using EasySave.Models.Backups;
 using EasySave.Services;
 using EasySave.Utils;
@@ -9,7 +10,7 @@ namespace EasySave.ViewModels;
 public class MainViewModel
 {
     private readonly List<BackupJob> _backupJobs = JobService.BackupJobs;
-    public List<string> EncryptedExtensions => ExtensionService.EncryptedExtensions;
+    public readonly ObservableCollection<string> EncryptedExtensions = ExtensionService.EncryptedExtensions;
     private static string T(string key) => LocalizationService.GetString(key);
 
     public MainViewModel()
@@ -46,6 +47,7 @@ public class MainViewModel
     public event Action<List<string>>? EncryptedExtensionsChanged;
     public event Action<string>? ExtensionsAdded;
     public event Action<string>? ExtensionsRemoved;
+    public event Action<string>? ExtensionsAlreadyExists;
 
     public void AddBackupJob(string name, string source, string destination, BackupType type, bool encryption)
     {
@@ -105,16 +107,16 @@ public class MainViewModel
             .ToList();
     }
     
-    public void SetupEncryptedExtensions(List<string> extensions)
-    {
-        ExtensionService.SetEncryptedExtensions(extensions);
-        EncryptedExtensionsChanged?.Invoke(extensions);
-    }
-
     public void AddExtensions(string extension)
     {
-        ExtensionService.AddEncryptedExtension(extension);
-        ExtensionsAdded?.Invoke(extension);
+        if (ExtensionService.AddEncryptedExtension(extension))
+        {
+            ExtensionsAdded?.Invoke(extension);
+        }
+        else 
+        {
+            ExtensionsAlreadyExists?.Invoke(extension);
+        }
     }
 
     public void RemoveExtension(List<int> indexes)

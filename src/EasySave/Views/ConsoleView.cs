@@ -1,4 +1,6 @@
-﻿using EasySave.Helpers;
+﻿
+using System.Security.Cryptography;
+using EasySave.Helpers;
 using EasySave.Utils;
 using EasySave.ViewModels;
 using EasySave.Models;
@@ -47,6 +49,7 @@ public class ConsoleView
         _viewModel.EncryptedExtensionsChanged += DisplayEncryptedExtensionsChanged;
         _viewModel.ExtensionsAdded += DisplayExtensionsAdded;
         _viewModel.ExtensionsRemoved += DisplayExtensionsRemoved;
+        _viewModel.ExtensionsAlreadyExists += DisplayExtensionsAlreadyExists;
         
     }
 
@@ -240,6 +243,7 @@ public class ConsoleView
             UnauthorizedAccessException => T("UnauthorizedAccess"),
             DirectoryNotFoundException => T("DirectoryNotFound"),
             OperationCanceledException => T("OperationCancelled"),
+            CryptographicException => T("CryptoError") + " - " + T("CheckLogs"),
             IOException => T("IOError") + " - " + T("CheckLogs"),
             _ => T("ErrorOccurred") + " - " + T("CheckLogs")
         };
@@ -257,7 +261,10 @@ public class ConsoleView
         if (_viewModel.EncryptedExtensions.Count == 0)
         {
             var extensions = ConsoleHelper.AskForStringList(T("EnterEncryptedExtensions") + ": ");
-            _viewModel.SetupEncryptedExtensions(extensions);
+            foreach (var ext in extensions)
+            {
+                _viewModel.AddExtensions(ext);
+            }
             return;
         }
 
@@ -298,23 +305,20 @@ public class ConsoleView
 
         foreach (var ext in newExtensions)
         {
-            if (!_viewModel.EncryptedExtensions.Contains(ext))
-            {
-                _viewModel.AddExtensions(ext);
-            }
-            else
-            {
-                Console.WriteLine($"\t- {ext} {T("ExtensionAlreadyExists")}");
-            }
+            _viewModel.AddExtensions(ext);
         }
-
-        _viewModel.SetupEncryptedExtensions(_viewModel.EncryptedExtensions);
     }
     
     private void DisplayEncryptedExtensionsChanged(List<string> extensions)
     {
         Console.WriteLine(T("EncryptedExtensionsChanged")+": " + string.Join(", ", extensions.Select(e => e.ToLower())));
-        
+    }
+    
+    private void DisplayExtensionsAlreadyExists(string ext)
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine($"\t- {ext} {T("ExtensionAlreadyExists")}");
+        Console.ResetColor();
     }
     
     private void DisplayExtensionsAdded(string ext)

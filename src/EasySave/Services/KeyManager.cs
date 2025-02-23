@@ -1,13 +1,35 @@
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
+using EasySave.Helpers;
 
 namespace EasySave.Services;
 
-public static class KeyManager
+public sealed class KeyManager
 {
-    private const string KeyPath = "encryption_key.txt";
-    private const string IvPath = "encryption_iv.txt";
+    private static KeyManager? _instance;
 
-    public static byte[] GetOrCreateKey()
+    private const string KeyPath = ".easysave/security/encryption_key";
+    private const string IvPath = ".easysave/security/encryption_iv";
+
+    private readonly byte[] _key;
+    private readonly byte[] _iv;
+
+    private KeyManager()
+    {
+        _key = LoadOrCreateKey();
+        _iv = LoadOrCreateIv();
+    }
+
+    [MethodImpl (MethodImplOptions.Synchronized)]
+    public static KeyManager GetInstance()
+    {
+        return _instance ??= new KeyManager();
+    }
+
+    public byte[] GetKey() => _key;
+    public byte[] GetIv() => _iv;
+
+    private static byte[] LoadOrCreateKey()
     {
         if (File.Exists(KeyPath))
         {
@@ -16,11 +38,11 @@ public static class KeyManager
 
         using var aes = Aes.Create();
         aes.GenerateKey();
-        File.WriteAllText(KeyPath, Convert.ToBase64String(aes.Key));
+        FileHelper.CreateAndWrite(KeyPath, Convert.ToBase64String(aes.Key));
         return aes.Key;
     }
 
-    public static byte[] GetOrCreateIv()
+    private static byte[] LoadOrCreateIv()
     {
         if (File.Exists(IvPath))
         {
@@ -29,7 +51,7 @@ public static class KeyManager
 
         using var aes = Aes.Create();
         aes.GenerateIV();
-        File.WriteAllText(IvPath, Convert.ToBase64String(aes.IV));
+        FileHelper.CreateAndWrite(IvPath, Convert.ToBase64String(aes.IV));
         return aes.IV;
     }
 }

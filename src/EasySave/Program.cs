@@ -9,6 +9,7 @@ namespace EasySave
         private static void Main()
         {
             JobService.LoadJobs();
+            ExtensionService.LoadEncryptedExtensions();
             HistoryService.LoadHistory();
             
             var viewModel = new MainViewModel();

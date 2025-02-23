@@ -76,7 +76,7 @@
     <value>Please enter at least one valid extension (.txt, .jpg, .png, etc.).</value>
   </data>
   <data name="InvalidBoolean" xml:space="preserve">
-    <value>Please enter a valid boolean value (yes/no/y/n).</value>
+    <value>Please enter a valid boolean value (y/n).</value>
   </data>
     <data name="InvalidFormat" xml:space="preserve">
     <value>Invalid format. Try: 5, 2-5, 1;3;7, *.</value>
@@ -133,7 +133,7 @@
     <value>Directory Not Found</value>
   </data>
   <data name="MenuEncryptedExtensions" xml:space="preserve">
-    <value>Encrypted extensions</value>
+    <value>Define encrypted extensions</value>
   </data>
   <data name="MenuAddExtension" xml:space="preserve">
     <value>Add extension</value>
@@ -215,5 +215,8 @@
   </data>
     <data name="AvailableLogsFormats" xml:space="preserve">
     <value>Available log output formats:</value>
+  </data>
+  <data name="CryptoError" xml:space="preserve">
+    <value>Error during encryption/decryption</value>
   </data>
 </root>

@@ -73,7 +73,7 @@
     <value>Veuillez entrer au moins une extension valide (.txt, .jpg, .png, etc.).</value>
   </data>
   <data name="InvalidBoolean" xml:space="preserve">
-    <value>Veuillez entrer une valeur booléenne valide (yes/no/y/n).</value>
+    <value>Veuillez entrer une valeur booléenne valide (y/n).</value>
   </data>
   <data name="InvalidNumber" xml:space="preserve">
     <value>Veuillez entrer un nombre valide.</value>
@@ -124,7 +124,7 @@
     <value>Chemin de destination</value>
   </data>
   <data name="MenuEncryptedExtensions" xml:space="preserve">
-    <value>Extensions chiffrées</value>
+    <value>Définir extensions chiffrées</value>
   </data>
   <data name="MenuAddExtension" xml:space="preserve">
     <value>Ajouter une extension</value>
@@ -215,5 +215,8 @@
   </data>
   <data name="AvailableLogsFormats" xml:space="preserve">
     <value>Formats de sortie des logs disponibles :</value>
+  </data>
+  <data name="CryptoError" xml:space="preserve">
+    <value>Erreur lors du chiffrement/déchiffrement</value>
   </data>
 </root>

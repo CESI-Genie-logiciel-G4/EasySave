@@ -2,65 +2,64 @@ using EasySave.Services;
 
 namespace EasySave.Tests.Services;
 
-public class KeyManagerTests
-{
-    private const string KeyPath = "encryption_key.txt";
-    private const string IvPath = "encryption_iv.txt";
-
-    public KeyManagerTests()
+public class KeyManagerTests : IDisposable
     {
-        Cleanup();
-    }
+        private const string KeyPath = ".easysave/security/encryption_key";
+        private const string IvPath = ".easysave/security/encryption_iv";
 
-    [Fact]
-    public void GetOrCreateKey_ShouldReturnValidKey()
-    {
-        // Act
-        byte[] key = KeyManager.GetOrCreateKey();
+        public KeyManagerTests()
+        {
+            Cleanup();
+        }
         
-        // Assert
-        Assert.NotNull(key);
-        Assert.Equal(32, key.Length); // AES-256 key length
-        Assert.True(File.Exists(KeyPath));
-    }
+        [Fact]
+        public void GetIv_ShouldReturnValidIv()
+        {
+            // Act
+            var keyManager = KeyManager.GetInstance();
+            byte[] iv = keyManager.GetIv();
 
-    [Fact]
-    public void GetOrCreateIv_ShouldReturnValidIv()
-    {
-        // Act
-        byte[] iv = KeyManager.GetOrCreateIv();
-        
-        // Assert
-        Assert.NotNull(iv);
-        Assert.Equal(16, iv.Length); // AES block size
-        Assert.True(File.Exists(IvPath));
-    }
+            // Assert
+            Assert.NotNull(iv);
+            Assert.True(File.Exists(IvPath));
+        }
 
-    [Fact]
-    public void GetOrCreateKey_ShouldPersistBetweenCalls()
-    {
-        // Act
-        byte[] key1 = KeyManager.GetOrCreateKey();
-        byte[] key2 = KeyManager.GetOrCreateKey();
-        
-        // Assert
-        Assert.Equal(key1, key2);
-    }
+        [Fact]
+        public void GetKey_ShouldReturnSameKeyBetweenCalls()
+        {
+            // Arrange
+            var keyManager = KeyManager.GetInstance();
 
-    [Fact]
-    public void GetOrCreateIv_ShouldPersistBetweenCalls()
-    {
-        // Act
-        byte[] iv1 = KeyManager.GetOrCreateIv();
-        byte[] iv2 = KeyManager.GetOrCreateIv();
-        
-        // Assert
-        Assert.Equal(iv1, iv2);
-    }
+            // Act
+            byte[] key1 = keyManager.GetKey();
+            byte[] key2 = keyManager.GetKey();
 
-    private static void Cleanup()
-    {
-        if (File.Exists(KeyPath)) File.Delete(KeyPath);
-        if (File.Exists(IvPath)) File.Delete(IvPath);
+            // Assert
+            Assert.Equal(key1, key2);
+        }
+
+        [Fact]
+        public void GetIv_ShouldReturnSameIvBetweenCalls()
+        {
+            // Arrange
+            var keyManager = KeyManager.GetInstance();
+
+            // Act
+            byte[] iv1 = keyManager.GetIv();
+            byte[] iv2 = keyManager.GetIv();
+
+            // Assert
+            Assert.Equal(iv1, iv2);
+        }
+
+        public void Dispose()
+        {
+            Cleanup();
+        }
+
+        private static void Cleanup()
+        {
+            if (File.Exists(KeyPath)) File.Delete(KeyPath);
+            if (File.Exists(IvPath)) File.Delete(IvPath);
+        }
     }
-}

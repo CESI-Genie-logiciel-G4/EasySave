@@ -1,46 +1,57 @@
+using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
+using EasySave.Helpers;
+
 namespace EasySave.Services;
 
 public static class ExtensionService
 {
-    private static List<string> _encryptedExtensions = [];
-    private static readonly Lock Lock = new();
+    private static String Path = "./.easysave/encryptedExtensions.json";
+    
+    public static readonly ObservableCollection<string> EncryptedExtensions = new();
 
-    public static List<string> EncryptedExtensions
+    public static void LoadEncryptedExtensions()
     {
-        get
+        if (!File.Exists(Path)) return;
+        var json = File.ReadAllText(Path);
+        EncryptedExtensions.Clear();
+        foreach (var ext in JsonSerializer.Deserialize<ObservableCollection<string>>(json)!)
         {
-            lock (Lock)
-            {
-                return [.._encryptedExtensions];
-            }
+            EncryptedExtensions.Add(ext.ToLower());
         }
     }
 
-    public static void SetEncryptedExtensions(List<string> extensions)
+    public static void StoreEncryptedExtensions()
     {
-        lock (Lock)
-        {
-            _encryptedExtensions = new List<string>(extensions.Select(e => e.ToLower()));
-        }
+        FileHelper.CreateParentDirectory(Path);
+        var json = JsonSerializer.Serialize(EncryptedExtensions);
+        FileHelper.CreateAndWrite(Path, json);
+    }
+    
+    /// <summary>
+    ///   Add an extension to the list of encrypted extensions.
+    /// </summary>
+    /// <param name="extension"></param>
+    /// <returns>
+    ///     <c>true</c> if the extension was added to the list, <c>false</c> otherwise.
+    /// </returns>
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    public static bool AddEncryptedExtension(string extension)
+    {
+        var lowerExt = extension.ToLower();
+        
+        if (EncryptedExtensions.Contains(lowerExt)) return false;
+        EncryptedExtensions.Add(lowerExt);
+            
+        StoreEncryptedExtensions();
+        return true;
     }
 
-    public static void AddEncryptedExtension(string extension)
-    {
-        lock (Lock)
-        {
-            var lowerExt = extension.ToLower();
-            if (!_encryptedExtensions.Contains(lowerExt))
-            {
-                _encryptedExtensions.Add(lowerExt);
-            }
-        }
-    }
-
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public static void RemoveEncryptedExtension(string extension)
     {
-        lock (Lock)
-        {
-            _encryptedExtensions.Remove(extension.ToLower());
-        }
+        EncryptedExtensions.Remove(extension.ToLower());
+        StoreEncryptedExtensions();
     }
 }
