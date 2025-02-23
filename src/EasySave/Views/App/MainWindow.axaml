@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:EasySave.ViewModels"
+        xmlns:converters="clr-namespace:EasySave.Converters"
         mc:Ignorable="d"
         x:Class="EasySave.Views.app.MainWindow"
         x:DataType="vm:MainViewModel"
@@ -14,6 +15,10 @@
     <Window.DataContext>
         <vm:MainViewModel />
     </Window.DataContext>
+
+    <Window.Resources>
+        <converters:EnumEqualsConverter x:Key="EnumEqualsConverter" />
+    </Window.Resources>
 
     <DockPanel LastChildFill="True">
         <Menu Background="#383A42" x:Name="MainMenu" PointerPressed="OnMenuPointerPressed" DockPanel.Dock="Top">
@@ -37,14 +42,14 @@
                             <MenuItem Header="{Binding Title}" Click="OnLogsTransporterChanged">
                                 <MenuItem.Icon>
                                     <CheckBox IsChecked="{Binding IsEnabled}" BorderThickness="0"
-                                            IsHitTestVisible="False" />
+                                              IsHitTestVisible="False" />
                                 </MenuItem.Icon>
                             </MenuItem>
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
                 </MenuItem>
             </MenuItem>
-            
+
             <!-- Help Section -->
             <MenuItem Header="{DynamicResource Help}" Foreground="White" PointerPressed="OnMenuItemPointerPressed">
                 <MenuItem Header="{DynamicResource About}" />
@@ -56,43 +61,132 @@
                     BorderThickness="0"
                     Background="#F7F8FA">
             <TabItem Header="{DynamicResource MyBackups}" FontSize="18">
-                <ListBox x:Name="JobList" ItemsSource="{Binding BackupJobs}" Background="White">
-                    <ListBox.ItemTemplate>
+                <ItemsControl x:Name="JobList" ItemsSource="{Binding BackupJobs}" Background="White">
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Vertical">
-                                <Grid Margin="5 5 5 0" ColumnDefinitions="*,60">
+                            <StackPanel Orientation="Vertical" Margin="10 10 10 0">
+
+                                <StackPanel.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Supprimer" Click="OnDeleteMenuItemClicked" />
+                                    </ContextMenu>
+                                </StackPanel.ContextMenu>
+
+                                <Grid Margin="10 10 10 5" ColumnDefinitions="*,180">
                                     <StackPanel Grid.Column="0" Orientation="Vertical" Spacing="2">
                                         <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                                         <TextBlock Text="{Binding BackupType.Name}" Foreground="Gray" />
                                         <TextBlock Text="{Binding SourceFolder}" FontStyle="Italic" />
                                         <TextBlock Text="{Binding DestinationFolder}" Foreground="Gray" />
                                     </StackPanel>
-                                    <Button Grid.Column="1" Content="▶" Click="OnStartJobButton" />
+
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                        <!-- Bouton "▶" : Displayed when the state is Completed -->
+                                        <Button Content="▶" Click="OnStartJobButton"
+                                                Classes.hidden="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Pending|Running|Paused}">
+                                            <Button.Styles>
+                                                <Style Selector="Button.hidden">
+                                                    <Setter Property="IsVisible" Value="false" />
+                                                </Style>
+                                                <Style Selector="Button:not(Button.hidden)">
+                                                    <Setter Property="IsVisible" Value="true" />
+                                                </Style>
+                                            </Button.Styles>
+                                        </Button>
+
+                                        <!-- Bouton "⏸" : Displayed when the state is Running -->
+                                        <Button Content="⏸" Command="{Binding CurrentExecution.Pause}"
+                                                Classes.visible="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Running}">
+                                            <Button.Styles>
+                                                <Style Selector="Button.visible">
+                                                    <Setter Property="IsVisible" Value="true" />
+                                                </Style>
+                                                <Style Selector="Button:not(Button.visible)">
+                                                    <Setter Property="IsVisible" Value="false" />
+                                                </Style>
+                                            </Button.Styles>
+                                        </Button>
+
+                                        <!-- Bouton "↺" : Displayed when the state is Paused -->
+                                        <Button Content="↺" Command="{Binding CurrentExecution.Resume}"
+                                                Classes.visible="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Paused}">
+                                            <Button.Styles>
+                                                <Style Selector="Button.visible">
+                                                    <Setter Property="IsVisible" Value="true" />
+                                                </Style>
+                                                <Style Selector="Button:not(Button.visible)">
+                                                    <Setter Property="IsVisible" Value="false" />
+                                                </Style>
+                                            </Button.Styles>
+                                        </Button>
+
+                                        <!-- Bouton "⏹" : Displayed when the state is Running or Paused -->
+                                        <Button Content="⏹"
+                                                Command="{Binding CurrentExecution.Cancel}"
+                                                Classes.visible="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Running|Paused}">
+                                            <Button.Styles>
+                                                <Style Selector="Button.visible">
+                                                    <Setter Property="IsVisible" Value="true" />
+                                                </Style>
+                                                <Style Selector="Button:not(Button.visible)">
+                                                    <Setter Property="IsVisible" Value="false" />
+                                                </Style>
+                                            </Button.Styles>
+                                        </Button>
+                                    </StackPanel>
                                 </Grid>
 
                                 <TextBlock Text="{Binding CurrentExecution.Exception.Message}"
-                                         Foreground="Red"
-                                         TextWrapping="Wrap"
-                                         IsVisible="{Binding CurrentExecution.Exception.Message, 
+                                           Foreground="Red"
+                                           TextWrapping="Wrap"
+                                           IsVisible="{Binding CurrentExecution.Exception.Message, 
                                          Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
 
                                 <ProgressBar Minimum="0"
-                                           Maximum="{Binding CurrentExecution.TotalSteps}"
-                                           Value="{Binding CurrentExecution.CurrentProgress}"
-                                           Height="5"
-                                           Foreground="DodgerBlue"
-                                           Background="LightGray"
-                                           Opacity="{Binding !!CurrentExecution}" />
+                                             Maximum="{Binding CurrentExecution.TotalSteps}"
+                                             Value="{Binding CurrentExecution.CurrentProgress}"
+                                             Height="5"
+                                             Background="LightGray"
+                                             Opacity="{Binding !!CurrentExecution}"
+
+                                             Classes.Cancelled="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Canceled}"
+                                             Classes.pending="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Pending}"
+                                             Classes.running="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Running}"
+                                             Classes.paused="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Paused}"
+                                             Classes.completed="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Completed}"
+                                             Classes.failed="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Failed}">
+
+                                    <ProgressBar.Styles>
+                                        <Style Selector="ProgressBar.pending">
+                                            <Setter Property="IsIndeterminate" Value="True" />
+                                            <Setter Property="Foreground" Value="Gray" />
+                                        </Style>
+                                        <Style Selector="ProgressBar.running">
+                                            <Setter Property="Foreground" Value="DodgerBlue" />
+                                        </Style>
+                                        <Style Selector="ProgressBar.paused">
+                                            <Setter Property="Foreground" Value="Orange" />
+                                        </Style>
+                                        <Style Selector="ProgressBar.completed">
+                                            <Setter Property="Foreground" Value="Green" />
+                                        </Style>
+                                        <Style Selector="ProgressBar.failed">
+                                            <Setter Property="Foreground" Value="red" />
+                                        </Style>
+                                    </ProgressBar.Styles>
+                                </ProgressBar>
+                                
                             </StackPanel>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </TabItem>
-            
+
             <TabItem Header="{DynamicResource NewBackup}" FontSize="18">
                 <Border Padding="10" Background="White">
                     <StackPanel Orientation="Vertical" Spacing="10" VerticalAlignment="Center"
-                              HorizontalAlignment="Center">
+                                HorizontalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Spacing="5">
                             <TextBlock Width="200" Text="{DynamicResource BackupName}" />
                             <TextBox x:Name="JobName" Width="300" />
@@ -121,7 +215,7 @@
                             </ComboBox>
                         </StackPanel>
 
-                        <Button Content="{DynamicResource Create}" Click="OnCreateJobButton" 
+                        <Button Content="{DynamicResource Create}" Click="OnCreateJobButton"
                                 Padding="20 5" HorizontalAlignment="Center" />
                     </StackPanel>
                 </Border>
@@ -132,16 +226,16 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="5" ColumnDefinitions="100,1*,150">
-                                <TextBlock Grid.Column="0" Text="{Binding BackupJob.Name}" 
-                                         FontWeight="Bold" Width="100" />
+                                <TextBlock Grid.Column="0" Text="{Binding BackupJob.Name}"
+                                           FontWeight="Bold" Width="100" />
                                 <StackPanel Grid.Column="1">
-                                    <TextBlock Text="{Binding BackupJob.SourceFolder}" 
-                                             FontStyle="Italic" />
-                                    <TextBlock Text="{Binding BackupJob.DestinationFolder}" 
-                                             FontStyle="Italic" />
+                                    <TextBlock Text="{Binding BackupJob.SourceFolder}"
+                                               FontStyle="Italic" />
+                                    <TextBlock Text="{Binding BackupJob.DestinationFolder}"
+                                               FontStyle="Italic" />
                                 </StackPanel>
-                                <TextBlock Grid.Column="2" Text="{Binding StartTime}" 
-                                         Foreground="Gray" />
+                                <TextBlock Grid.Column="2" Text="{Binding StartTime}"
+                                           Foreground="Gray" />
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

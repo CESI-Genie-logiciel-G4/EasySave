@@ -15,7 +15,7 @@ public partial class BackupJob : ObservableObject
     [ObservableProperty]
     [property: JsonIgnore]
     [JsonIgnore]
-    private Execution? currentExecution;
+    private Execution? _currentExecution;
 
     public BackupJob(
         string name, 
@@ -46,6 +46,6 @@ public partial class BackupJob : ObservableObject
         if (CurrentExecution?.State is not ExecutionState.Pending)
             throw new InvalidOperationException("Execution isn't in a pending state");
 
-        await Task.Run(() => CurrentExecution?.Run());
+        await CurrentExecution.Start();
     }
 }

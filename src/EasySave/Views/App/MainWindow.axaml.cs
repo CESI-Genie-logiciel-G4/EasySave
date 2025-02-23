@@ -30,6 +30,16 @@ public partial class MainWindow : Window
         _viewModel.ExecuteJob(index);
     }
     
+    public void OnDeleteMenuItemClicked(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem menuItem) return;
+        if (menuItem.DataContext is not BackupJob backupJob) return;
+        
+        var index = _viewModel.BackupJobs.IndexOf(backupJob);
+        
+        _viewModel.RemoveJob(index);
+    }
+    
     private void OnCreateJobButton(object? sender, RoutedEventArgs e)
     {
         var name = JobName.Text;

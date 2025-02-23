@@ -1,5 +1,7 @@
+using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using EasySave.Helpers;
+using EasySave.Utils;
 using static EasySave.Services.HistoryService;
 
 namespace EasySave.Models;
@@ -8,9 +10,10 @@ public partial class Execution : ObservableObject
 {
     public Execution(BackupJob backupJob)
     {
-        BackupJob = backupJob ?? throw new ArgumentNullException(nameof(backupJob));
+        BackupJob = backupJob;
         State = ExecutionState.Pending;
         Exception = null;
+        _controller = new TaskController();
     }
 
     public DateTime StartTime { get; set; }
@@ -20,23 +23,50 @@ public partial class Execution : ObservableObject
     public event Action<Execution>? ProgressUpdated;
 
     [ObservableProperty] 
-    private ExecutionState state;
+    private ExecutionState _state;
 
     [ObservableProperty] 
-    private Exception? exception;
+    private Exception? _exception;
 
     [ObservableProperty] 
-    private int currentProgress;
+    private int _currentProgress;
 
     [ObservableProperty] 
-    private int totalSteps;
-
-    public void Run()
+    private int _totalSteps;
+    
+    [JsonIgnore]
+    [property: JsonIgnore]
+    [ObservableProperty]
+    private TaskController _controller;
+    
+    public async Task Start()
     {
-        StartTime = DateTime.UtcNow;
         ProgressUpdated?.Invoke(this);
         State = ExecutionState.Running;
+        await Controller.Start(Run);
+    }
+    
+    public void Pause()
+    {
+        State = ExecutionState.Paused;
+        Controller.Pause();
+    }
+    
+    public void Resume()
+    {
+        State = ExecutionState.Running;
+        Controller.Resume();
+    }
+    
+    public void Cancel()
+    {
+        State = ExecutionState.Canceled;
+        Controller.Cancel();
+    }
 
+    private Task Run(CancellationToken token, ManualResetEventSlim pauseEvent)
+    {
+        StartTime = DateTime.UtcNow;
         try
         {
             var rootFolder = BackupJob.SourceFolder;
@@ -50,6 +80,9 @@ public partial class Execution : ObservableObject
 
             foreach (var sourceFile in files)
             {
+                token.ThrowIfCancellationRequested();
+                pauseEvent.Wait(token);
+                Thread.Sleep(1000);
                 var destinationFile = FileHelper.GetMirrorFilePath(rootFolder, sourceFile, destinationFolder);
                 BackupJob.BackupType.Execute(sourceFile, destinationFile, BackupJob);
                 CurrentProgress++;
@@ -67,5 +100,7 @@ public partial class Execution : ObservableObject
             State = ExecutionState.Failed;
             Exception = e;
         }
+
+        return Task.CompletedTask;
     }
 }
