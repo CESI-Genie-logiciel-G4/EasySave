@@ -12,6 +12,8 @@ public partial class BackupJob : ObservableObject
     public BackupType BackupType { get; }
     public bool UseEncryption { get; }
     
+    public string[] BlockedProcesses { get; } = ["Calculator", "Calc"];
+    
     [ObservableProperty]
     [property: JsonIgnore]
     [JsonIgnore]
@@ -36,6 +38,8 @@ public partial class BackupJob : ObservableObject
     {
         if (CurrentExecution?.State is ExecutionState.Running)
             throw new InvalidOperationException("An execution is already running for this job");
+
+        CurrentExecution?.Dispose();
 
         CurrentExecution = new Execution(this);
         return CurrentExecution;

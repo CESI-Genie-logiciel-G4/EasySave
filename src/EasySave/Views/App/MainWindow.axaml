@@ -150,7 +150,7 @@
                                              Background="LightGray"
                                              Opacity="{Binding !!CurrentExecution}"
 
-                                             Classes.Cancelled="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Canceled}"
+                                             Classes.Blocked="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Blocked}"
                                              Classes.pending="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Pending}"
                                              Classes.running="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Running}"
                                              Classes.paused="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Paused}"
@@ -173,6 +173,10 @@
                                         </Style>
                                         <Style Selector="ProgressBar.failed">
                                             <Setter Property="Foreground" Value="red" />
+                                        </Style>
+                                        <Style Selector="ProgressBar.Blocked">
+                                            <Setter Property="Foreground" Value="Orange" />
+                                            <Setter Property="IsIndeterminate" Value="True" />
                                         </Style>
                                     </ProgressBar.Styles>
                                 </ProgressBar>
@@ -215,6 +219,16 @@
                             </ComboBox>
                         </StackPanel>
 
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Width="200" Text="{DynamicResource Crypt}" />
+                            <CheckBox x:Name="Crypt" />
+                        </StackPanel>
+                        
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Width="200" Text="{DynamicResource BlockerApp}" />
+                            <TextBox x:Name="BlockerApp" Width="300" />
+                        </StackPanel>
+                        
                         <Button Content="{DynamicResource Create}" Click="OnCreateJobButton"
                                 Padding="20 5" HorizontalAlignment="Center" />
                     </StackPanel>

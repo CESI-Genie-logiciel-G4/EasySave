@@ -276,4 +276,7 @@
     <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="AnotherInstanceRunning" xml:space="preserve">
+    <value>Another instance of the application is already running.</value>
+  </data>
 </root>

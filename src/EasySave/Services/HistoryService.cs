@@ -16,7 +16,6 @@ public static class HistoryService
     
     public static void StoreCompletedExecution(Execution execution)
     {
-        LoadHistory();
         CompletedExecutions.Add(execution);
         var json = JsonSerializer.Serialize(CompletedExecutions, DefaultJsonOptions);
         FileHelper.CreateAndWrite(ExecutionHistoryFile, json);
@@ -24,8 +23,10 @@ public static class HistoryService
 
     public static void LoadHistory()
     {
-        if (!File.Exists(ExecutionHistoryFile)) return;
+        if (!File.Exists(ExecutionHistoryFile)) 
+            return;
         var readJson = File.ReadAllText(ExecutionHistoryFile);
+        
         CompletedExecutions.Clear();
         CompletedExecutions.AddRange(JsonSerializer.Deserialize<List<Execution>>(readJson) ?? []);
     }

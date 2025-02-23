@@ -25,8 +25,20 @@ namespace EasySave
             
             if (!valid)
             {
-                Console.WriteLine(LocalizationService.GetString("InvalidUiType"), uiType);
+                Console.WriteLine();
+                ConsoleHelper.DisplayError(LocalizationService.GetString("InvalidUiType"), false);
                 DisplayUsage();
+                ConsoleHelper.Pause();
+                return;
+            }
+            
+            using Mutex mutex = new(true, "Global\\EasySaveMutex", out var createdNew);
+            
+            if (!createdNew)
+            {
+                Console.WriteLine();
+                ConsoleHelper.DisplayError(LocalizationService.GetString("AnotherInstanceRunning"), false);
+                ConsoleHelper.Pause();
                 return;
             }
             
@@ -52,14 +64,16 @@ namespace EasySave
         {
             var executableName = Path.GetFileName(Process.GetCurrentProcess().MainModule?.FileName);
 
-            Console.WriteLine(LocalizationService.GetString("\nUsage"));
+            Console.WriteLine(LocalizationService.GetString("Usage"));
             Console.WriteLine($"\t{executableName} [Mode]");
             Console.WriteLine();
 
             Console.WriteLine(LocalizationService.GetString("AvailableModes"));
+            
+            const string format = "\t{0,-10} - {1}";
             foreach (var type in Enum.GetValues<UiType>())
             {
-                Console.WriteLine($"\t{type}  - {LocalizationService.GetString($"UiType_{type}")}");
+                Console.WriteLine(format, type, LocalizationService.GetString($"UiType_{type}"));
             }
         }
 
