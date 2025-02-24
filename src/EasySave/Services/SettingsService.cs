@@ -115,4 +115,19 @@ public static class SettingsService
         _appSettings.EncryptExtensions.Remove(encryptExtension);
         SaveSettings();
     }
+
+    public static void AddPriorityProcessNames(string priorityProcessNames)
+    {
+        if (_appSettings.PriorityProcessNames.Contains(priorityProcessNames))
+            return;
+        _appSettings.PriorityProcessNames.Add(priorityProcessNames);
+        SaveSettings();
+    }
+
+    public static void RemovePriorityProcessNames(string priorityProcessNames)
+    {
+        if(!_appSettings.PriorityProcessNames.Contains(priorityProcessNames)) return;
+        _appSettings.PriorityProcessNames.Remove(priorityProcessNames);
+        SaveSettings();
+    }
 }

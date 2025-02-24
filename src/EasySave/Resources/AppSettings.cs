@@ -11,6 +11,8 @@ public partial class AppSettings : ObservableObject
     
     public ObservableCollection<String> EncryptExtensions { get; set; } = [];
     
+    public ObservableCollection<String> PriorityProcessNames { get; set; } = [];
+    
     public String Language { get; set; } = "en";
     
     [ObservableProperty]
