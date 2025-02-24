@@ -14,9 +14,9 @@ public static class JobService
     private const string BackupJobsFile = ".easysave/jobs-list.json";
     
     
-    public static BackupJob AddBackupJob(string name, string source, string destination, BackupType type)
+    public static BackupJob AddBackupJob(string name, string source, string destination, BackupType type, bool encryption)
     {
-        var newJob = new BackupJob(name, source, destination, type);
+        var newJob = new BackupJob(name, source, destination, type, encryption);
         BackupJobs.Add(newJob);
         StoreJobs();
         

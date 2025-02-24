@@ -22,7 +22,7 @@ public class DifferentialBackup() : BackupType("DifferentialBackup")
         
         if (!File.Exists(lastFullBackupFile) || File.GetLastWriteTime(sourceFile) > File.GetLastWriteTime(lastFullBackupFile))
         {
-            FileHelper.Copy(sourceFile, destinationFile, job);
+            CryptoService.SecureCopy(sourceFile, destinationFile, job);
         }
     }
 }

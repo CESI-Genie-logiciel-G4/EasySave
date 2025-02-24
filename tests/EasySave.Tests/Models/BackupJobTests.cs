@@ -10,7 +10,7 @@ public class BackupJobTests
     public void ToStringTest()
     {
         const string expectedName = "Full";
-        var backupJob = new BackupJob(expectedName, "", "",new FullBackup());
+        var backupJob = new BackupJob(expectedName, "", "",new FullBackup(), false);
         
         var actualString = backupJob.ToString();
         

@@ -1,4 +1,6 @@
-﻿using EasySave.Models;
+﻿using System.Collections.ObjectModel;
+using EasySave.Exceptions;
+using EasySave.Models;
 using EasySave.Models.Backups;
 using EasySave.Services;
 using EasySave.Utils;
@@ -9,6 +11,7 @@ namespace EasySave.ViewModels;
 public class MainViewModel
 {
     private readonly List<BackupJob> _backupJobs = JobService.BackupJobs;
+    public readonly ObservableCollection<string> EncryptedExtensions = ExtensionService.EncryptedExtensions;
     private static string T(string key) => LocalizationService.GetString(key);
 
     public MainViewModel()
@@ -42,10 +45,14 @@ public class MainViewModel
     public event Action<Execution>? ProgressUpdated;
     public event Action<Exception>? ErrorOccurred;
     public event Action? LogsTransportersChanged;
+    public event Action<List<string>>? EncryptedExtensionsChanged;
+    public event Action<string>? ExtensionsAdded;
+    public event Action<string>? ExtensionsRemoved;
+    public event Action<string>? ExtensionsAlreadyExists;
 
-    public void AddBackupJob(string name, string source, string destination, BackupType type)
+    public void AddBackupJob(string name, string source, string destination, BackupType type, bool encryption)
     {
-        var newJob = JobService.AddBackupJob(name, source, destination, type);
+        var newJob = JobService.AddBackupJob(name, source, destination, type, encryption);
         BackupJobAdded?.Invoke(newJob);
     }
 
@@ -93,5 +100,35 @@ public class MainViewModel
         return LogTransporters.Where(t => t.IsEnabled)
             .Select(t => t.Transporter)
             .ToList();
+    }
+    
+    public void AddExtensions(string extension)
+    {
+        try
+        {
+            var newExtension = ExtensionService.AddEncryptedExtension(extension);
+            if (newExtension == null)
+            {
+                ExtensionsAlreadyExists?.Invoke(extension);
+                return;
+            }
+
+            ExtensionsAdded?.Invoke(newExtension);
+        }
+        catch (AlreadyExistException e)
+        {
+            ExtensionsAlreadyExists?.Invoke(e.Extension);
+        }
+        
+    }
+
+    public void RemoveExtension(List<int> indexes)
+    {
+        foreach (var index in indexes.OrderByDescending(i => i))
+        {
+            var extension = ExtensionService.EncryptedExtensions[index - 1];
+            ExtensionService.RemoveEncryptedExtension(extension);
+            ExtensionsRemoved?.Invoke(extension);
+        }
     }
 }

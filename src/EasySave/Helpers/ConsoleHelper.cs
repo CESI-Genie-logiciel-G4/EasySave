@@ -161,6 +161,53 @@ public static class ConsoleHelper
     }
 
     /// <summary>
+    /// Asks the user for a boolean value (yes/no).
+    /// </summary>
+    public static bool AskForBool(string prompt)
+    {
+        while (true)
+        {
+            Console.Write($"{prompt} (y/n): ");
+            var input = ReadTrimmedConsole().ToLower();
+
+            switch (input)
+            {
+                case "y":
+                case "yes":
+                    return true;
+                case "n":
+                case "no":
+                    return false;
+                default:
+                    DisplayError(T("InvalidBoolean"));
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Asks the user for a list of strings (comma-separated).
+    /// </summary>
+    public static List<string> AskForStringList(string prompt)
+    {
+        while (true)
+        {
+            Console.Write($"{prompt}");
+            var input = ReadTrimmedConsole();
+
+            if (!string.IsNullOrWhiteSpace(input))
+            {
+                var extensions = input.Split(',').Select(s => s.Trim()).Where(s => !string.IsNullOrEmpty(s)).ToList();
+                if (extensions.Count > 0)
+                {
+                    return extensions;
+                }
+            }
+            DisplayError(T("InvalidStringList"));
+        }
+    }
+
+    /// <summary>
     /// Parses an input string and returns a list of integers if valid, otherwise null.
     /// </summary>
     private static List<int>? ParseIntRange(string input, int min, int max)

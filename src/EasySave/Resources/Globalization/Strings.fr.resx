@@ -69,6 +69,12 @@
   <data name="InvalidStringLength" xml:space="preserve">
     <value>Veuillez entrer une chaîne de caractères valide.</value>
   </data>
+  <data name="InvalidStringList" xml:space="preserve">
+    <value>Veuillez entrer au moins une extension valide (.txt, .jpg, .png, etc.).</value>
+  </data>
+  <data name="InvalidBoolean" xml:space="preserve">
+    <value>Veuillez entrer une valeur booléenne valide (y/n).</value>
+  </data>
   <data name="InvalidNumber" xml:space="preserve">
     <value>Veuillez entrer un nombre valide.</value>
   </data>
@@ -109,13 +115,61 @@
     <value>Nom</value>
   </data>
   <data name="FullBackup" xml:space="preserve">
-    <value>Sauvegarde complète</value>
+    <value>Complète</value>
   </data>
   <data name="DifferentialBackup" xml:space="preserve">
-    <value>Sauvegarde différentielle</value>
+    <value>Différentielle</value>
   </data>
   <data name="DestinationPath" xml:space="preserve">
     <value>Chemin de destination</value>
+  </data>
+  <data name="MenuEncryptedExtensions" xml:space="preserve">
+    <value>Définir extensions chiffrées</value>
+  </data>
+  <data name="MenuAddExtension" xml:space="preserve">
+    <value>Ajouter une extension</value>
+  </data>
+  <data name="MenuRemoveExtension" xml:space="preserve">
+      <value>Supprimer une extension</value>
+  </data>
+  <data name="MenuReturn" xml:space="preserve">
+      <value>Retour</value>
+  </data>
+  <data name="Encryption" xml:space="preserve">
+      <value>Chiffrement</value>
+  </data>
+  <data name="EncryptedExtensions" xml:space="preserve">
+    <value>Extensions chiffrées</value>
+  </data>
+  <data name="UseEncryption" xml:space="preserve">
+      <value>Utiliser le chiffrement ?</value>
+  </data>
+  <data name="EnterEncryptedExtensions" xml:space="preserve">
+    <value>Entrez les extensions à chiffrer (séparées par des virgules)</value>
+  </data>
+  <data name="CurrentEncryptedExtensions" xml:space="preserve">
+      <value>Extensions chiffrées actuelles</value>
+  </data>
+  <data name="NoExtensionsAvailable" xml:space="preserve">
+      <value>Aucune extension disponible</value>
+  </data>
+  <data name="SelectExtensionToRemove" xml:space="preserve">
+      <value>Sélectionnez l'extension à supprimer</value>
+  </data>
+  <data name="EnterNewExtensions" xml:space="preserve">
+      <value>Entrez les nouvelles extensions (séparées par des virgules)</value>
+  </data>
+  <data name="ExtensionAlreadyExists" xml:space="preserve">
+      <value>Extension déjà existante</value>
+  </data>
+  <data name="EncryptedExtensionsChanged" xml:space="preserve">
+      <value>Nouvelle liste d'extensions à chiffrer</value>
+  </data>
+  <data name="ExtensionAdded" xml:space="preserve">
+      <value>Extension ajoutée : </value>
+  </data>
+  <data name="ExtensionRemoved" xml:space="preserve">
+      <value>Extension supprimée : </value>
   </data>
   <data name="Progress" xml:space="preserve">
     <value>Progression :</value>
@@ -139,7 +193,7 @@
     <value>Erreur d'entrée/sortie</value>
   </data>
   <data name="SyntheticFullBackup" xml:space="preserve">
-    <value>Sauvegarde complète synthétique</value>
+    <value>Complète synthétique</value>
   </data>
   <data name="MenuLogsFormat" xml:space="preserve">
     <value>Changer format des Logs</value>
@@ -161,5 +215,8 @@
   </data>
   <data name="AvailableLogsFormats" xml:space="preserve">
     <value>Formats de sortie des logs disponibles :</value>
+  </data>
+  <data name="CryptoError" xml:space="preserve">
+    <value>Erreur lors du chiffrement/déchiffrement</value>
   </data>
 </root>

@@ -1,4 +1,5 @@
 using EasySave.Helpers;
+using EasySave.Services;
 
 namespace EasySave.Models.Backups;
 
@@ -12,7 +13,7 @@ public class SyntheticFullBackup() : BackupType("SyntheticFullBackup")
     {
         if (!File.Exists(destinationFile) || File.GetLastWriteTime(sourceFile) > File.GetLastWriteTime(destinationFile))
         {
-            FileHelper.Copy(sourceFile, destinationFile, job);
+            CryptoService.SecureCopy(sourceFile, destinationFile, job);
         }
     }
 }
