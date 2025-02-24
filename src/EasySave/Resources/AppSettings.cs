@@ -8,7 +8,11 @@ namespace EasySave.Resources;
 public partial class AppSettings : ObservableObject
 {
     public ObservableCollection<String> PriorityExtensions { get; set; } = [];
+    
+    public ObservableCollection<String> EncryptExtensions { get; set; } = [];
+    
     public String Language { get; set; } = "en";
+    
     [ObservableProperty]
     public ObservableCollection<TransporterItem> _logTransporters  =
     [

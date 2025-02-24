@@ -45,7 +45,6 @@ namespace EasySave
             }
 
             JobService.LoadJobs();
-            ExtensionService.LoadEncryptedExtensions();
             HistoryService.LoadHistory();
 
             switch (uiType)

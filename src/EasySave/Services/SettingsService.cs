@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text.Json;
+using EasySave.Exceptions;
 using EasySave.Helpers;
 using EasySave.Resources;
 
@@ -13,14 +15,39 @@ public static class SettingsService
     private static AppSettings _appSettings = new ();
     public static AppSettings Settings => _appSettings;
     
+    /// <summary>
+    ///     Initialise the static classe with :
+    ///      - Create the settings file if needed
+    ///      - Load settings when existing
+    ///      - Make a file watcher on updates
+    /// </summary>
     static SettingsService ()
     {
-        LoadSettings();
+        EnsureSettingsExists();
+        
         var fullSettingsPath = Path.GetFullPath(SettingsFile);
-        Watcher = new FileSystemWatcher(Path.GetDirectoryName(fullSettingsPath) ?? string.Empty) 
-            { Filter = Path.GetFileName(fullSettingsPath), NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size };
+        Watcher = new FileSystemWatcher(Path.GetDirectoryName(fullSettingsPath) ?? string.Empty)
+        {
+            Filter = Path.GetFileName(fullSettingsPath), NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
+        };
         Watcher.Changed += OnSettingsFileChanged;
         Watcher.EnableRaisingEvents = true;
+    }
+
+    /// <summary>
+    /// Ensure that there is a setting file and create it if needed with the good format
+    /// </summary>
+    private static void EnsureSettingsExists()
+    {
+        if (!File.Exists(SettingsFile)) SetDefaultSettings();
+        else LoadSettings();
+    }
+
+    private static void SetDefaultSettings()
+    {
+        _appSettings = new AppSettings();
+        var jsonSettings = JsonSerializer.Serialize(_appSettings, DefaultJsonOptions);
+        FileHelper.CreateAndWrite(SettingsFile, jsonSettings);
     }
     
     private static void OnSettingsFileChanged(object sender, FileSystemEventArgs e)
@@ -30,11 +57,6 @@ public static class SettingsService
     
     private static void LoadSettings()
     {
-        if (!File.Exists(SettingsFile))
-        {
-            _appSettings = new AppSettings();
-            return; 
-        }
         try
         {
             var json = File.ReadAllText(SettingsFile);
@@ -52,7 +74,6 @@ public static class SettingsService
         Watcher.EnableRaisingEvents = false;
         FileHelper.CreateAndWrite(SettingsFile, jsonSettings);
         Watcher.EnableRaisingEvents = true;
-        
     }
     
     public static void UpdateLanguage(String languageCode)
@@ -76,6 +97,22 @@ public static class SettingsService
             var transporter = _appSettings.LogTransporters.ElementAt(numericalIndex - 1);
             transporter.IsEnabled = !transporter.IsEnabled;
         }
+        SaveSettings();
+    }
+
+    public static void AddEncryptExtensions(string encryptExtension)
+    {
+        if (_appSettings.EncryptExtensions.Contains(encryptExtension)) 
+            throw new AlreadyExistException("Encrypting extension already exists in the list", encryptExtension);
+        _appSettings.EncryptExtensions.Add(encryptExtension);
+        SaveSettings();
+    }
+
+    public static void RemoveEncryptExtensions(string encryptExtension)
+    {
+        if (!_appSettings.EncryptExtensions.Contains(encryptExtension))
+            throw new AlreadyExistException("Encrypting extension does not exist in the list", encryptExtension);
+        _appSettings.EncryptExtensions.Remove(encryptExtension);
         SaveSettings();
     }
 }
