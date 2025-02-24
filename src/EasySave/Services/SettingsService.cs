@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.Text.Json;
 using EasySave.Helpers;
 using EasySave.Resources;
@@ -45,8 +46,11 @@ public class SettingsService : IDisposable
         {
             var json = File.ReadAllText(SettingsFile);
             _appSettings = JsonSerializer.Deserialize<AppSettings>(json, DefaultJsonOptions) ?? new AppSettings();
-            if (_watcher != null) _watcher.Changed += OnSettingsFileChanged;
-            if (_watcher != null) _watcher.EnableRaisingEvents = true;
+            if (_watcher != null)
+            {
+                _watcher.Changed += OnSettingsFileChanged;
+                _watcher.EnableRaisingEvents = true;
+            }
         }
         catch (Exception e)
         {
@@ -57,7 +61,10 @@ public class SettingsService : IDisposable
     private static void SaveSettings()
     {
         var jsonSettings = JsonSerializer.Serialize(_appSettings, DefaultJsonOptions);
+        _watcher.EnableRaisingEvents = false;
         FileHelper.CreateAndWrite(SettingsFile, jsonSettings);
+        _watcher.EnableRaisingEvents = true;
+        
     }
     
     public void UpdateLanguage(String languageCode)
