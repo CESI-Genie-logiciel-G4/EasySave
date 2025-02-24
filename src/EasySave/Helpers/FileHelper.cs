@@ -2,7 +2,11 @@ namespace EasySave.Helpers;
 
 public static class FileHelper
 {
-    
+    public static void Copy(string sourceFile, string destinationFile)
+    {
+        CreateParentDirectory(destinationFile);
+        File.Copy(sourceFile, destinationFile, true);
+    }
     public static void CreateAndWrite(string path, string content)
     {
         CreateParentDirectory(path);

@@ -92,7 +92,7 @@ public static class CryptoService
             {
                 EncryptFile(sourceFile, destinationFile + ".aes");
             } else {
-                File.Copy(sourceFile, destinationFile, true);
+                FileHelper.Copy(sourceFile, destinationFile);
             }
             
             watch.Stop();

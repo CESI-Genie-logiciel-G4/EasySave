@@ -1,15 +1,16 @@
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using EasySave.Exceptions;
 using EasySave.Helpers;
 
 namespace EasySave.Services;
 
 public static class ExtensionService
 {
-    private static String Path = "./.easysave/encryptedExtensions.json";
-    
-    public static readonly ObservableCollection<string> EncryptedExtensions = new();
+    private const string Path = "./.easysave/encryptedExtensions.json";
+
+    public static readonly ObservableCollection<string> EncryptedExtensions = [];
 
     public static void LoadEncryptedExtensions()
     {
@@ -22,7 +23,7 @@ public static class ExtensionService
         }
     }
 
-    public static void StoreEncryptedExtensions()
+    private static void StoreEncryptedExtensions()
     {
         FileHelper.CreateParentDirectory(Path);
         var json = JsonSerializer.Serialize(EncryptedExtensions);
@@ -34,18 +35,27 @@ public static class ExtensionService
     /// </summary>
     /// <param name="extension"></param>
     /// <returns>
-    ///     <c>true</c> if the extension was added to the list, <c>false</c> otherwise.
+    ///     <c>extension</c> if the extension was added to the list, <c>null</c> otherwise.
     /// </returns>
+    /// <remarks>
+    ///   If the extension is not prefixed with a dot, it will be added with a dot.
+    /// </remarks>
     [MethodImpl(MethodImplOptions.Synchronized)]
-    public static bool AddEncryptedExtension(string extension)
+    public static string? AddEncryptedExtension(string extension)
     {
         var lowerExt = extension.ToLower();
+
+        if (!lowerExt.StartsWith('.'))
+        {
+            lowerExt = lowerExt.Insert(0, ".");
+        }
         
-        if (EncryptedExtensions.Contains(lowerExt)) return false;
+        if (EncryptedExtensions.Contains(lowerExt)) 
+            throw new AlreadyExistException("Extension already exists in the list : ", lowerExt);
         EncryptedExtensions.Add(lowerExt);
             
         StoreEncryptedExtensions();
-        return true;
+        return lowerExt;
     }
 
     [MethodImpl(MethodImplOptions.Synchronized)]

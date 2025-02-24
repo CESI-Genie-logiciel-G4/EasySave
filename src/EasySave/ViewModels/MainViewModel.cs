@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using EasySave.Exceptions;
 using EasySave.Models;
 using EasySave.Models.Backups;
 using EasySave.Services;
@@ -60,12 +61,6 @@ public class MainViewModel
         var job = _backupJobs[index];
         var execution = new Execution(job);
         
-        if (job.UseEncryption && ExtensionService.EncryptedExtensions.Count == 0)
-        {
-            ErrorOccurred?.Invoke(execution.Exception!);
-            return;
-        }
-        
         execution.ProgressUpdated += (e) => ProgressUpdated?.Invoke(e);
         execution.Run();
         
@@ -109,14 +104,22 @@ public class MainViewModel
     
     public void AddExtensions(string extension)
     {
-        if (ExtensionService.AddEncryptedExtension(extension))
+        try
         {
-            ExtensionsAdded?.Invoke(extension);
+            var newExtension = ExtensionService.AddEncryptedExtension(extension);
+            if (newExtension == null)
+            {
+                ExtensionsAlreadyExists?.Invoke(extension);
+                return;
+            }
+
+            ExtensionsAdded?.Invoke(newExtension);
         }
-        else 
+        catch (AlreadyExistException e)
         {
-            ExtensionsAlreadyExists?.Invoke(extension);
+            ExtensionsAlreadyExists?.Invoke(e.Extension);
         }
+        
     }
 
     public void RemoveExtension(List<int> indexes)
