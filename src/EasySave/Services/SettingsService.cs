@@ -5,29 +5,23 @@ using EasySave.Resources;
 
 namespace EasySave.Services;
 
-public class SettingsService : IDisposable
+public static class SettingsService
 {
-    private static SettingsService? _instance;
-    private SettingsService() {}
-    public static SettingsService GetInstance()
-    {
-        if (_instance != null) return _instance;
-        {
-            LoadSettings();
-            _instance = new SettingsService();
-            _watcher = new FileSystemWatcher(Path.GetDirectoryName(Path.GetFullPath(SettingsFile)) ?? string.Empty) 
-                { Filter = Path.GetFileName(Path.GetFullPath(SettingsFile)), NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size };
-        }
-        return _instance ??= new SettingsService();
-    }
-    
-    private static readonly JsonSerializerOptions? DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
+    private static readonly JsonSerializerOptions DefaultJsonOptions = new () { WriteIndented = true };
     private const string SettingsFile = ".easysave/settings.json";
-    private static FileSystemWatcher? _watcher;
-    private static AppSettings _appSettings = new AppSettings();
+    private static readonly FileSystemWatcher Watcher;
+    private static AppSettings _appSettings = new ();
+    public static AppSettings Settings => _appSettings;
     
-    public AppSettings Settings => _appSettings;
-    
+    static SettingsService ()
+    {
+        LoadSettings();
+        var fullSettingsPath = Path.GetFullPath(SettingsFile);
+        Watcher = new FileSystemWatcher(Path.GetDirectoryName(fullSettingsPath) ?? string.Empty) 
+            { Filter = Path.GetFileName(fullSettingsPath), NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size };
+        Watcher.Changed += OnSettingsFileChanged;
+        Watcher.EnableRaisingEvents = true;
+    }
     
     private static void OnSettingsFileChanged(object sender, FileSystemEventArgs e)
     {
@@ -46,11 +40,6 @@ public class SettingsService : IDisposable
         {
             var json = File.ReadAllText(SettingsFile);
             _appSettings = JsonSerializer.Deserialize<AppSettings>(json, DefaultJsonOptions) ?? new AppSettings();
-            if (_watcher != null)
-            {
-                _watcher.Changed += OnSettingsFileChanged;
-                _watcher.EnableRaisingEvents = true;
-            }
         }
         catch (Exception e)
         {
@@ -61,28 +50,23 @@ public class SettingsService : IDisposable
     private static void SaveSettings()
     {
         var jsonSettings = JsonSerializer.Serialize(_appSettings, DefaultJsonOptions);
-        _watcher.EnableRaisingEvents = false;
+        Watcher.EnableRaisingEvents = false;
         FileHelper.CreateAndWrite(SettingsFile, jsonSettings);
-        _watcher.EnableRaisingEvents = true;
+        Watcher.EnableRaisingEvents = true;
         
     }
     
-    public void UpdateLanguage(String languageCode)
+    public static void UpdateLanguage(String languageCode)
     {
         if (languageCode == _appSettings.Language) return;
         _appSettings.Language = languageCode;
         SaveSettings();
     }
     
-    public void UpdatePriorityExtensions(List<String> priorityExtensions)
+    public static void UpdatePriorityExtensions(List<String> priorityExtensions)
     {
         if (priorityExtensions == _appSettings.PriorityExtensions) return;
         _appSettings.PriorityExtensions = priorityExtensions;
         SaveSettings();
-    }
-    
-    public void Dispose()
-    {
-        _watcher?.Dispose();
     }
 }

@@ -50,7 +50,7 @@ public partial class MainViewModel : ObservableObject
     [
         new("Console", new ConsoleTransporter(), false),
         new("XML", new FileXmlTransporter("./.easysave/logs/")),
-        new("JSON", new FileJsonTransporter("./.easysave/logs/"))
+        new("JSON", new FileJsonTransporter("./.easysave/logs/"),false)
     ];
 
     public event Action<BackupJob>? BackupJobAdded;

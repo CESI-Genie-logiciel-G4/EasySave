@@ -23,7 +23,8 @@ namespace EasySave
         {
             var mode = args.Length == 0 ? "gui" : args[0];
             var valid = Enum.TryParse(mode, true, out UiType uiType);
-            LocalizationService.SetLanguage(SettingsService.GetInstance().Settings.Language);
+            LocalizationService.SetLanguage(SettingsService.Settings.Language);
+            
             if (!valid)
             {
                 Console.WriteLine();
