@@ -1,15 +1,19 @@
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 using Logger.Helpers;
 using Logger.LogEntries;
 
 namespace Logger.Transporters;
 
-public class FileJsonTransporter(string logRepositoryPath) : Transporter
+[method: JsonConstructor]
+public class FileJsonTransporter (string logRepositoryPath) : Transporter
 {
+    public String LogRepositoryPath { get; set; } = logRepositoryPath;
+    
     [MethodImpl(MethodImplOptions.Synchronized)]
     public override void Write(ILogEntry logEntry)
     {
-        var logFilePath = FileHelper.GetLogFilePath(logRepositoryPath, ".json");
+        var logFilePath = FileHelper.GetLogFilePath(LogRepositoryPath, ".json");
         FileHelper.CreateLogDirectoryIfNotExists(logFilePath);
         
         if (!File.Exists(logFilePath))

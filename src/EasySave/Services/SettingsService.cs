@@ -33,8 +33,7 @@ public static class SettingsService
         if (!File.Exists(SettingsFile))
         {
             _appSettings = new AppSettings();
-            SaveSettings();
-            return;
+            return; 
         }
         try
         {
@@ -63,10 +62,20 @@ public static class SettingsService
         SaveSettings();
     }
     
-    public static void UpdatePriorityExtensions(List<String> priorityExtensions)
+    public static void UpdatePriorityExtensions(ObservableCollection<String> priorityExtensions)
     {
         if (priorityExtensions == _appSettings.PriorityExtensions) return;
         _appSettings.PriorityExtensions = priorityExtensions;
+        SaveSettings();
+    }
+
+    public static void UpdateLogTransporters(List<int> indexes)
+    {
+        foreach (var numericalIndex in indexes)
+        {
+            var transporter = _appSettings.LogTransporters.ElementAt(numericalIndex - 1);
+            transporter.IsEnabled = !transporter.IsEnabled;
+        }
         SaveSettings();
     }
 }
