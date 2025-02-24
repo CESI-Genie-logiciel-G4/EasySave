@@ -26,10 +26,8 @@ public static class SettingsService
         EnsureSettingsExists();
         
         var fullSettingsPath = Path.GetFullPath(SettingsFile);
-        Watcher = new FileSystemWatcher(Path.GetDirectoryName(fullSettingsPath) ?? string.Empty)
-        {
-            Filter = Path.GetFileName(fullSettingsPath), NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size
-        };
+        Watcher = new FileSystemWatcher(Path.GetDirectoryName(fullSettingsPath) ?? string.Empty) 
+            { Filter = Path.GetFileName(fullSettingsPath), NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size };
         Watcher.Changed += OnSettingsFileChanged;
         Watcher.EnableRaisingEvents = true;
     }
@@ -74,6 +72,7 @@ public static class SettingsService
         Watcher.EnableRaisingEvents = false;
         FileHelper.CreateAndWrite(SettingsFile, jsonSettings);
         Watcher.EnableRaisingEvents = true;
+        
     }
     
     public static void UpdateLanguage(String languageCode)
