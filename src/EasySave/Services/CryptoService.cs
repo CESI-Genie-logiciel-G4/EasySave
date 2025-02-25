@@ -9,7 +9,7 @@ namespace EasySave.Services;
 
 public static class CryptoService
 {
-    
+
     /// <summary>
     ///  Encrypt a file from source to destination
     /// </summary>
@@ -42,7 +42,7 @@ public static class CryptoService
 
         var key = keyManager.GetKey();
         var iv = keyManager.GetIv();
-        
+
         FileHelper.CreateFile(destination);
 
         using var inputStream = new FileStream(source, FileMode.Open, FileAccess.Read);
@@ -53,10 +53,10 @@ public static class CryptoService
         aes.IV = iv;
         aes.Mode = CipherMode.CBC;
         aes.Padding = PaddingMode.PKCS7;
-        
+
         using var cryptoStream = new CryptoStream(
-            encrypt ? outputStream : inputStream, 
-            encrypt ? aes.CreateEncryptor() : aes.CreateDecryptor(), 
+            encrypt ? outputStream : inputStream,
+            encrypt ? aes.CreateEncryptor() : aes.CreateDecryptor(),
             encrypt ? CryptoStreamMode.Write : CryptoStreamMode.Read
         );
 
@@ -70,7 +70,7 @@ public static class CryptoService
             cryptoStream.CopyTo(outputStream);
         }
     }
-    
+
     /// <summary>
     ///   Copy a file from source to destination, encrypting it if needed
     ///   Logs the operation
@@ -82,22 +82,27 @@ public static class CryptoService
     {
         var logger = Logger.Logger.GetInstance();
         var watch = new Stopwatch();
-        
-        try {
-            var needEncryption = job.UseEncryption && ExtensionService.EncryptedExtensions.Contains(Path.GetExtension(sourceFile));
-        
+
+        try
+        {
+
+            var needEncryption = job.UseEncryption &&
+                                 ExtensionService.EncryptedExtensions.Contains(Path.GetExtension(sourceFile));
             watch.Start();
-            
+
             if (needEncryption)
             {
                 EncryptFile(sourceFile, destinationFile + ".aes");
-            } else {
+            }
+            else
+            {
                 FileHelper.Copy(sourceFile, destinationFile);
             }
-            
+
             watch.Stop();
-            
-        } catch (Exception e)
+
+        }
+        catch (Exception e)
         {
             logger.Log(new GlobalLogEntry("Backup", "An error occurred during the backup job", new()
             {
@@ -107,10 +112,10 @@ public static class CryptoService
                 ["JobName"] = job.Name,
                 ["Error"] = e.Message
             }));
-            
+
             throw;
         }
-        
+
         logger.Log(new CopyFileLogEntry(
             "Backup",
             sourceFile,
@@ -118,5 +123,63 @@ public static class CryptoService
             new FileInfo(sourceFile).Length,
             watch.ElapsedMilliseconds
         ));
+    }
+    
+    public static bool AreFilesIdentical(string sourceFile, string lastFullBackupFile, bool needDecryption)
+    {
+        var destinationFile = needDecryption ? lastFullBackupFile + ".aes" : lastFullBackupFile;
+
+        return needDecryption ? AreEncryptedFilesIdentical(sourceFile, destinationFile) : AreNonEncryptedFilesIdentical(sourceFile, lastFullBackupFile);
+    }
+
+    private static bool AreNonEncryptedFilesIdentical(string sourceFile, string lastFullBackupFile)
+    {
+        var sourceFileInfo = new FileInfo(sourceFile);
+        var lastFullBackupFileInfo = new FileInfo(lastFullBackupFile);
+
+        return sourceFileInfo.Length == lastFullBackupFileInfo.Length &&
+               sourceFileInfo.LastWriteTime <= lastFullBackupFileInfo.LastWriteTime;
+    }
+
+    private static bool AreEncryptedFilesIdentical(string sourceFile, string destinationFile)
+    {
+        using var lastFullBackupFileStream = DecryptFileToStream(destinationFile);
+        using var sourceFileStream = new BufferedStream(new FileStream(sourceFile, FileMode.Open, FileAccess.Read));
+        
+        return AreFileStreamsIdentical(sourceFileStream, lastFullBackupFileStream);
+    }
+
+    private static bool AreFileStreamsIdentical(BufferedStream sourceFileStream, Stream lastFullBackupFileStream)
+    {
+        int sourceByte, backupByte;
+        do
+        {
+            sourceByte = sourceFileStream.ReadByte();
+            backupByte = lastFullBackupFileStream.ReadByte();
+        } while (sourceByte == backupByte && sourceByte != -1);
+
+        return sourceByte == backupByte;
+    }
+
+    private static Stream DecryptFileToStream(string lastFullBackupFile)
+    {
+        var keyManager = KeyManager.GetInstance();
+        var key = keyManager.GetKey();
+        var iv = keyManager.GetIv();
+
+        var inputStream = new BufferedStream(new FileStream(lastFullBackupFile, FileMode.Open, FileAccess.Read));
+        var aes = Aes.Create();
+        aes.Key = key;
+        aes.IV = iv;
+        aes.Mode = CipherMode.CBC;
+        aes.Padding = PaddingMode.PKCS7;
+
+        var cryptoStream = new CryptoStream(
+            inputStream,
+            aes.CreateDecryptor(),
+            CryptoStreamMode.Read
+        );
+
+        return cryptoStream;
     }
 }

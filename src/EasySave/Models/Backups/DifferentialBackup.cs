@@ -20,7 +20,10 @@ public class DifferentialBackup() : BackupType("DifferentialBackup")
             _lastFullBackupFolder!
             );
         
-        if (!File.Exists(lastFullBackupFile) || File.GetLastWriteTime(sourceFile) > File.GetLastWriteTime(lastFullBackupFile))
+        var needEncryption = job.UseEncryption &&
+                            ExtensionService.EncryptedExtensions.Contains(Path.GetExtension(sourceFile));
+        
+        if (!CryptoService.AreFilesIdentical(sourceFile, lastFullBackupFile!, needEncryption))
         {
             CryptoService.SecureCopy(sourceFile, destinationFile, job);
         }
