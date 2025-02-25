@@ -1,5 +1,4 @@
-using System.Diagnostics;
-using System.Xml;
+using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Logger.Helpers;
 using Logger.LogEntries;
@@ -8,6 +7,7 @@ namespace Logger.Transporters;
 
 public class FileXmlTransporter(string logRepositoryPath) : Transporter
 {
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public override void Write(ILogEntry logEntry)
     {
         var logFilePath = FileHelper.GetLogFilePath(logRepositoryPath, ".xml");

@@ -5,5 +5,8 @@ public enum ExecutionState
     Pending,
     Running,
     Completed,
-    Failed
+    Paused,
+    Canceled,
+    Failed,
+    Blocked,
 }

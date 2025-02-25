@@ -1,4 +1,6 @@
+using System.Collections.ObjectModel;
 using System.Text.Json;
+using DynamicData;
 using EasySave.Helpers;
 using EasySave.Models;
 using EasySave.Models.Backups;
@@ -7,15 +9,13 @@ namespace EasySave.Services;
 
 public static class HistoryService
 {
-    private static List<Execution> CompletedExecutions { get; set; } = [];
+    public static ObservableCollection<Execution> CompletedExecutions { get; } = [];
     private const string ExecutionHistoryFile = ".easysave/executions-history.json";
 
     private static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
     
-    
     public static void StoreCompletedExecution(Execution execution)
     {
-        LoadHistory();
         CompletedExecutions.Add(execution);
         var json = JsonSerializer.Serialize(CompletedExecutions, DefaultJsonOptions);
         FileHelper.CreateAndWrite(ExecutionHistoryFile, json);
@@ -23,12 +23,15 @@ public static class HistoryService
 
     public static void LoadHistory()
     {
-        if (!File.Exists(ExecutionHistoryFile)) return;
+        if (!File.Exists(ExecutionHistoryFile)) 
+            return;
         var readJson = File.ReadAllText(ExecutionHistoryFile);
-        CompletedExecutions = JsonSerializer.Deserialize<List<Execution>>(readJson)?? [];
+        
+        CompletedExecutions.Clear();
+        CompletedExecutions.AddRange(JsonSerializer.Deserialize<List<Execution>>(readJson) ?? []);
     }
-    
-    public static BackupJob? GetLastCompleteBackupJob(string jobSourcePath)
+
+    private static BackupJob? GetLastCompleteBackupJob(string jobSourcePath)
     {
         var lastFullBackupExecution = CompletedExecutions.LastOrDefault(
             execution =>
