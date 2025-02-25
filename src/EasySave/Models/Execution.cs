@@ -132,7 +132,7 @@ public partial class Execution : ObservableObject, IDisposable
             var rootFolder = BackupJob.SourceFolder;
             var destinationFolder = BackupJob.DestinationFolder;
             var files = Directory.GetFiles(rootFolder, "*", SearchOption.AllDirectories);
-            files = FilesSorterservice.SortFilesByPriority(files);
+            files = SorterService.SortFilesByPriority(files);
 
             if (files == null) throw new FileNotFoundException();
             TotalSteps = files.Length;

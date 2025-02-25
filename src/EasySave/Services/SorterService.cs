@@ -1,6 +1,6 @@
 namespace EasySave.Services;
 
-public static class FilesSorterservice
+public static class SorterService
 {
     /// <summary>
     ///     Sort file list with the calculate priority
