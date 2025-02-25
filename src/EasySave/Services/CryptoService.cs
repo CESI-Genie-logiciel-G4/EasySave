@@ -9,7 +9,7 @@ namespace EasySave.Services;
 
 public static class CryptoService
 {
-
+    
     /// <summary>
     ///  Encrypt a file from source to destination
     /// </summary>
@@ -81,28 +81,31 @@ public static class CryptoService
     public static void SecureCopy(string sourceFile, string destinationFile, BackupJob job)
     {
         var logger = Logger.Logger.GetInstance();
-        var watch = new Stopwatch();
-
-        try
+        Stopwatch copyWatch = new ();
+        Stopwatch encryptWatch = new ();
+        
+        try 
         {
-
-            var needEncryption = job.UseEncryption &&
+            var needEncryption = job.UseEncryption && 
                                  ExtensionService.EncryptedExtensions.Contains(Path.GetExtension(sourceFile));
-            watch.Start();
-
+        
+            copyWatch.Start();
+            
             if (needEncryption)
             {
+                encryptWatch.Start();
                 EncryptFile(sourceFile, destinationFile + ".aes");
+                while (encryptWatch.ElapsedMilliseconds == 0);
+                encryptWatch.Stop();
             }
             else
             {
                 FileHelper.Copy(sourceFile, destinationFile);
             }
-
-            watch.Stop();
-
-        }
-        catch (Exception e)
+            
+            copyWatch.Stop();
+            
+        } catch (Exception e)
         {
             logger.Log(new GlobalLogEntry("Backup", "An error occurred during the backup job", new()
             {
@@ -115,13 +118,14 @@ public static class CryptoService
 
             throw;
         }
-
-        logger.Log(new CopyFileLogEntry(
+        
+        logger.Log(new CopyFileLogEntryV2(
             "Backup",
             sourceFile,
             destinationFile,
             new FileInfo(sourceFile).Length,
-            watch.ElapsedMilliseconds
+            copyWatch.ElapsedMilliseconds,
+            encryptWatch.ElapsedMilliseconds
         ));
     }
     
