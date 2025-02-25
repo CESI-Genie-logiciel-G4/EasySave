@@ -279,4 +279,34 @@
   <data name="AnotherInstanceRunning" xml:space="preserve">
     <value>Another instance of the application is already running.</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="NewBusinessApp" xml:space="preserve">
+    <value>New business application</value>
+  </data>
+  <data name="PriorityFiles" xml:space="preserve">
+    <value>Priority files</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="AboutText" xml:space="preserve">
+    <value>EasySave is a simple and effective backup software.</value>
+  </data>
+  <data name="SourceCode" xml:space="preserve">
+    <value>See the project on GitHub</value>
+  </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>EasySave - About us</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Time: </value>
+  </data>
+  <data name="Encrypt" xml:space="preserve">
+    <value>Encrypted</value>
+  </data>
+  <data name="NotEncrypt" xml:space="preserve">
+    <value>Not encrypted</value>
+  </data>
 </root>

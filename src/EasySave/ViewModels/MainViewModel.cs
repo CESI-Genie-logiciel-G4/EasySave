@@ -11,24 +11,28 @@ namespace EasySave.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
-    public readonly ObservableCollection<string> EncryptedExtensions = ExtensionService.EncryptedExtensions;
-    private static string T(string key) => LocalizationService.GetString(key);
-    
     [ObservableProperty]
-    private ObservableCollection<BackupJob> _backupJobs;
+    private ObservableCollection<string> _encryptedExtensions = ExtensionService.EncryptedExtensions;
 
-    [ObservableProperty]
-    private ObservableCollection<Execution> _history;
-    
+    [ObservableProperty] private ObservableCollection<BackupJob> _backupJobs;
+
+    [ObservableProperty] private ObservableCollection<Execution> _history;
+
+    [ObservableProperty] private ObservableCollection<string> _businessApps = [];
+
+    [ObservableProperty] private ObservableCollection<string> _priorityFiles = [];
+
+    [ObservableProperty] private ObservableCollection<UiType> _usageMode = [UiType.Console, UiType.Gui];
+
     public MainViewModel()
     {
         BackupJobs = JobService.BackupJobs;
         History = HistoryService.CompletedExecutions;
-        
+
         Logger.Logger.GetInstance()
             .SetupTransporters(ExtractLogsTransporters());
     }
-    
+
     public List<LanguageItem> Languages { get; } =
     [
         new("English", "en"),
@@ -41,9 +45,8 @@ public partial class MainViewModel : ObservableObject
         new SyntheticFullBackup(),
         new DifferentialBackup()
     ];
-    
-    [ObservableProperty]
-    private ObservableCollection<TransporterItem> _logTransporters  =
+
+    [ObservableProperty] private ObservableCollection<TransporterItem> _logTransporters =
     [
         new("Console", new ConsoleTransporter(), false),
         new("XML", new FileXmlTransporter("./.easysave/logs/")),
@@ -70,15 +73,12 @@ public partial class MainViewModel : ObservableObject
     {
         var job = BackupJobs[index];
         var execution = job.InitializeExecution();
-        
-        execution.ProgressUpdated += (e) =>
-        {
-            ProgressUpdated?.Invoke(e);
-        };
+
+        execution.ProgressUpdated += (e) => { ProgressUpdated?.Invoke(e); };
 
         await job.ExecuteAsync();
-        
-        if(execution.State == ExecutionState.Failed)
+
+        if (execution.State == ExecutionState.Failed)
         {
             ErrorOccurred?.Invoke(execution.Exception!);
         }
@@ -95,7 +95,7 @@ public partial class MainViewModel : ObservableObject
         LocalizationService.SetLanguage(language.Identifier);
         LocalizationService.UpdateAvaloniaResources();
     }
-    
+
     public void ChangeLogsTransporters(List<int> indexes)
     {
         foreach (var numericalIndex in indexes)
@@ -103,20 +103,20 @@ public partial class MainViewModel : ObservableObject
             var transporter = LogTransporters.ElementAt(numericalIndex - 1);
             transporter.IsEnabled = !transporter.IsEnabled;
         }
-        
+
         Logger.Logger.GetInstance()
             .SetupTransporters(ExtractLogsTransporters());
-        
+
         LogsTransportersChanged?.Invoke();
     }
-    
+
     private List<Transporter> ExtractLogsTransporters()
     {
         return LogTransporters.Where(t => t.IsEnabled)
             .Select(t => t.Transporter)
             .ToList();
     }
-    
+
     public void AddExtensions(string extension)
     {
         try
@@ -134,7 +134,6 @@ public partial class MainViewModel : ObservableObject
         {
             ExtensionsAlreadyExists?.Invoke(e.Extension);
         }
-        
     }
 
     public void RemoveExtension(List<int> indexes)

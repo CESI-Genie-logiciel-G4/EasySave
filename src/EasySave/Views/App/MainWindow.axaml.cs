@@ -1,4 +1,3 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -20,45 +19,47 @@ public partial class MainWindow : Window
         InitializeComponent();
         _viewModel = viewModel;
         DataContext = viewModel;
-        AdjustMenuForMacOS();
     }
-    
-    public void OnStartJobButton (object? sender, RoutedEventArgs e)
+
+    public void OnStartJobButton(object? sender, RoutedEventArgs e)
     {
-        var job = (BackupJob) ((Button) sender!)?.DataContext!;
+        var job = (BackupJob)((Button)sender!)?.DataContext!;
         var index = _viewModel.BackupJobs.IndexOf(job);
         _viewModel.ExecuteJob(index);
     }
-    
+
     public void OnDeleteMenuItemClicked(object? sender, RoutedEventArgs e)
     {
         if (sender is not MenuItem menuItem) return;
         if (menuItem.DataContext is not BackupJob backupJob) return;
-        
+
         var index = _viewModel.BackupJobs.IndexOf(backupJob);
-        
+
         _viewModel.RemoveJob(index);
     }
-    
+
     private void OnCreateJobButton(object? sender, RoutedEventArgs e)
     {
         var name = JobName.Text;
         var source = SourcePath.Text;
         var target = TargetPath.Text;
         var modeIndex = Mode.SelectedIndex;
-        
-        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target) || modeIndex == -1)
+
+        if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target) ||
+            modeIndex == -1)
         {
             return;
         }
 
         var backupType = _viewModel.BackupTypes[modeIndex];
-        _viewModel.AddBackupJob(name, source, target, backupType, true);
-        
+        var isEncrypted = Encryption.IsChecked ?? false;
+
+        _viewModel.AddBackupJob(name, source, target, backupType, isEncrypted);
+
         JobName.Text = "";
         SourcePath.Text = "";
         TargetPath.Text = "";
-        
+
         SidebarTabs.SelectedIndex = 0;
     }
 
@@ -67,15 +68,16 @@ public partial class MainWindow : Window
         var topLevel = GetTopLevel(this)!;
 
         var files = await topLevel.StorageProvider.OpenFolderPickerAsync(
-            new FolderPickerOpenOptions {
-            Title = "Sélectionnez un dossier"
-        });
-        
+            new FolderPickerOpenOptions
+            {
+                Title = "Sélectionnez un dossier"
+            });
+
         if (files.Count == 0)
         {
             throw new Exception("No folder selected");
         }
-        
+
         return files;
     }
 
@@ -91,7 +93,7 @@ public partial class MainWindow : Window
             System.Console.WriteLine(ex);
         }
     }
-    
+
     private async void OnSelectSourceFolder(object sender, RoutedEventArgs e)
     {
         try
@@ -104,7 +106,7 @@ public partial class MainWindow : Window
             System.Console.WriteLine(ex);
         }
     }
-    
+
     private void OnMenuItemPointerPressed(object? sender, RoutedEventArgs e)
     {
         _menuItemClicked = true;
@@ -117,39 +119,59 @@ public partial class MainWindow : Window
             _menuItemClicked = false;
             return;
         }
+
         BeginMoveDrag(e);
     }
-    
+
     private void OnLanguageChanged(object sender, RoutedEventArgs e)
     {
-        var menuItem = (MenuItem)sender;
+        var menuItem = (Button)sender;
 
         if (menuItem.DataContext is LanguageItem selectedLanguage)
         {
             _viewModel.ChangeLanguage(selectedLanguage);
         }
     }
-    
-    private void OnLogsTransporterChanged(object sender, RoutedEventArgs e)
-    {
-        var menuItem = (MenuItem)sender;
 
-        if (menuItem.DataContext is not TransporterItem selectedTransporter) return;
-        
-        List<int> indexes = [_viewModel.LogTransporters.IndexOf(selectedTransporter)+1];
-        _viewModel.ChangeLogsTransporters(indexes);
-    }
-    
-    private void AdjustMenuForMacOS()
-    {
-        if (OperatingSystem.IsMacOS())
-        {
-            MainMenu.Padding = new Thickness(70, 0, 0, 0);
-        }
-    }
-    
     private void OnClose(object? sender, RoutedEventArgs e)
     {
         Close();
+    }
+
+    private void navigateToSettings(object? sender, RoutedEventArgs e)
+    {
+        SidebarTabs.SelectedIndex = 3;
+    }
+
+    private void OnAddEncryptedExtension(object? sender, RoutedEventArgs e)
+    {
+        var newExtension = NewEncryptedExtension.Text;
+        if (string.IsNullOrEmpty(newExtension))
+        {
+            return;
+        }
+
+        _viewModel.AddExtensions(newExtension);
+        NewEncryptedExtension.Text = "";
+    }
+
+    private void OnDeleteEncryptedExtension(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem menuItem) return;
+        if (menuItem.DataContext is not string selectedItem) return;
+
+        var index = _viewModel.EncryptedExtensions.IndexOf(selectedItem);
+        _viewModel.RemoveExtension([index + 1]);
+    }
+
+    private void OnLogTransporterChecked(object? sender, RoutedEventArgs e)
+    {
+        e.Handled = true;
+
+        if (sender is not CheckBox checkBox) return;
+        if (checkBox.DataContext is not TransporterItem transporterItem) return;
+
+        var index = _viewModel.LogTransporters.IndexOf(transporterItem);
+        _viewModel.ChangeLogsTransporters([index + 1]);
     }
 }

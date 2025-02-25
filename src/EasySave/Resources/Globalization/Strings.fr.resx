@@ -279,4 +279,34 @@
   <data name="AnotherInstanceRunning" xml:space="preserve">
     <value>Une autre instance de l'application est déjà en cours d'exécution.</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="PriorityFiles" xml:space="preserve">
+    <value>Fichiers prioritaires</value>
+  </data>
+  <data name="NewBusinessApp" xml:space="preserve">
+    <value>Nouvelle application métier</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="AboutText" xml:space="preserve">
+    <value>EasySave est un logiciel de sauvegarde simple et efficace.</value>
+  </data>
+  <data name="SourceCode" xml:space="preserve">
+    <value>Consultez le projet sur GitHub</value>
+  </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>EasySave - À propos</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Temps : </value>
+  </data>
+  <data name="Encrypt" xml:space="preserve">
+    <value>Chiffré</value>
+  </data>
+  <data name="NotEncrypt" xml:space="preserve">
+    <value>Non chiffré</value>
+  </data>
 </root>

@@ -16,63 +16,57 @@ public partial class Execution : ObservableObject, IDisposable
         State = ExecutionState.Pending;
         Exception = null;
         _controller = new TaskController();
-        
-        _monitorTimer = new Timer(CheckBlockedProcesses, null, 0, 1000);
     }
 
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
+
+    [JsonIgnore] public int ElapsedTime => (int)(EndTime - StartTime).TotalSeconds;
     public BackupJob BackupJob { get; }
 
     public event Action<Execution>? ProgressUpdated;
 
-    [ObservableProperty] 
-    private ExecutionState _state;
+    [ObservableProperty] private ExecutionState _state;
 
-    [ObservableProperty] 
-    private Exception? _exception;
+    [ObservableProperty] private Exception? _exception;
 
-    [ObservableProperty] 
-    private int _currentProgress;
+    [ObservableProperty] private int _currentProgress;
 
-    [ObservableProperty] 
-    private int _totalSteps;
-    
-    [JsonIgnore]
-    private readonly TaskController _controller;
-    
-    [JsonIgnore]
-    private readonly Timer _monitorTimer;
-    
+    [ObservableProperty] private int _totalSteps;
+
+    [JsonIgnore] private readonly TaskController _controller;
+
     public async Task Start()
     {
         ProgressUpdated?.Invoke(this);
         State = ExecutionState.Running;
-        try 
+
+        await using var monitorTimer = new Timer(CheckBlockedProcesses, null, 0, 1000);
+
+        try
         {
             await _controller.Start(Run);
         }
         finally
         {
-            Dispose();
+            await monitorTimer.DisposeAsync();
         }
     }
-    
+
     public void Pause()
     {
         State = ExecutionState.Paused;
         _controller.Pause();
     }
-    
+
     public void Resume()
     {
         State = ExecutionState.Running;
         _controller.Resume();
     }
-    
+
     public void Cancel()
     {
-        State = ExecutionState.Canceled;
         _controller.Cancel();
     }
 
@@ -80,7 +74,7 @@ public partial class Execution : ObservableObject, IDisposable
     {
         var shouldPause = BackupJob.BlockedProcesses
             .Any(blocked => Process.GetProcessesByName(blocked).Length > 0);
-        
+
         switch (shouldPause)
         {
             case true when State == ExecutionState.Running:
@@ -92,7 +86,7 @@ public partial class Execution : ObservableObject, IDisposable
                 break;
         }
     }
-    
+
     private Task Run(CancellationToken token, ManualResetEventSlim pauseEvent)
     {
         StartTime = DateTime.UtcNow;
@@ -116,12 +110,16 @@ public partial class Execution : ObservableObject, IDisposable
                 CurrentProgress++;
                 ProgressUpdated?.Invoke(this);
             }
-            
+
             State = ExecutionState.Completed;
 
             EndTime = DateTime.UtcNow;
             StoreCompletedExecution(this);
             ProgressUpdated?.Invoke(this);
+        }
+        catch (OperationCanceledException)
+        {
+            State = ExecutionState.Canceled;
         }
         catch (Exception e)
         {
@@ -135,6 +133,5 @@ public partial class Execution : ObservableObject, IDisposable
     public void Dispose()
     {
         _controller.Dispose();
-        _monitorTimer.Dispose();
     }
 }
