@@ -1,7 +1,13 @@
 namespace EasySave.Services;
 
-public static class SorterService
+public static class PriorityService
 {
+    public static string[]? GetSortedFile(string rootFolder)
+    {
+        var files = Directory.GetFiles(rootFolder, "*", SearchOption.AllDirectories);
+        return SortFilesByPriority(files);
+    }
+    
     /// <summary>
     ///     Sort file list with the calculate priority
     /// </summary>
