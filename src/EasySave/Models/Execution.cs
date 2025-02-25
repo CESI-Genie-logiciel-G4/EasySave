@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using EasySave.Helpers;
+using EasySave.Services;
 using EasySave.Utils;
 using static EasySave.Services.HistoryService;
 using Timer = System.Threading.Timer;
@@ -16,6 +17,8 @@ public partial class Execution : ObservableObject, IDisposable
         State = ExecutionState.Pending;
         Exception = null;
         _controller = new TaskController();
+        
+        _monitorTimer = new Timer(CheckBlockedProcesses, null, 0, 1000);
     }
 
     public DateTime StartTime { get; set; }
@@ -26,16 +29,24 @@ public partial class Execution : ObservableObject, IDisposable
 
     public event Action<Execution>? ProgressUpdated;
 
-    [ObservableProperty] private ExecutionState _state;
+    [ObservableProperty] 
+    private ExecutionState _state;
 
-    [ObservableProperty] private Exception? _exception;
+    [ObservableProperty] 
+    private Exception? _exception;
 
-    [ObservableProperty] private int _currentProgress;
+    [ObservableProperty] 
+    private int _currentProgress;
 
-    [ObservableProperty] private int _totalSteps;
-
-    [JsonIgnore] private readonly TaskController _controller;
-
+    [ObservableProperty] 
+    private int _totalSteps;
+    
+    [JsonIgnore]
+    private readonly TaskController _controller;
+    
+    [JsonIgnore]
+    private static  readonly Semaphore largeFileSemaphore = new (1,1);
+    
     public async Task Start()
     {
         ProgressUpdated?.Invoke(this);
@@ -87,6 +98,36 @@ public partial class Execution : ObservableObject, IDisposable
         }
     }
 
+    private void ExecuteBackupForFile(string sourceFile, string destinationFile)
+    {
+        if (IsOverMaxSize(sourceFile))
+        {
+            State = ExecutionState.Blocked;
+            _controller.Pause();
+            
+            largeFileSemaphore.WaitOne();
+            Resume();
+            
+            try
+            {
+                BackupJob.BackupType.Execute(sourceFile, destinationFile, BackupJob);
+            }
+            finally
+            {
+                largeFileSemaphore.Release();
+            }
+        }
+        else
+        {
+            BackupJob.BackupType.Execute(sourceFile, destinationFile, BackupJob);
+        }
+    }
+
+    private bool IsOverMaxSize(string file)
+    {
+        return FileHelper.GetFileSize(file) > SettingsService.Settings.MaxFileSize;
+    }
+    
     private Task Run(CancellationToken token, ManualResetEventSlim pauseEvent)
     {
         StartTime = DateTime.UtcNow;
@@ -106,7 +147,7 @@ public partial class Execution : ObservableObject, IDisposable
                 token.ThrowIfCancellationRequested();
                 pauseEvent.Wait(token);
                 var destinationFile = FileHelper.GetMirrorFilePath(rootFolder, sourceFile, destinationFolder);
-                BackupJob.BackupType.Execute(sourceFile, destinationFile, BackupJob);
+                ExecuteBackupForFile(sourceFile, destinationFile);
                 CurrentProgress++;
                 ProgressUpdated?.Invoke(this);
             }
