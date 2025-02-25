@@ -95,7 +95,7 @@ public static class CryptoService
             {
                 encryptWatch.Start();
                 EncryptFile(sourceFile, destinationFile + ".aes");
-                while (encryptWatch.ElapsedMilliseconds == 0);
+                while (encryptWatch.ElapsedMilliseconds == 0); // Security to avoid seems null encryption
                 encryptWatch.Stop();
             }
             else
