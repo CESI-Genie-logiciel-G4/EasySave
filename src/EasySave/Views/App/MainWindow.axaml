@@ -13,7 +13,7 @@
         MinWidth="950"
         MinHeight="500"
         TransparencyLevelHint="Mica, AcrylicBlur, Blur"
-        Background="#0F000000"
+        Background="#F0F0F0"
         ExtendClientAreaToDecorationsHint="True"
         RequestedThemeVariant="Light">
 
