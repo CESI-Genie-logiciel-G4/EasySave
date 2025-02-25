@@ -309,4 +309,7 @@
   <data name="NotEncrypt" xml:space="preserve">
     <value>Not encrypted</value>
   </data>
+  <data name="MissingFullBackup" xml:space="preserve">
+    <value>Full backup required but not found.</value>
+  </data>
 </root>

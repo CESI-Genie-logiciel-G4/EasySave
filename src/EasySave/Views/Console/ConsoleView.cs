@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Security.Cryptography;
+using EasySave.Exceptions;
 using EasySave.Helpers;
 using EasySave.Models;
 using EasySave.Services;
@@ -45,8 +46,7 @@ public class ConsoleView
         _viewModel.ProgressUpdated += DisplayProgress;
         _viewModel.ErrorOccurred += DisplayError;
         _viewModel.LogsTransportersChanged += DisplayLogsTransportersChanged;
-
-        _viewModel.EncryptedExtensionsChanged += DisplayEncryptedExtensionsChanged;
+        
         _viewModel.ExtensionsAdded += DisplayExtensionsAdded;
         _viewModel.ExtensionsRemoved += DisplayExtensionsRemoved;
         _viewModel.ExtensionsAlreadyExists += DisplayExtensionsAlreadyExists;
@@ -61,7 +61,6 @@ public class ConsoleView
 
             DisplayJobs();
             System.Console.WriteLine();
-            ;
             DisplayMenu(_menuItems);
 
             var mainMenu = true;
@@ -85,7 +84,6 @@ public class ConsoleView
     private void DisplayMenu(List<MenuItem> menuItems)
     {
         System.Console.WriteLine(T("MenuTitle"));
-        ;
         for (var i = 0; i < menuItems.Count; i++)
         {
             var item = menuItems[i];
@@ -117,9 +115,7 @@ public class ConsoleView
             var job = _backupJobs[i];
             var sourceEllipsis = StringHelper.GetEllipsisSuffix(job.SourceFolder, 27);
             var destinationEllipsis = StringHelper.GetEllipsisSuffix(job.DestinationFolder, 27);
-
-            System.Console.WriteLine(lineTemplate, i + 1, job.Name, sourceEllipsis, destinationEllipsis,
-                T(job.BackupType.Name));
+            
             var encryption = job.UseEncryption ? T("Yes") : T("No");
 
             System.Console.WriteLine(lineTemplate, i + 1, job.Name, sourceEllipsis, destinationEllipsis,
@@ -249,6 +245,7 @@ public class ConsoleView
     {
         var message = e switch
         {
+            MissingFullBackupException => T("MissingFullBackup"),
             UnauthorizedAccessException => T("UnauthorizedAccess"),
             DirectoryNotFoundException => T("DirectoryNotFound"),
             OperationCanceledException => T("OperationCancelled"),
@@ -320,13 +317,7 @@ public class ConsoleView
             _viewModel.AddExtensions(ext);
         }
     }
-
-    private void DisplayEncryptedExtensionsChanged(List<string> extensions)
-    {
-        System.Console.WriteLine(T("EncryptedExtensionsChanged") + ": " +
-                                 string.Join(", ", extensions.Select(e => e.ToLower())));
-    }
-
+    
     private void DisplayExtensionsAlreadyExists(string ext)
     {
         System.Console.ForegroundColor = ConsoleColor.Yellow;

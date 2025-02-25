@@ -55,6 +55,7 @@ public class KeyManagerTests : IDisposable
         public void Dispose()
         {
             Cleanup();
+            GC.SuppressFinalize(this);
         }
 
         private static void Cleanup()

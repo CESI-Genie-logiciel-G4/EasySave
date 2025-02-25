@@ -31,7 +31,7 @@
             <Menu x:Name="MainMenu" PointerPressed="OnMenuPointerPressed"
                   CornerRadius="5" DockPanel.Dock="Top" VerticalAlignment="Center">
                 <MenuItem Header="EasySave" PointerPressed="OnMenuItemPointerPressed">
-                    <MenuItem i:MenuItem.Icon="mdi information-outline" Header="{DynamicResource About}" />
+                    <MenuItem i:MenuItem.Icon="mdi information-outline" Header="{DynamicResource About}" Click="navigateToSettings"/>
                     <MenuItem i:MenuItem.Icon="mdi location-exit" Header="{DynamicResource Exit}" Click="OnClose" />
                 </MenuItem>
             </Menu>

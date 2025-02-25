@@ -132,6 +132,11 @@ public static class CryptoService
     public static bool AreFilesIdentical(string sourceFile, string lastFullBackupFile, bool needDecryption)
     {
         var destinationFile = needDecryption ? lastFullBackupFile + ".aes" : lastFullBackupFile;
+        
+        if (!File.Exists(destinationFile))
+        {
+            return false;
+        }
 
         return needDecryption ? AreEncryptedFilesIdentical(sourceFile, destinationFile) : AreNonEncryptedFilesIdentical(sourceFile, lastFullBackupFile);
     }
@@ -165,7 +170,7 @@ public static class CryptoService
         return sourceByte == backupByte;
     }
 
-    private static Stream DecryptFileToStream(string lastFullBackupFile)
+    private static CryptoStream DecryptFileToStream(string lastFullBackupFile)
     {
         var keyManager = KeyManager.GetInstance();
         var key = keyManager.GetKey();

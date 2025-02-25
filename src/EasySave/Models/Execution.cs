@@ -133,5 +133,6 @@ public partial class Execution : ObservableObject, IDisposable
     public void Dispose()
     {
         _controller.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

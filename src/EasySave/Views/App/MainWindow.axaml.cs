@@ -86,7 +86,7 @@ public partial class MainWindow : Window
         try
         {
             var files = await AskFolder();
-            TargetPath.Text = files[0].Path.AbsolutePath;
+            TargetPath.Text = Uri.UnescapeDataString(files[0].Path.AbsolutePath);
         }
         catch (Exception ex)
         {
@@ -99,7 +99,7 @@ public partial class MainWindow : Window
         try
         {
             var files = await AskFolder();
-            SourcePath.Text = files[0].Path.AbsolutePath;
+            SourcePath.Text = Uri.UnescapeDataString(files[0].Path.AbsolutePath);
         }
         catch (Exception ex)
         {
