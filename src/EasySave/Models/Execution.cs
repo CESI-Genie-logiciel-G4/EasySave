@@ -94,11 +94,10 @@ public partial class Execution : ObservableObject, IDisposable
     {
         if (IsOverMaxSize(sourceFile))
         {
-            State = ExecutionState.Blocked;
-            _controller.Pause();
+            State = ExecutionState.Waiting;
             
             largeFileSemaphore.WaitOne();
-            Resume();
+            State = ExecutionState.Running;
             
             try
             {

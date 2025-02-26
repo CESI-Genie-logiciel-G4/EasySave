@@ -9,4 +9,5 @@ public enum ExecutionState
     Canceled,
     Failed,
     Blocked,
+    Waiting,
 }

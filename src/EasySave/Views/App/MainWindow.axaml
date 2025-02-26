@@ -80,7 +80,7 @@
 
                                                 <!-- Bouton "▶" : Displayed when the state is Completed -->
                                                 <Button Click="OnStartJobButton"
-                                                        Classes.hidden="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Pending|Running|Paused|Blocked}">
+                                                        Classes.hidden="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Pending|Running|Paused|Blocked|Waiting}">
                                                     <i:Icon Value="mdi play-circle-outline" FontSize="20" />
                                                     <Button.Styles>
                                                         <Style Selector="Button.hidden">
@@ -94,7 +94,7 @@
 
                                                 <!-- Bouton "⏸" : Displayed when the state is Running -->
                                                 <Button Command="{Binding CurrentExecution.Pause}"
-                                                        Classes.visible="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Running|Blocked}">
+                                                        Classes.visible="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Running|Blocked|Waiting}">
                                                     <i:Icon Value="mdi pause-circle-outline" FontSize="20" />
                                                     <Button.Styles>
                                                         <Style Selector="Button.visible">
@@ -123,7 +123,7 @@
                                                 <!-- Bouton "⏹" : Displayed when the state is Running or Paused -->
                                                 <Button
                                                     Command="{Binding CurrentExecution.Cancel}"
-                                                    Classes.visible="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Running|Paused|Blocked}">
+                                                    Classes.visible="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Running|Paused|Blocked|Waiting}">
 
                                                     <i:Icon Value="mdi stop-circle-outline" FontSize="20" />
 
@@ -159,7 +159,8 @@
                                                          Classes.paused="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Paused}"
                                                          Classes.completed="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Completed}"
                                                          Classes.failed="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Failed}"
-                                                         Classes.canceled="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Canceled}">
+                                                         Classes.canceled="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Canceled}"
+                                                         Classes.waiting="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Waiting}">
 
                                                 <ProgressBar.Styles>
                                                     <Style Selector="ProgressBar.pending">
@@ -181,6 +182,9 @@
                                                     <Style Selector="ProgressBar.blocked">
                                                         <Setter Property="Foreground" Value="Orange" />
                                                         <Setter Property="IsIndeterminate" Value="True" />
+                                                    </Style>
+                                                    <Style Selector="ProgressBar.waiting">
+                                                        <Setter Property="Foreground" Value="Orange" />
                                                     </Style>
                                                     <Style Selector="ProgressBar.canceled">
                                                         <Setter Property="Foreground" Value="Gray" />
