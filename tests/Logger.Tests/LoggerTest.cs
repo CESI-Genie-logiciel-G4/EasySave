@@ -32,7 +32,7 @@ public class LoggerTest
         const string expectedSourcePath = @"\\UNC\source\Path";
         const string expectedDestinationPath = @"UNC\destination\Path";
         const long expectedFileSize = 12;
-        const double expectedTransferTime = 3.356;
+        const long expectedTransferTime = 3;
         
         var jsonTransporter = new FileJsonTransporter(logDirectory);
         var logger = Logger.GetInstance();
