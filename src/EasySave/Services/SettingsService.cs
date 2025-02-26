@@ -115,6 +115,22 @@ public static class SettingsService
         SaveSettings();
     }
 
+    public static void AddPriorityExtensions(string priorityExtension)
+    {
+        if (_appSettings.PriorityExtensions.Contains(priorityExtension)) 
+            throw new AlreadyExistException("Priority extension already exists in the list", priorityExtension);
+        _appSettings.PriorityExtensions.Add(priorityExtension);
+        SaveSettings();
+    }
+
+    public static void RemovePriorityExtensions(string priorityExtension)
+    {
+        if (!_appSettings.PriorityExtensions.Contains(priorityExtension))
+            throw new AlreadyExistException("Priority extension does not exist in the list", priorityExtension);
+        _appSettings.PriorityExtensions.Remove(priorityExtension);
+        SaveSettings();
+    }
+    
     public static void AddPriorityProcessNames(string priorityProcessNames)
     {
         if (_appSettings.PriorityProcessNames.Contains(priorityProcessNames))

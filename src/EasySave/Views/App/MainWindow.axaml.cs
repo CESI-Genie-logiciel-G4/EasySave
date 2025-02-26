@@ -3,6 +3,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using EasySave.Models;
+using EasySave.Services;
 using EasySave.Utils;
 using EasySave.ViewModels;
 using MenuItem = Avalonia.Controls.MenuItem;
@@ -151,7 +152,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        _viewModel.AddExtensions(newExtension);
+        _viewModel.AddExtensions(newExtension, ExtensionService.ExtensionType.Encrypted);
         NewEncryptedExtension.Text = "";
     }
 
@@ -161,7 +162,7 @@ public partial class MainWindow : Window
         if (menuItem.DataContext is not string selectedItem) return;
 
         var index = _viewModel.EncryptedExtensions.IndexOf(selectedItem);
-        _viewModel.RemoveExtension([index + 1]);
+        _viewModel.RemoveExtension([index + 1], ExtensionService.ExtensionType.Encrypted);
     }
 
     private void OnLogTransporterChecked(object? sender, RoutedEventArgs e)
@@ -171,5 +172,26 @@ public partial class MainWindow : Window
 
         var index = _viewModel.LogTransporters.IndexOf(transporterItem);
         _viewModel.ChangeLogsTransporters([index + 1]);
+    }
+    
+    private void OnAddPriorityExtension(object? sender, RoutedEventArgs e)
+    {
+        var newExtension = NewPriorityExtension.Text;
+        if (string.IsNullOrEmpty(newExtension))
+        {
+            return;
+        }
+
+        _viewModel.AddExtensions(newExtension, ExtensionService.ExtensionType.Priority);
+        NewEncryptedExtension.Text = "";
+    }
+    
+    private void OnDeletePriorityExtension(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem menuItem) return;
+        if (menuItem.DataContext is not string selectedItem) return;
+
+        var index = _viewModel.EncryptedExtensions.IndexOf(selectedItem);
+        _viewModel.RemoveExtension([index + 1], ExtensionService.ExtensionType.Priority);
     }
 }

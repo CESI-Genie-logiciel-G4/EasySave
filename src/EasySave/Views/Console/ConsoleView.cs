@@ -269,7 +269,7 @@ public class ConsoleView
             var extensions = ConsoleHelper.AskForStringList(T("EnterEncryptedExtensions") + ": ");
             foreach (var ext in extensions)
             {
-                _viewModel.AddExtensions(ext);
+                _viewModel.AddExtensions(ext, ExtensionService.ExtensionType.Encrypted);
             }
 
             return;
@@ -305,7 +305,7 @@ public class ConsoleView
         }
 
         var choice = ConsoleHelper.AskForMultipleValues(T("SelectOption"), 1, _viewModel.EncryptedExtensions.Count);
-        _viewModel.RemoveExtension(choice);
+        _viewModel.RemoveExtension(choice, ExtensionService.ExtensionType.Encrypted);
     }
 
     private void AddExtension()
@@ -314,7 +314,7 @@ public class ConsoleView
 
         foreach (var ext in newExtensions)
         {
-            _viewModel.AddExtensions(ext);
+            _viewModel.AddExtensions(ext, ExtensionService.ExtensionType.Encrypted);
         }
     }
     
