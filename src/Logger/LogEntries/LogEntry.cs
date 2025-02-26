@@ -4,7 +4,6 @@ using System.Xml.Serialization;
 
 namespace Logger.LogEntries;
 
-[XmlInclude(typeof(CopyFileLogEntryV2))]
 [XmlInclude(typeof(CopyFileLogEntry))]
 [XmlInclude(typeof(GlobalLogEntry))]
 public abstract class LogEntry(string loggedOperation) : ILogEntry

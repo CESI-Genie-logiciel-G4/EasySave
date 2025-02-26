@@ -19,15 +19,18 @@ public class CopyFileLogEntry() : LogEntry("Copy a file")
     [JsonPropertyOrder(6)]
     public long FileSize { get; set; }
     [JsonPropertyOrder(7)]
-    public double TransferTimeMs { get; set; }
+    public long TransferTimeMs { get; set; }
+    [JsonPropertyOrder(8)]
+    public long EncryptionTimeMs { get; set; }
     
-    public CopyFileLogEntry(string backupName, string sourcePath, string destinationPath, long fileSize, double transferTimeMs) : this()
+    public CopyFileLogEntry(string backupName, string sourcePath, string destinationPath, long fileSize, long transferTimeMs, long encryptionTimeMs = 0) : this()
     {
         BackupName = backupName;
         SourcePath = sourcePath;
         DestinationPath = destinationPath;
         FileSize = fileSize;
         TransferTimeMs = transferTimeMs;
+        EncryptionTimeMs = encryptionTimeMs;
     }
 
     public override string ToString() => $" [{Timestamp}] - {LoggedOperation} in {TransferTimeMs} ms - {BackupName} backup in progress";

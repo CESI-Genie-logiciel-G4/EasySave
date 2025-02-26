@@ -119,7 +119,7 @@ public static class CryptoService
             throw;
         }
         
-        logger.Log(new CopyFileLogEntryV2(
+        logger.Log(new CopyFileLogEntry(
             "Backup",
             sourceFile,
             destinationFile,
