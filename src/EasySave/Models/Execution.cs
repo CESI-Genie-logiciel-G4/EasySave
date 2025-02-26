@@ -37,7 +37,7 @@ public partial class Execution : ObservableObject, IDisposable
     
     [JsonIgnore] private readonly TaskController _controller;
     
-    [JsonIgnore] private static  readonly Semaphore largeFileSemaphore = new (1,1);
+    [JsonIgnore] private static  readonly Semaphore LargeFileSemaphore = new (1,1);
     
     public async Task Start()
     {
@@ -70,6 +70,7 @@ public partial class Execution : ObservableObject, IDisposable
 
     public void Cancel()
     {
+        State = ExecutionState.Canceled;
         _controller.Cancel();
     }
 
@@ -94,10 +95,14 @@ public partial class Execution : ObservableObject, IDisposable
     {
         if (IsOverMaxSize(sourceFile))
         {
-            State = ExecutionState.Waiting;
-            
-            largeFileSemaphore.WaitOne();
-            State = ExecutionState.Running;
+            if (!LargeFileSemaphore.WaitOne(0))
+            {
+                State = ExecutionState.Waiting;
+                LargeFileSemaphore.WaitOne();
+                
+                if (State == ExecutionState.Waiting) 
+                    State = ExecutionState.Running;
+            }
             
             try
             {
@@ -105,7 +110,7 @@ public partial class Execution : ObservableObject, IDisposable
             }
             finally
             {
-                largeFileSemaphore.Release();
+                LargeFileSemaphore.Release();
             }
         }
         else

@@ -94,7 +94,7 @@
 
                                                 <!-- Bouton "⏸" : Displayed when the state is Running -->
                                                 <Button Command="{Binding CurrentExecution.Pause}"
-                                                        Classes.visible="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Running|Blocked|Waiting}">
+                                                        Classes.visible="{Binding CurrentExecution.State, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=Running|Blocked}">
                                                     <i:Icon Value="mdi pause-circle-outline" FontSize="20" />
                                                     <Button.Styles>
                                                         <Style Selector="Button.visible">
