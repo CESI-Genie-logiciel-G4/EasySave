@@ -16,9 +16,7 @@ public partial class Execution : ObservableObject, IDisposable
         BackupJob = backupJob;
         State = ExecutionState.Pending;
         Exception = null;
-        _controller = new TaskController();
-        
-        _monitorTimer = new Timer(CheckBlockedProcesses, null, 0, 1000);
+        _controller = new TaskController(); 
     }
 
     public DateTime StartTime { get; set; }
@@ -29,23 +27,17 @@ public partial class Execution : ObservableObject, IDisposable
 
     public event Action<Execution>? ProgressUpdated;
 
-    [ObservableProperty] 
-    private ExecutionState _state;
+    [ObservableProperty] private ExecutionState _state;
 
-    [ObservableProperty] 
-    private Exception? _exception;
+    [ObservableProperty] private Exception? _exception;
 
-    [ObservableProperty] 
-    private int _currentProgress;
+    [ObservableProperty] private int _currentProgress;
 
-    [ObservableProperty] 
-    private int _totalSteps;
+    [ObservableProperty] private int _totalSteps;
     
-    [JsonIgnore]
-    private readonly TaskController _controller;
+    [JsonIgnore] private readonly TaskController _controller;
     
-    [JsonIgnore]
-    private static  readonly Semaphore largeFileSemaphore = new (1,1);
+    [JsonIgnore] private static  readonly Semaphore largeFileSemaphore = new (1,1);
     
     public async Task Start()
     {
