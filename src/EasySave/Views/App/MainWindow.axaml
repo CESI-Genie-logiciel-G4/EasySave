@@ -542,7 +542,7 @@
                             <Border Background="White" BorderBrush="#DDD" BorderThickness="1" Padding="6"
                                     CornerRadius="8">
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" Height="130">
-                                    <ItemsControl ItemsSource="{Binding PriorityFiles}">
+                                    <ItemsControl ItemsSource="{Binding PriorityExtensions}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding}" Padding="5" Margin="2" Background="#F0F0F0"
@@ -560,8 +560,8 @@
                                 </ScrollViewer>
                             </Border>
                             <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
-                                <TextBox Width="150" IsEnabled="False" />
-                                <Button i:Attached.Icon="mdi plus" FontSize="20" IsEnabled="False" />
+                                <TextBox Width="150" x:Name="NewPriorityExtension" />
+                                <Button Click="OnAddPriorityExtension" i:Attached.Icon="mdi plus" FontSize="20"/>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
