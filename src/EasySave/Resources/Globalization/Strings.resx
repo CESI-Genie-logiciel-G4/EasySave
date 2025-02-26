@@ -312,4 +312,10 @@
   <data name="MissingFullBackup" xml:space="preserve">
     <value>Full backup required but not found.</value>
   </data>
+  <data name="MaxSizeTitle" xml:space="preserve">
+    <value>Max concurrent files size</value>
+  </data>
+  <data name="KiloBytesIdentifier" xml:space="preserve">
+    <value>kB</value>
+  </data>
 </root>

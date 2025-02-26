@@ -312,4 +312,10 @@
   <data name="MissingFullBackup" xml:space="preserve">
     <value>Aucune sauvegarde complète trouvée</value>
   </data>
+  <data name="MaxSizeTitle" xml:space="preserve">
+    <value>Taille max des fichiers simultané</value>
+  </data>
+  <data name="KiloBytesIdentifier" xml:space="preserve">
+    <value>ko</value>
+  </data>
 </root>
