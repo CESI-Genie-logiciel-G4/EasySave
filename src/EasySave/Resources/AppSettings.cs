@@ -15,7 +15,7 @@ public partial class AppSettings : ObservableObject
     
     public String Language { get; set; } = "en";
     
-    public long MaxFileSize { get; set; } = 2_000_000_000; // 2 Go
+    public long MaxFileSizeKb { get; set; } = 2_000_000; // 2 GB en kB
     
     [ObservableProperty]
     private ObservableCollection<TransporterItem> _logTransporters  =

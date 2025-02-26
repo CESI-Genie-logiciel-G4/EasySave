@@ -129,4 +129,10 @@ public static class SettingsService
         _appSettings.PriorityProcessNames.Remove(priorityProcessNames);
         SaveSettings();
     }
+
+    public static void UpdateMaxFileSize(long size)
+    {
+        _appSettings.MaxFileSizeKb = size;
+        SaveSettings();
+    }
 }

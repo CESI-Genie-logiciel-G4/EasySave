@@ -40,4 +40,9 @@ public static class FileHelper
         var fileSize = new FileInfo(file).Length;
         return fileSize;
     }
+
+    public static long GetFileSizeInKb(string file)
+    {
+        return GetFileSize(file)/ 1024;
+    }
 }

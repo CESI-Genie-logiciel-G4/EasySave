@@ -121,7 +121,7 @@ public partial class Execution : ObservableObject, IDisposable
 
     private bool IsOverMaxSize(string file)
     {
-        return FileHelper.GetFileSize(file) > SettingsService.Settings.MaxFileSize;
+        return FileHelper.GetFileSizeInKb(file) > SettingsService.Settings.MaxFileSizeKb;
     }
     
     private Task Run(CancellationToken token, ManualResetEventSlim pauseEvent)
