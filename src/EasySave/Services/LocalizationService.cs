@@ -32,7 +32,7 @@ namespace EasySave.Services
                 foreach (DictionaryEntry entry in resourceSet)
                 {
                     var key = entry.Key.ToString()!;
-                    var value = entry.Value.ToString()!;
+                    var value = entry.Value?.ToString()!;
                     newResourceDictionary[key] = value;
                 }
             }

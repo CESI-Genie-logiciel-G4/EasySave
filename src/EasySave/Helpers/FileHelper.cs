@@ -29,9 +29,8 @@ public static class FileHelper
         Directory.CreateDirectory(parentDir);
     }
 
-    public static string? GetMirrorFilePath(string sourceFolder, string sourceFile, string? mirrorFolder)
+    public static string GetMirrorFilePath(string sourceFolder, string sourceFile, string mirrorFolder)
     {
-        if(mirrorFolder == null) return null;
         var relativePath = Path.GetRelativePath(sourceFolder, sourceFile);
         return Path.Combine(mirrorFolder, relativePath);
     }

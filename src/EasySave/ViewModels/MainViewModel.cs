@@ -58,7 +58,6 @@ public partial class MainViewModel : ObservableObject
     public event Action<Execution>? ProgressUpdated;
     public event Action<Exception>? ErrorOccurred;
     public event Action? LogsTransportersChanged;
-    public event Action<List<string>>? EncryptedExtensionsChanged;
     public event Action<string>? ExtensionsAdded;
     public event Action<string>? ExtensionsRemoved;
     public event Action<string>? ExtensionsAlreadyExists;
@@ -100,7 +99,7 @@ public partial class MainViewModel : ObservableObject
     {
         foreach (var numericalIndex in indexes)
         {
-            var transporter = LogTransporters.ElementAt(numericalIndex - 1);
+            var transporter = LogTransporters[numericalIndex - 1];
             transporter.IsEnabled = !transporter.IsEnabled;
         }
 
