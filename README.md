@@ -31,14 +31,16 @@
 </br>
 
 <div align="center">
-  <img src="./assets/easysave.png" alt="EasySave 1.0" width="70%">
+  <img src="./assets/easysave-v2.png" alt="EasySave 2.0" width="70%">
 </div>
 
 </br>
 
 <p align="justify">
-  <strong>EasySave 1.0</strong> enables users to create and execute up to <strong>five backup tasks</strong>, supporting both <strong>full and differential backups</strong>.
-  It supports <strong>English</strong> and <strong>French</strong> and can back up files from local disks, external drives, and network drives. The application also features real-time logging, storing detailed backup information in JSON files.
+  <strong>EasySave 2.0</strong> enables users to create and execute an unlimited number of backup tasks,
+   supporting simultaneous operations and secure encryption. The application features a graphical interface, allowing users to play, pause, and stop tasks. 
+   
+   User global settings are available to configure the application to their needs.
 </p>
 
 </br>
@@ -47,8 +49,13 @@
   <table>
     <tr>
       <td>💾 Backup tasks</td>
-      <td>📂 Full and differential backups</td>
-      <td>💻 Command-line input</td>
+      <td>🔒 Secure encryption</td>
+      <td>💻 Graphical interface</td>
+    </tr>
+    <tr>
+      <td>🔄 Multithreaded operations</td>
+      <td>⏯️ Play/Pause/Stop</td>
+      <td>🔧 Configurable settings</td>
     </tr>
     <tr>
       <td>🔄 Follows best practices</td>
@@ -77,7 +84,7 @@ Comprehensive user documentation is available to help you get started and unders
 
 ## 📦 Installation
 
-Download and execute the latest version of **EasySave** from the [EasySave v1.1 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v1.1).
+Download and execute the latest version of **EasySave** from the [EasySave v2.0 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v2.0).
 
 If you are building from source, ensure **.NET 9** is installed before running the application.  
 
@@ -100,13 +107,20 @@ EasySave/                # Main solution
 
 ## 🚀 Getting Started
 
-To start the application, simply run the **EasySave** project:
+Useful commands to build and test the application are available in the root directory.
 
-```python
+```bash
 dotnet
 ├── build                # Builds the application
-├── run                  # Runs the main project
 └── test                 # Executes unit tests
+```
+
+To execute the application, navigate to the **EasySave** core project and run the following command:
+
+```bash
+dotnet run 
+├── Gui                  # Launches the graphical UI
+└── Console              # Launches the console UI (default option)
 ```
 
 </br>
@@ -142,6 +156,16 @@ dotnet
           </ul>
         </td>
         <td>Unit testing, coverage, and code quality tools.</td>
+      </tr>
+      <tr>
+        <td>UI Framework</td>
+        <td>
+          <ul style="list-style-type: none; padding: 0;">
+            <li><img src="https://img.shields.io/badge/UI-Avalonia-black.svg" alt="Avalonia"></li>
+            <li><img src="https://img.shields.io/badge/Icons-Material%20Icons-black.svg" alt="Material Icons"></li>
+          </ul>
+        </td>
+        <td>Framework for building cross-platform UIs and icon library.</td>
       </tr>
       <tr>
         <td>Documentation</td>
@@ -188,5 +212,5 @@ dotnet
 </br>
 
 <p align="center">
-  2025 © <strong>ProSoft</strong>™. Tous droits réservés.
+  2025 © <strong>ProSoft</strong>™. All rights reserved.
 </p>
