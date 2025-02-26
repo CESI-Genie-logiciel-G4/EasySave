@@ -16,7 +16,7 @@ public partial class AppSettings : ObservableObject
     public String Language { get; set; } = "en";
     
     [ObservableProperty]
-    public ObservableCollection<TransporterItem> _logTransporters  =
+    private ObservableCollection<TransporterItem> _logTransporters  =
     [
         new("Console", new ConsoleTransporter(), false),
         new("XML", new FileXmlTransporter("./.easysave/logs/")),

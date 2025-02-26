@@ -166,10 +166,8 @@ public partial class MainWindow : Window
 
     private void OnLogTransporterChecked(object? sender, RoutedEventArgs e)
     {
-        e.Handled = true;
-
-        if (sender is not CheckBox checkBox) return;
-        if (checkBox.DataContext is not TransporterItem transporterItem) return;
+        if (sender is not Button button) return;
+        if (button.DataContext is not TransporterItem transporterItem) return;
 
         var index = _viewModel.LogTransporters.IndexOf(transporterItem);
         _viewModel.ChangeLogsTransporters([index + 1]);
