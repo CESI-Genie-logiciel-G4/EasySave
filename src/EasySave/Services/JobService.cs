@@ -1,4 +1,6 @@
-﻿using EasySave.Helpers;
+﻿using System.Collections.ObjectModel;
+using DynamicData;
+using EasySave.Helpers;
 using EasySave.Models.Backups;
 
 namespace EasySave.Services;
@@ -8,22 +10,15 @@ using System.Text.Json;
 
 public static class JobService
 {
-    public static List<BackupJob> BackupJobs { get; } = [];
-    public const int BackupJobLimit = 5;
-
-    public static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
+    public static ObservableCollection<BackupJob> BackupJobs { get; } = [];
+    private static readonly JsonSerializerOptions DefaultJsonOptions = new JsonSerializerOptions { WriteIndented = true };
     
     private const string BackupJobsFile = ".easysave/jobs-list.json";
     
     
-    public static BackupJob AddBackupJob(string name, string source, string destination, BackupType type)
+    public static BackupJob AddBackupJob(string name, string source, string destination, BackupType type, bool encryption)
     {
-        if (BackupJobs.Count >= BackupJobLimit)
-        {
-            throw new InvalidOperationException("Backup job limit reached");
-        }
-        
-        var newJob = new BackupJob(name, source, destination, type);
+        var newJob = new BackupJob(name, source, destination, type, encryption);
         BackupJobs.Add(newJob);
         StoreJobs();
         

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using EasySave.Helpers;
+using EasySave.Views.Console;
 
 namespace EasySave.Tests.Views;
 

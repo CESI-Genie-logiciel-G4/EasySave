@@ -1,3 +1,4 @@
+using EasySave.Exceptions;
 using EasySave.Helpers;
 using EasySave.Services;
 
@@ -5,11 +6,16 @@ namespace EasySave.Models.Backups;
 
 public class DifferentialBackup() : BackupType("DifferentialBackup")
 {
-    private string? _lastFullBackupFolder = null;
+    private string? _lastFullBackupFolder;
     
     public override void Initialize(BackupJob job)
     {
         _lastFullBackupFolder = HistoryService.GetLastCompleteBackupFolder(job.SourceFolder);
+        
+        if (_lastFullBackupFolder is null)
+        {
+            throw new MissingFullBackupException();
+        }
     }
 
     public override void Execute(string sourceFile, string destinationFile, BackupJob job)
@@ -20,9 +26,12 @@ public class DifferentialBackup() : BackupType("DifferentialBackup")
             _lastFullBackupFolder!
             );
         
-        if (!File.Exists(lastFullBackupFile) || File.GetLastWriteTime(sourceFile) > File.GetLastWriteTime(lastFullBackupFile))
+        var needEncryption = job.UseEncryption &&
+                            ExtensionService.EncryptedExtensions.Contains(Path.GetExtension(sourceFile));
+        
+        if (!CryptoService.AreFilesIdentical(sourceFile, lastFullBackupFile, needEncryption))
         {
-            FileHelper.Copy(sourceFile, destinationFile, job);
+            CryptoService.SecureCopy(sourceFile, destinationFile, job);
         }
     }
 }

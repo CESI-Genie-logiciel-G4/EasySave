@@ -11,7 +11,7 @@ public class MainViewModelTests
         var viewModel = new MainViewModel();
         
         const string expectedName = "New-Backup";
-        viewModel.AddBackupJob(expectedName, "","",new FullBackup());
+        viewModel.AddBackupJob(expectedName, "","",new FullBackup(), false);
 
         var lastJob = JobService.BackupJobs[^1];
         

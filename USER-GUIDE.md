@@ -1,10 +1,9 @@
-
 <div align="center">
 
 # 📘 **User Guide - EasySave**
 
-![Date](https://img.shields.io/badge/Date-2025_02_16-blue)
-![Version](https://img.shields.io/badge/Version-1.1-green)
+![Date](https://img.shields.io/badge/Date-2025_02_26-blue)
+![Version](https://img.shields.io/badge/Version-2.0-green)
 
 **Welcome to our user Wiki!** This document explains how to use our app.
 
@@ -15,22 +14,23 @@
 
 <br/>
 
-**EasySave** is a robust, multi-platform, console-based backup tool. It enables users to **create**, **manage**, and **execute** backup jobs with ease.
+**EasySave** is a graphical, multi-platform backup tool. It enables users to **create**, **manage**, and **execute** backup jobs with ease.
 Whether performing **full** or **differential** backups, EasySave ensures your data is securely backed up.
 
-You can **download** and **execute** the EasySave app from the following link: [EasySave v1.1 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v1.1).
+You can **download** and **execute** the EasySave app from the following link: [EasySave v2.0 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v2.0).
 
 ## **Main Features**
 
 ### **Navigating the Menu**
 
-Using an interactive menu system, each action is selectable by entering its corresponding number.
+EasySave's menu is divided into three main sections:
 
-<div align="center">
+- **Backup Jobs**: Manage and execute backup jobs.
+- **Create a Backup Job**: Define a backup job by specifying a source and destination.
+- **History**: View the history of executed backup jobs.
+- **Settings**: Configure the application's language, logs output format and more.
 
-💡 *To cancel an operation, enter **exit** at any time.*
-
-</div>
+<br/>
 
 
 ### **Creating a Backup Job**
@@ -40,9 +40,7 @@ Three backup strategies are available:
 - **Full**: Recopies all files at each execution.
 - **Synthetic Full**: Only new files are copied, creating a full backup by merging changes with the last 
 full backup.
- **Differential**: Copies only new or modified files since the last full backup, saving them in a separate location.
-
-> **Limit**: No limit on the number of backup jobs.
+- **Differential**: Copies only new or modified files since the last full backup, saving them in a separate location.
 
 <div align="center">
 
@@ -52,32 +50,94 @@ full backup.
 
 <br/>
 
-### **Executing Backups**
-EasySave offers flexible management of backup jobs through simplified expressions:
+### **Task Status Indicators**
 
+EasySave provides visual feedback on backup tasks through color-coded progress bars, making it easy to monitor their status at a glance.
 
 <div align="center">
-  <table style="width:50%">
-    <tr>
-      <td><code>1</code></td>
-      <td>Launch a single job.</td>
-    </tr>
-    <tr>
-      <td><code>1-3</code></td>
-      <td>Launch all jobs within a specified range.</td>
-    </tr>
-    <tr>
-      <td><code>1;3;5</code></td>
-      <td>Launch specific jobs.</td>
-    </tr>
-    <tr>
-      <td><code>*</code></td>
-      <td>Launch all saved jobs.</td>
-    </tr>
+  <table>
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Color</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Pending</strong></td>
+        <td>⬛ Gray (Indeterminate)</td>
+        <td>Task is queued and waiting to start</td>
+      </tr>
+      <tr>
+        <td><strong>Running</strong></td>
+        <td>🟦 DodgerBlue</td>
+        <td>Task is actively processing files</td>
+      </tr>
+      <tr>
+        <td><strong>Paused</strong></td>
+        <td>🟧 Orange</td>
+        <td>Task has been temporarily paused by the user</td>
+      </tr>
+      <tr>
+        <td><strong>Completed</strong></td>
+        <td>🟩 Green</td>
+        <td>Task has successfully completed all operations</td>
+      </tr>
+      <tr>
+        <td><strong>Failed</strong></td>
+        <td>🟥 Red</td>
+        <td>Task encountered an error and could not complete</td>
+      </tr>
+      <tr>
+        <td><strong>Blocked</strong></td>
+        <td>🟧 Orange (Indeterminate)</td>
+        <td>Task is waiting for another process or resource</td>
+      </tr>
+      <tr>
+        <td><strong>Canceled</strong></td>
+        <td>⬛ Gray</td>
+        <td>Task was manually canceled by the user</td>
+      </tr>
+    </tbody>
   </table>
 </div>
 
-<br/>
+The task status is reflected in real-time through the UI, allowing users to quickly identify which tasks require attention.
+
+### **File Encryption**
+
+EasySave encrypts files with specified extensions using AES when configured in backup tasks.
+
+<div align="center">
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Encryption Algorithm</strong></td>
+        <td>AES CBC (Advanced Encryption Standard)</td>
+      </tr>
+      <tr>
+        <td><strong>Key Storage</strong></td>
+        <td><code>.easysave/security</code> directory</td>
+      </tr>
+      <tr>
+        <td><strong>Configuration</strong></td>
+        <td>File extensions defined in settings</td>
+      </tr>
+      <tr>
+        <td><strong>Activation</strong></td>
+        <td>Per-backup task setting</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 
 ### **Real-Time Monitoring**
 
