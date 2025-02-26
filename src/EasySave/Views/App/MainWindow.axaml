@@ -365,10 +365,41 @@
                                     <ItemsControl ItemsSource="{Binding LogTransporters}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <CheckBox Content="{Binding Title}"
-                                                          IsChecked="{Binding IsEnabled}"
-                                                          PointerPressed="OnLogTransporterChecked"
-                                                          Padding="6" FontSize="14" />
+                                                <Button Content="{Binding Title}"
+                                                        HorizontalAlignment="Center"
+                                                        Click="OnLogTransporterChecked"
+                                                        Padding="6"
+                                                        Margin="0,2"
+                                                        FontSize="14"
+                                                        CornerRadius="6"
+                                                        BorderThickness="0"
+                                                        Width="150"
+                                                        Classes.checked="{Binding IsEnabled}">
+
+                                                    <Button.Styles>
+                                                        <Style Selector="Button.checked">
+                                                            <Setter Property="Background" Value="#0078D4" />
+                                                            <Setter Property="Foreground" Value="White" />
+                                                        </Style>
+
+                                                        <Style
+                                                            Selector="Button.checked:pointerover /template/ ContentPresenter">
+                                                            <Setter Property="Background" Value="#005A9E" />
+                                                            <Setter Property="Foreground" Value="White" />
+                                                        </Style>
+
+                                                        <Style Selector="Button:not(.checked)">
+                                                            <Setter Property="Background" Value="#E1E1E1" />
+                                                            <Setter Property="Foreground" Value="Black" />
+                                                        </Style>
+
+                                                        <Style
+                                                            Selector="Button:not(.checked):pointerover /template/ ContentPresenter">
+                                                            <Setter Property="Background" Value="#C8C8C8" />
+                                                            <Setter Property="Foreground" Value="Black" />
+                                                        </Style>
+                                                    </Button.Styles>
+                                                </Button>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>

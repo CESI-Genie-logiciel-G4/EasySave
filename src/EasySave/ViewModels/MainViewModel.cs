@@ -46,18 +46,14 @@ public partial class MainViewModel : ObservableObject
         new DifferentialBackup()
     ];
 
-    [ObservableProperty] private ObservableCollection<TransporterItem> _logTransporters =
-    [
-        new("Console", new ConsoleTransporter(), false),
-        new("XML", new FileXmlTransporter("./.easysave/logs/")),
-        new("JSON", new FileJsonTransporter("./.easysave/logs/"))
-    ];
+    [ObservableProperty] private ObservableCollection<TransporterItem> _logTransporters = SettingsService.Settings.LogTransporters;
 
     public event Action<BackupJob>? BackupJobAdded;
     public event Action<int>? BackupJobRemoved;
     public event Action<Execution>? ProgressUpdated;
     public event Action<Exception>? ErrorOccurred;
     public event Action? LogsTransportersChanged;
+    public event Action<List<string>>? EncryptedExtensionsChanged;
     public event Action<string>? ExtensionsAdded;
     public event Action<string>? ExtensionsRemoved;
     public event Action<string>? ExtensionsAlreadyExists;
@@ -97,12 +93,8 @@ public partial class MainViewModel : ObservableObject
 
     public void ChangeLogsTransporters(List<int> indexes)
     {
-        foreach (var numericalIndex in indexes)
-        {
-            var transporter = LogTransporters[numericalIndex - 1];
-            transporter.IsEnabled = !transporter.IsEnabled;
-        }
-
+        SettingsService.UpdateLogTransporters(indexes);
+        
         Logger.Logger.GetInstance()
             .SetupTransporters(ExtractLogsTransporters());
 
