@@ -334,6 +334,10 @@
                                         <TextBlock Text="{DynamicResource AboutText}"
                                                    FontSize="14" Foreground="#555"
                                                    TextWrapping="Wrap" TextAlignment="Center" />
+                                        
+                                        <TextBlock Text="{DynamicResource DeveloppedTextAbout}"
+                                                   FontSize="13" Foreground="#555"
+                                                   TextWrapping="Wrap" TextAlignment="Center" />
 
                                         <HyperlinkButton NavigateUri="https://github.com/CESI-Genie-logiciel-G4/EasySave"
                                                          Content="{DynamicResource SourceCode}"
