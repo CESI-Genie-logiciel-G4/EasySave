@@ -20,7 +20,7 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty] private ObservableCollection<Execution> _history;
 
-    [ObservableProperty] private ObservableCollection<string> _businessApps = [];
+    [ObservableProperty] private ObservableCollection<string> _businessApps = SettingsService.Settings.PriorityProcessNames;
 
     [ObservableProperty] private ObservableCollection<string> _priorityExtensions = ExtensionService.PriorityExtensions;
 
@@ -67,7 +67,6 @@ public partial class MainViewModel : ObservableObject
     public event Action<Execution>? ProgressUpdated;
     public event Action<Exception>? ErrorOccurred;
     public event Action? LogsTransportersChanged;
-    public event Action<List<string>>? EncryptedExtensionsChanged;
     public event Action<string>? ExtensionsAdded;
     public event Action<string>? ExtensionsRemoved;
     public event Action<string>? ExtensionsAlreadyExists;
@@ -149,5 +148,16 @@ public partial class MainViewModel : ObservableObject
             ExtensionService.RemoveExtension(extension, extensionType);
             ExtensionsRemoved?.Invoke(extension);
         }
+    }
+
+    public void AddBusinessApp(string businessApp)
+    {
+            SettingsService.AddPriorityProcessNames(businessApp);
+    }
+    
+    public void RemoveBusinessApp(string businessApp)
+    {
+        if (SettingsService.Settings.PriorityProcessNames.Contains(businessApp))
+            SettingsService.RemovePriorityProcessNames(businessApp);
     }
 }

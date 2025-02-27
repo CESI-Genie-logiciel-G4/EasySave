@@ -1,6 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.ObjectModel;
+using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using EasySave.Models.Backups;
+using EasySave.Services;
 
 namespace EasySave.Models;
 
@@ -12,7 +14,7 @@ public partial class BackupJob : ObservableObject
     public BackupType BackupType { get; }
     public bool UseEncryption { get; }
     
-    public string[] BlockedProcesses { get; } = ["Calculator", "Calc"];
+    public ObservableCollection<string> BlockedProcesses { get; } = SettingsService.Settings.PriorityProcessNames;
     
     [ObservableProperty]
     [property: JsonIgnore]
