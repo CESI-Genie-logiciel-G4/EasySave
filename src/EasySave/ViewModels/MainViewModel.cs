@@ -5,6 +5,7 @@ using EasySave.Exceptions;
 using EasySave.Models;
 using EasySave.Models.Backups;
 using EasySave.Services;
+using static EasySave.Services.ExtensionService;
 using EasySave.Utils;
 using Logger.Transporters;
 
@@ -21,7 +22,7 @@ public partial class MainViewModel : ObservableObject
 
     [ObservableProperty] private ObservableCollection<string> _businessApps = [];
 
-    [ObservableProperty] private ObservableCollection<string> _priorityFiles = [];
+    [ObservableProperty] private ObservableCollection<string> _priorityExtensions = ExtensionService.PriorityExtensions;
 
     [ObservableProperty] private ObservableCollection<UiType> _usageMode = [UiType.Console, UiType.Gui];
 
@@ -121,11 +122,11 @@ public partial class MainViewModel : ObservableObject
             .ToList();
     }
 
-    public void AddExtensions(string extension)
+    public void AddExtensions(string extension, ExtensionType extensionType)
     {
         try
         {
-            var newExtension = ExtensionService.AddEncryptedExtension(extension);
+            var newExtension = ExtensionService.AddExtension(extension, extensionType);
             if (newExtension == null)
             {
                 ExtensionsAlreadyExists?.Invoke(extension);
@@ -140,12 +141,12 @@ public partial class MainViewModel : ObservableObject
         }
     }
 
-    public void RemoveExtension(List<int> indexes)
+    public void RemoveExtension(List<int> indexes, ExtensionType extensionType)
     {
         foreach (var index in indexes.OrderByDescending(i => i))
         {
-            var extension = ExtensionService.EncryptedExtensions[index - 1];
-            ExtensionService.RemoveEncryptedExtension(extension);
+            var extension = GetExtension(extensionType,index - 1);
+            ExtensionService.RemoveExtension(extension, extensionType);
             ExtensionsRemoved?.Invoke(extension);
         }
     }
