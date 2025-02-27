@@ -292,7 +292,7 @@
     <value>Delete</value>
   </data>
   <data name="AboutText" xml:space="preserve">
-    <value>EasySave is a simple and effective backup software.</value>
+    <value>EasySave is a simple and effective backup software, developped by ProSoft.</value>
   </data>
   <data name="SourceCode" xml:space="preserve">
     <value>See the project on GitHub</value>
@@ -317,5 +317,8 @@
   </data>
   <data name="KiloBytesIdentifier" xml:space="preserve">
     <value>kB</value>
+  </data>
+  <data name="DeveloppedTextAbout" xml:space="preserve">
+    <value>It allows users to create and execute an unlimited number of backup tasks, with support for secure encryption and simultaneous operations.</value>
   </data>
 </root>

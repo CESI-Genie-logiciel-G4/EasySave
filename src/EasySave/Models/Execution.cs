@@ -138,6 +138,10 @@ public partial class Execution : ObservableObject, IDisposable
             ProgressUpdated?.Invoke(this);
 
             BackupJob.BackupType.Initialize(BackupJob);
+            if (BackupJob.BackupType.NeedToClearFolder)
+            {
+                FileHelper.ClearDirectory(destinationFolder);
+            }
 
             foreach (var sourceFile in files)
             {

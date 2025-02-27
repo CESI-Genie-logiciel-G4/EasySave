@@ -121,7 +121,7 @@ public static class CryptoService
         }
 
         logger.Log(new CopyFileLogEntry(
-            "Backup",
+            job.Name,
             sourceFile,
             destinationFile,
             FileHelper.GetFileSize(sourceFile),
