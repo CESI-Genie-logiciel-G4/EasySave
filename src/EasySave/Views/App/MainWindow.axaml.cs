@@ -191,7 +191,7 @@ public partial class MainWindow : Window
         if (sender is not MenuItem menuItem) return;
         if (menuItem.DataContext is not string selectedItem) return;
 
-        var index = _viewModel.EncryptedExtensions.IndexOf(selectedItem);
+        var index = _viewModel.PriorityExtensions.IndexOf(selectedItem);
         _viewModel.RemoveExtension([index + 1], ExtensionService.ExtensionType.Priority);
     }
 }

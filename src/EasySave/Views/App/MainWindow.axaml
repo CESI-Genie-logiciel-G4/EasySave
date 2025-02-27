@@ -550,7 +550,8 @@
                                                     <TextBlock.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem i:MenuItem.Icon="mdi-trash-can"
-                                                                      Header="{DynamicResource Delete}" />
+                                                                      Header="{DynamicResource Delete}" 
+                                                                      Click="OnDeletePriorityExtension" />
                                                         </ContextMenu>
                                                     </TextBlock.ContextMenu>
                                                 </TextBlock>

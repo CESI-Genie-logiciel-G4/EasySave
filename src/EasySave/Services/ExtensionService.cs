@@ -80,4 +80,14 @@ public static class ExtensionService
         
         removeMethod(formatedExtension);
     }
+
+    public static string GetExtension(ExtensionType type, int index)
+    {
+        return type switch
+        {
+            ExtensionType.Encrypted => EncryptedExtensions[index],
+            ExtensionType.Priority => PriorityExtensions[index],
+            _ => throw new ArgumentException($"Extension type undefined: {type}")
+        };
+    }
 }

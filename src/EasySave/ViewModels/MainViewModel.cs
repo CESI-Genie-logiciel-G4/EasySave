@@ -145,7 +145,7 @@ public partial class MainViewModel : ObservableObject
     {
         foreach (var index in indexes.OrderByDescending(i => i))
         {
-            var extension = ExtensionService.EncryptedExtensions[index - 1];
+            var extension = GetExtension(extensionType,index - 1);
             ExtensionService.RemoveExtension(extension, extensionType);
             ExtensionsRemoved?.Invoke(extension);
         }
