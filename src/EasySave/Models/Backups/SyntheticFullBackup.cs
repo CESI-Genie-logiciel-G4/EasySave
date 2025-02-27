@@ -5,6 +5,7 @@ namespace EasySave.Models.Backups;
 
 public class SyntheticFullBackup() : BackupType("SyntheticFullBackup")
 {
+    public override bool NeedToClearFolder => false;
     public override void Initialize(BackupJob job)
     {
     }

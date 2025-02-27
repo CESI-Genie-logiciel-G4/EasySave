@@ -45,4 +45,10 @@ public static class FileHelper
     {
         return GetFileSize(file)/ 1024;
     }
+
+    public static void ClearDirectory(string directory)
+    {
+        Directory.Delete(directory, true);
+        Directory.CreateDirectory(directory);
+    }
 }

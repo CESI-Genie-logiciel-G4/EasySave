@@ -7,6 +7,7 @@ namespace EasySave.Models.Backups;
 [JsonDerivedType(typeof(SyntheticFullBackup), typeDiscriminator: "synthetic-full")]
 public abstract class BackupType(string name)
 {
+    public virtual bool NeedToClearFolder { get; } = true;
     public string Name { get; } = name;
     
     public abstract void Initialize(BackupJob job);
