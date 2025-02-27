@@ -491,7 +491,8 @@
                                                     <TextBlock.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem i:MenuItem.Icon="mdi-trash-can"
-                                                                      Header="{DynamicResource Delete}" />
+                                                                      Header="{DynamicResource Delete}" 
+                                                                      Click="OnDeleteBusinessApp"/>
                                                         </ContextMenu>
                                                     </TextBlock.ContextMenu>
                                                 </TextBlock>
@@ -501,8 +502,8 @@
                                 </ScrollViewer>
                             </Border>
                             <StackPanel Orientation="Horizontal" Spacing="5" HorizontalAlignment="Center">
-                                <TextBox Width="150" IsEnabled="False" />
-                                <Button i:Attached.Icon="mdi plus" FontSize="20" IsEnabled="False" />
+                                <TextBox Width="150" x:Name="NewBusinessApp" />
+                                <Button Click="OnAddBusinessApplication" i:Attached.Icon="mdi plus" FontSize="20" />
                             </StackPanel>
                         </StackPanel>
 

@@ -183,7 +183,7 @@ public partial class MainWindow : Window
         }
 
         _viewModel.AddExtensions(newExtension, ExtensionService.ExtensionType.Priority);
-        NewEncryptedExtension.Text = "";
+        NewPriorityExtension.Text = "";
     }
     
     private void OnDeletePriorityExtension(object? sender, RoutedEventArgs e)
@@ -193,5 +193,25 @@ public partial class MainWindow : Window
 
         var index = _viewModel.PriorityExtensions.IndexOf(selectedItem);
         _viewModel.RemoveExtension([index + 1], ExtensionService.ExtensionType.Priority);
+    }
+
+    private void OnAddBusinessApplication(object? sender, RoutedEventArgs e)
+    {
+        var newApp = NewBusinessApp.Text;
+        if (string.IsNullOrEmpty(newApp))
+        {
+            return;
+        }
+
+        _viewModel.AddBusinessApp(newApp);
+        NewBusinessApp.Text = "";
+    }
+    
+    private void OnDeleteBusinessApp(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuItem menuItem) return;
+        if (menuItem.DataContext is not string selectedItem) return;
+
+        _viewModel.RemoveBusinessApp(selectedItem);
     }
 }
