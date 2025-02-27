@@ -34,4 +34,15 @@ public static class FileHelper
         var relativePath = Path.GetRelativePath(sourceFolder, sourceFile);
         return Path.Combine(mirrorFolder, relativePath);
     }
+
+    public static long GetFileSize(string file)
+    {
+        var fileSize = new FileInfo(file).Length;
+        return fileSize;
+    }
+
+    public static long GetFileSizeInKb(string file)
+    {
+        return GetFileSize(file)/ 1024;
+    }
 }

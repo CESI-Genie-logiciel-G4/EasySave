@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using EasySave.Converters;
 using EasySave.Exceptions;
 using EasySave.Models;
 using EasySave.Models.Backups;
@@ -47,6 +48,18 @@ public partial class MainViewModel : ObservableObject
     ];
 
     [ObservableProperty] private ObservableCollection<TransporterItem> _logTransporters = SettingsService.Settings.LogTransporters;
+
+    public long FileSizeValue
+    {
+        get => SettingsService.Settings.MaxFileSizeKb;
+        set
+        {
+            if (value != SettingsService.Settings.MaxFileSizeKb)
+            {
+                SettingsService.UpdateMaxFileSize(value);
+            }
+        }
+    }
 
     public event Action<BackupJob>? BackupJobAdded;
     public event Action<int>? BackupJobRemoved;
