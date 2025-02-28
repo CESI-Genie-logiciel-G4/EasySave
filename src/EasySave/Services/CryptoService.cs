@@ -9,7 +9,7 @@ namespace EasySave.Services;
 
 public static class CryptoService
 {
-    
+
     /// <summary>
     ///  Encrypt a file from source to destination
     /// </summary>
@@ -105,7 +105,8 @@ public static class CryptoService
             
             copyWatch.Stop();
             
-        } catch (Exception e)
+        } 
+        catch (Exception e)
         {
             logger.Log(new GlobalLogEntry("Backup", "An error occurred during the backup job", new()
             {
@@ -118,12 +119,12 @@ public static class CryptoService
 
             throw;
         }
-        
+
         logger.Log(new CopyFileLogEntry(
-            "Backup",
+            job.Name,
             sourceFile,
             destinationFile,
-            new FileInfo(sourceFile).Length,
+            FileHelper.GetFileSize(sourceFile),
             copyWatch.ElapsedMilliseconds,
             encryptWatch.ElapsedMilliseconds
         ));
@@ -170,7 +171,7 @@ public static class CryptoService
         return sourceByte == backupByte;
     }
 
-    private static CryptoStream DecryptFileToStream(string lastFullBackupFile)
+    private static Stream DecryptFileToStream(string lastFullBackupFile)
     {
         var keyManager = KeyManager.GetInstance();
         var key = keyManager.GetKey();

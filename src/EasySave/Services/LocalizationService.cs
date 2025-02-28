@@ -52,6 +52,7 @@ namespace EasySave.Services
             CultureInfo.CurrentCulture = newCulture;
             CultureInfo.DefaultThreadCurrentCulture = newCulture;
             CultureInfo.DefaultThreadCurrentUICulture = newCulture;
+            SettingsService.UpdateLanguage(cultureCode);
         }
     }
 }

@@ -292,7 +292,7 @@
     <value>Supprimer</value>
   </data>
   <data name="AboutText" xml:space="preserve">
-    <value>EasySave est un logiciel de sauvegarde simple et efficace.</value>
+    <value>EasySave est un logiciel de sauvegarde simple et efficace, développé par ProSoft.</value>
   </data>
   <data name="SourceCode" xml:space="preserve">
     <value>Consultez le projet sur GitHub</value>
@@ -311,5 +311,14 @@
   </data>
   <data name="MissingFullBackup" xml:space="preserve">
     <value>Aucune sauvegarde complète trouvée</value>
+  </data>
+  <data name="MaxSizeTitle" xml:space="preserve">
+    <value>Taille max des fichiers simultané</value>
+  </data>
+  <data name="KiloBytesIdentifier" xml:space="preserve">
+    <value>ko</value>
+  </data>
+  <data name="DeveloppedTextAbout" xml:space="preserve">
+    <value>Il permet aux utilisateurs de créer et exécuter un nombre illimité de tâches de sauvegarde, avec prise en charge du chiffrement sécurisé et des opérations simultanées.</value>
   </data>
 </root>

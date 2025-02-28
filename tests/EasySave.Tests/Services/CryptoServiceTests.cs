@@ -1,4 +1,4 @@
-using EasySave.Models;
+using EasySave.Helpers;
 using EasySave.Services;
 using Xunit;
 
@@ -43,10 +43,11 @@ public class CryptoServiceTests
         
         // Assert
         Assert.True(File.Exists(_encryptedFilePath));
-        long encryptedSize = new FileInfo(_encryptedFilePath).Length;
+        long encryptedSize = FileHelper.GetFileSize(_encryptedFilePath);
         Assert.NotEqual(originalSize, encryptedSize);
     }
 
+    
     [Fact]
     public void EncryptFile_ShouldBeAbleToDecrypt()
     {

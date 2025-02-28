@@ -21,6 +21,9 @@
     <a href="https://www.sonarsource.com/" target="_blank">
       <img src="https://img.shields.io/badge/Code%20Quality-SonarQube-4E9BCD.svg" alt="SonarQube">
     </a>
+    <a href="https://avaloniaui.net/" target="_blank">
+      <img src="https://img.shields.io/badge/UI%20Framework-Avalonia-blue.svg" alt="Avalonia">
+    </a>
   </div>
 </section>
 
@@ -31,13 +34,13 @@
 </br>
 
 <div align="center">
-  <img src="./assets/easysave-v2.png" alt="EasySave 2.0" width="70%">
+  <img src="./assets/easysave-v2.png" alt="EasySave 3.0" width="70%">
 </div>
 
 </br>
 
 <p align="justify">
-  <strong>EasySave 2.0</strong> enables users to create and execute an unlimited number of backup tasks,
+  <strong>EasySave 3.0</strong> enables users to create and execute an unlimited number of backup tasks,
    supporting simultaneous operations and secure encryption. The application features a graphical interface, allowing users to play, pause, and stop tasks. 
    
    User global settings are available to configure the application to their needs.
@@ -58,14 +61,19 @@
       <td>🔧 Configurable settings</td>
     </tr>
     <tr>
-      <td>🔄 Follows best practices</td>
+      <td>📐 Follows best practices</td>
       <td>🌐 English and French support</td>
-      <td>📈 Real-time logging</td>
+      <td>📊 Real-time logging</td>
     </tr>
     <tr>
       <td>🖥️ Multiplatform</td>
       <td>✅ Tested</td>
       <td>📚 Documented</td>
+    </tr>
+    <tr>
+      <td>📂 File prioritization</td>
+      <td>⚖️ Concurrent heavy file limitation</td>
+      <td>🔍 Business app detection</td>
     </tr>
   </table>
 </div>
@@ -84,7 +92,7 @@ Comprehensive user documentation is available to help you get started and unders
 
 ## 📦 Installation
 
-Download and execute the latest version of **EasySave** from the [EasySave v2.0 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v2.0).
+Download and execute the latest version of **EasySave** from the [EasySave v3.0 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v3.0).
 
 If you are building from source, ensure **.NET 9** is installed before running the application.  
 
