@@ -371,7 +371,7 @@
                                             <TextBlock TextAlignment="Center" FontSize="10" Foreground="#666"
                                                        Text="{DynamicResource Version}" />
                                             <TextBlock TextAlignment="Center" FontSize="10" Foreground="#666"
-                                                       Text=" v2.0" />
+                                                       Text=" v3.0" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Grid>

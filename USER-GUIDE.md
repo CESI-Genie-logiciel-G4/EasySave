@@ -2,8 +2,8 @@
 
 # 📘 **User Guide - EasySave**
 
-![Date](https://img.shields.io/badge/Date-2025_02_26-blue)
-![Version](https://img.shields.io/badge/Version-2.0-green)
+![Date](https://img.shields.io/badge/Date-2025_02_28-blue)
+![Version](https://img.shields.io/badge/Version-3.0-green)
 
 **Welcome to our user Wiki!** This document explains how to use our app.
 
@@ -17,7 +17,7 @@
 **EasySave** is a graphical, multi-platform backup tool. It enables users to **create**, **manage**, and **execute** backup jobs with ease.
 Whether performing **full** or **differential** backups, EasySave ensures your data is securely backed up.
 
-You can **download** and **execute** the EasySave app from the following link: [EasySave v2.0 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v2.0).
+You can **download** and **execute** the EasySave app from the following link: [EasySave v3.0 Release](https://github.com/CESI-Genie-logiciel-G4/EasySave/releases/tag/v3.0).
 
 ## **Main Features**
 
@@ -99,6 +99,11 @@ EasySave provides visual feedback on backup tasks through color-coded progress b
         <td>⬛ Gray</td>
         <td>Task was manually canceled by the user</td>
       </tr>
+      <tr>
+        <td><strong>Wainting</strong></td>
+        <td>🟧 Orange</td>
+        <td>Task is waiting for another task to complete</td>
+      </tr>
     </tbody>
   </table>
 </div>
@@ -137,6 +142,16 @@ EasySave encrypts files with specified extensions using AES when configured in b
     </tbody>
   </table>
 </div>
+
+### **Settings**
+
+EasySave offers a range of persistent settings to customize the application to your needs:
+- **Language**: Choose between English and French.
+- **Logs Output Format**: Select between XML, JSON, or Console.
+- **Security**: Enable or disable file encryption.
+- **File Extensions**: Define which file types to encrypt or prioritize.
+- **Concurrent Heavy File Limit**: Set the maximum size of files to process concurrently.
+- **Business App Detection**: Enable or disable the automatic detection of business applications.
 
 
 ### **Real-Time Monitoring**
